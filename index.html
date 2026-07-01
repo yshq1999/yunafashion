@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yuna Fashion Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.30.0/tabler-icons.min.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#C9767A">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Yuna Fashion">
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  :root {
+    --rose:#C9767A; --rose-light:#F7DCE4; --cream:#FDF8F5; --berry:#6E4053;
+    --lavender:#E5D8EC; --sage:#D4ECD4; --text:#2C1A1F; --muted:#927580; --line:#f0e6ea;
+  }
+  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--text); }
+  .wrap { max-width:1180px; margin:0 auto; }
+
+  /* TOPBAR */
+  .topbar { background:var(--berry); color:#fff; display:flex; align-items:center; justify-content:space-between; padding:6px 28px; font-size:12px; flex-wrap:wrap; gap:6px; }
+  .topbar-left { opacity:.85; }
+  .lang-switch { display:flex; gap:4px; }
+  .lang-btn { background:none; border:none; color:rgba(255,255,255,.6); cursor:pointer; font-size:12px; padding:3px 9px; border-radius:12px; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .lang-btn:hover { color:#fff; }
+  .lang-btn.active { background:rgba(255,255,255,.18); color:#fff; font-weight:500; }
+
+  /* NAV */
+  nav { display:flex; align-items:center; justify-content:space-between; padding:14px 28px; background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:100; flex-wrap:wrap; gap:12px; }
+  .nav-brand { display:flex; flex-direction:column; }
+  .nav-logo { font-family:'Playfair Display',serif; font-size:23px; font-weight:600; color:var(--berry); line-height:1; }
+  .nav-logo span { color:var(--rose); font-style:italic; }
+  .nav-slogan { font-size:11px; color:var(--rose); font-weight:500; margin-top:4px; font-style:italic; }
+  .nav-tabs { display:flex; gap:8px; align-items:center; }
+  .vtab { border:1px solid var(--line); background:#fff; color:var(--muted); padding:7px 15px; border-radius:18px; font-size:13px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; display:flex; align-items:center; gap:6px; transition:all .2s; }
+  .vtab.active { background:var(--berry); color:#fff; border-color:var(--berry); }
+  .vcart-count { background:var(--rose); color:#fff; border-radius:50%; min-width:18px; height:18px; font-size:11px; display:flex; align-items:center; justify-content:center; padding:0 4px; }
+  .lang-dd { position:relative; }
+  .lang-current { background:rgba(255,255,255,.14); border:none; color:#fff; cursor:pointer; font-size:12px; padding:5px 12px; border-radius:14px; font-family:'DM Sans',sans-serif; display:flex; align-items:center; gap:6px; }
+  .lang-current:hover { background:rgba(255,255,255,.24); }
+  .lang-menu { position:absolute; right:0; top:130%; background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:0 8px 24px rgba(110,64,83,.18); padding:6px; min-width:150px; z-index:300; display:flex; flex-direction:column; gap:2px; }
+  .lang-opt { background:none; border:none; text-align:left; color:var(--text); cursor:pointer; font-size:13px; padding:8px 12px; border-radius:8px; font-family:'DM Sans',sans-serif; }
+  .lang-opt:hover { background:var(--cream); }
+  .lang-opt.active { background:var(--rose-light); color:var(--berry); font-weight:500; }
+  .vtab-flash { border-color:var(--rose); animation:memberFlash 1.3s ease-in-out infinite; }
+  @keyframes memberFlash { 0%,100%{ background:var(--rose-light); color:var(--berry); box-shadow:0 0 0 0 rgba(201,118,122,.0);} 50%{ background:var(--rose); color:#fff; box-shadow:0 0 12px 2px rgba(201,118,122,.55);} }
+  .vtab-flash.active { animation:none; background:var(--berry); color:#fff; border-color:var(--berry); }
+  .cart-icon { padding:8px 12px; position:relative; }
+  .cart-icon .vcart-count { position:absolute; top:-5px; right:-5px; }
+  .vipflower { transform-box:fill-box; transform-origin:center; }
+  .vipf-bronze { animation:vbBronze 2.6s ease-in-out infinite; }
+  .vipf-silver { animation:vbSilver 2.1s ease-in-out infinite; }
+  .vipf-gold { animation:vbGold 1.7s ease-in-out infinite; }
+  @keyframes vbBronze { 0%,100%{ transform:scale(1); filter:drop-shadow(0 0 2px rgba(255,160,195,.4)); } 50%{ transform:scale(1.1); filter:drop-shadow(0 0 8px rgba(255,160,195,.8)); } }
+  @keyframes vbSilver { 0%,100%{ transform:scale(1.02); filter:drop-shadow(0 0 5px rgba(205,215,235,.7)); } 50%{ transform:scale(1.17); filter:drop-shadow(0 0 17px rgba(220,205,230,1)); } }
+  @keyframes vbGold { 0%,100%{ transform:scale(1.04); filter:drop-shadow(0 0 7px rgba(255,200,90,.75)); } 50%{ transform:scale(1.23); filter:drop-shadow(0 0 24px rgba(255,200,90,1)) drop-shadow(0 0 9px rgba(255,170,200,.85)); } }
+
+  /* HERO */
+  .hero { display:grid; grid-template-columns:1fr 1fr; min-height:360px; }
+  .hero-text { background:var(--lavender); padding:48px 44px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden; }
+  .hero-text::before { content:'☾'; position:absolute; top:-20px; right:30px; font-size:130px; color:rgba(110,64,83,.07); }
+  .hero-tag { font-size:12px; font-weight:500; letter-spacing:2px; color:var(--rose); text-transform:uppercase; margin-bottom:14px; }
+  .hero-title { font-family:'Playfair Display',serif; font-size:34px; line-height:1.3; color:var(--berry); margin-bottom:14px; }
+  .hero-title em { font-style:italic; color:var(--rose); }
+  .hero-desc { font-size:15px; color:var(--muted); line-height:1.7; margin-bottom:24px; max-width:340px; }
+  .hero-btn { display:inline-flex; align-items:center; gap:8px; background:var(--berry); color:#fff; padding:12px 26px; border-radius:24px; font-size:14px; font-weight:500; border:none; cursor:pointer; width:fit-content; transition:background .2s; }
+  .hero-btn:hover { background:var(--rose); }
+  .hero-visual { background:linear-gradient(135deg,#e8dcf0,#f3e2e8); display:flex; align-items:center; justify-content:center; position:relative; }
+  .hero-badges { position:absolute; bottom:20px; left:20px; display:flex; gap:8px; }
+  .badge { background:#fff; border-radius:20px; padding:6px 14px; font-size:12px; font-weight:500; color:var(--berry); }
+
+  /* PANELS */
+  .panel { padding:36px 28px; }
+  .ph { font-family:'Playfair Display',serif; font-size:24px; color:var(--berry); margin-bottom:4px; }
+  .psub { font-size:13px; color:var(--muted); margin-bottom:22px; }
+  .section-header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:22px; }
+
+  /* PRODUCT GRID */
+  .product-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .product-card { background:#fff; border-radius:14px; overflow:hidden; border:1px solid var(--line); display:flex; flex-direction:column; transition:transform .2s; }
+  .product-card:hover { transform:translateY(-3px); }
+  .product-img { aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; position:relative; background:#f3e2e8; }
+  .product-img img { width:100%; height:100%; object-fit:cover; }
+  .product-tag { position:absolute; top:8px; left:8px; font-size:10px; font-weight:600; letter-spacing:1px; padding:3px 8px; border-radius:10px; text-transform:uppercase; }
+  .tag-new { background:var(--sage); color:#4d7a4f; }
+  .tag-sale { background:var(--rose-light); color:var(--rose); }
+  .product-info { padding:12px; display:flex; flex-direction:column; flex:1; }
+  .product-name { font-size:13px; font-weight:500; margin-bottom:3px; min-height:36px; line-height:1.4; }
+  .product-for { font-size:11px; color:var(--muted); margin-bottom:8px; }
+  .product-price { display:flex; align-items:baseline; gap:6px; margin-bottom:10px; }
+  .price-now { font-size:15px; font-weight:600; color:var(--berry); }
+  .price-old { font-size:12px; color:var(--muted); text-decoration:line-through; }
+  .add-btn { margin-top:auto; width:100%; padding:8px; background:var(--rose-light); color:var(--berry); border:none; border-radius:8px; font-size:12px; font-weight:500; cursor:pointer; transition:all .2s; }
+  .add-btn:hover { background:var(--berry); color:#fff; }
+
+  /* PROMO */
+  .promo-banner { margin:0 28px 36px; background:var(--berry); border-radius:18px; padding:30px 40px; display:flex; align-items:center; justify-content:space-between; position:relative; overflow:hidden; flex-wrap:wrap; gap:16px; }
+  .promo-banner::after { content:'✦'; position:absolute; right:120px; top:50%; transform:translateY(-50%); font-size:64px; opacity:.1; color:#fff; }
+  .promo-text { color:#fff; }
+  .promo-subtitle { font-size:12px; letter-spacing:2px; text-transform:uppercase; opacity:.7; margin-bottom:6px; }
+  .promo-title { font-family:'Playfair Display',serif; font-size:24px; margin-bottom:6px; }
+  .promo-desc { font-size:14px; opacity:.8; }
+  .promo-btn { background:#fff; color:var(--berry); padding:11px 24px; border-radius:24px; font-size:14px; font-weight:600; border:none; cursor:pointer; }
+
+  /* ADMIN */
+  .admin-wrap { display:grid; grid-template-columns:1fr 1.2fr; gap:24px; }
+  .form-card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:20px; }
+  .toast-wrap{ position:fixed; left:50%; bottom:96px; transform:translateX(-50%); z-index:700; display:flex; flex-direction:column; gap:8px; align-items:center; pointer-events:none; }
+  .toast{ background:var(--berry); color:#fff; padding:10px 18px; border-radius:24px; font-size:14px; box-shadow:0 6px 20px rgba(110,64,83,.35); opacity:0; transform:translateY(10px); transition:all .25s; max-width:90vw; text-align:center; }
+  .toast.show{ opacity:1; transform:translateY(0); }
+  .field { margin-bottom:14px; }
+  .field label { display:block; font-size:12px; font-weight:500; color:var(--berry); margin-bottom:6px; }
+  .field input, .field select { width:100%; padding:9px 12px; border:1px solid var(--line); border-radius:8px; font-size:13px; font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--text); }
+  .field input:focus, .field select:focus { outline:none; border-color:var(--rose); }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .upload-zone { border:1.5px dashed var(--rose); border-radius:10px; padding:18px; text-align:center; cursor:pointer; color:var(--muted); font-size:12px; background:var(--cream); }
+  .upload-zone:hover { background:#fbf0f3; }
+  .upload-zone img { max-height:90px; border-radius:8px; margin-bottom:6px; }
+  .save-btn { width:100%; padding:11px; background:var(--berry); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:500; cursor:pointer; }
+  .save-btn:hover { background:var(--rose); }
+  .admin-list { display:flex; flex-direction:column; gap:10px; max-height:520px; overflow-y:auto; }
+  .admin-item { display:flex; align-items:center; gap:12px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 12px; }
+  .admin-thumb { width:46px; height:46px; border-radius:8px; object-fit:cover; background:#f3e2e8; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; overflow:hidden; }
+  .admin-thumb img { width:100%; height:100%; object-fit:cover; }
+  .admin-meta { flex:1; }
+  .admin-meta .nm { font-size:13px; font-weight:500; }
+  .admin-meta .pr { font-size:12px; color:var(--rose); font-weight:500; }
+  .del-btn { background:none; border:none; color:var(--muted); cursor:pointer; font-size:18px; }
+  .del-btn:hover { color:var(--rose); }
+
+  /* CART */
+  .cart-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); }
+  .cart-thumb { width:54px; height:54px; border-radius:10px; background:#f3e2e8; display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; overflow:hidden; }
+  .cart-thumb img { width:100%; height:100%; object-fit:cover; }
+  .cart-mid { flex:1; }
+  .cart-mid .nm { font-size:13px; font-weight:500; }
+  .cart-mid .pr { font-size:12px; color:var(--muted); }
+  .qty { display:flex; align-items:center; gap:8px; }
+  .qty button { width:24px; height:24px; border:1px solid var(--line); background:#fff; border-radius:6px; cursor:pointer; color:var(--berry); font-size:14px; }
+  .cart-line-total { font-size:13px; font-weight:600; color:var(--berry); min-width:64px; text-align:right; }
+  .cart-summary { display:flex; justify-content:space-between; align-items:center; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+  .cart-total-label { font-size:14px; color:var(--muted); }
+  .cart-total-val { font-family:'Playfair Display',serif; font-size:24px; color:var(--berry); }
+  .checkout-btn { width:100%; margin-top:16px; padding:13px; background:var(--berry); color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:500; cursor:pointer; }
+  .checkout-btn:hover { background:var(--rose); }
+  .empty { text-align:center; padding:50px; color:var(--muted); font-size:14px; }
+
+  /* CHECKOUT */
+  .pay-options { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:14px 0; }
+  .pay-opt { border:1.5px solid var(--line); border-radius:12px; padding:14px 10px; text-align:center; cursor:pointer; background:#fff; }
+  .pay-opt.sel { border-color:var(--rose); background:#fbf0f3; }
+  .pay-opt i { font-size:24px; color:var(--berry); display:block; margin-bottom:6px; }
+  .pay-opt .pn { font-size:12px; font-weight:500; }
+  .pay-detail { background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px; text-align:center; margin-bottom:14px; }
+  .qr-box { width:160px; height:160px; margin:0 auto 12px; border-radius:12px; background:var(--cream); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .qr-box img { width:100%; height:100%; object-fit:contain; }
+  .pay-note { font-size:13px; color:var(--muted); line-height:1.6; }
+  .pay-acc { font-size:18px; font-weight:600; color:var(--berry); letter-spacing:.5px; margin:8px 0; }
+  .submit-order { width:100%; padding:13px; background:var(--berry); color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:500; cursor:pointer; margin-top:8px; }
+  .submit-order:disabled { background:#cbb8c0; cursor:not-allowed; }
+  .back-link { font-size:13px; color:var(--rose); cursor:pointer; display:inline-flex; align-items:center; gap:4px; margin-bottom:14px; }
+  .success-box { text-align:center; padding:50px 20px; }
+  .success-box i { font-size:56px; color:#5a9a5c; }
+  .success-box h3 { font-family:'Playfair Display',serif; font-size:24px; color:var(--berry); margin:14px 0 6px; }
+  .success-box p { font-size:14px; color:var(--muted); line-height:1.6; }
+  .order-id { font-weight:600; color:var(--rose); }
+
+  /* FOOTER */
+  footer { background:var(--berry); color:#fff; padding:36px 28px 22px; }
+  .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:30px; margin-bottom:28px; }
+  .footer-brand { font-family:'Playfair Display',serif; font-size:20px; margin-bottom:6px; }
+  .footer-brand span { color:var(--rose-light); font-style:italic; }
+  .footer-slogan { font-size:12px; color:var(--rose-light); font-style:italic; margin-bottom:10px; }
+  .footer-tagline { font-size:13px; opacity:.65; line-height:1.6; }
+  .footer-col h4 { font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase; opacity:.5; margin-bottom:14px; }
+  .footer-col ul { list-style:none; }
+  .footer-col li { font-size:13px; opacity:.75; margin-bottom:8px; cursor:pointer; }
+  .footer-col li:hover { opacity:1; }
+  .footer-bottom { border-top:1px solid rgba(255,255,255,.15); padding-top:18px; font-size:12px; opacity:.5; text-align:center; }
+
+  .hide { display:none !important; }
+  @media (max-width:760px){
+    .hero { grid-template-columns:1fr; }
+    .product-grid { grid-template-columns:repeat(2,1fr); }
+    .admin-wrap { grid-template-columns:1fr; }
+    .footer-grid { grid-template-columns:1fr 1fr; }
+    nav { flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar" style="justify-content:flex-end">
+    <div class="lang-dd" id="langDD">
+      <button class="lang-current" type="button" onclick="toggleLangMenu(event)"><i class="ti ti-world"></i> <span id="langCurLabel">中文</span> <i class="ti ti-chevron-down"></i></button>
+      <div class="lang-menu hide" id="langMenu">
+        <button class="lang-opt active" data-lang="zh">中文</button>
+        <button class="lang-opt" data-lang="en">English</button>
+        <button class="lang-opt" data-lang="ms">Bahasa Melayu</button>
+        <button class="lang-opt" data-lang="vi">Tiếng Việt</button>
+      </div>
+    </div>
+  </div>
+
+  <nav>
+    <div class="nav-brand">
+      <div class="nav-logo">Yuna <span>Fashion</span></div>
+      <div class="nav-slogan" data-i="slogan"></div>
+    </div>
+    <div class="nav-tabs">
+      <button class="vtab active" id="tab_all" onclick="showShop('all')"><span data-i="navHome"></span></button>
+      <button class="vtab" id="tab_women" onclick="showShop('women')"><span data-i="navWomen"></span></button>
+      <button class="vtab" id="tab_kids" onclick="showShop('kids')"><span data-i="navKids"></span></button>
+      <button class="vtab" id="tab_sale" onclick="showShop('sale')"><span data-i="navSale"></span></button>
+      <button class="vtab vtab-flash" id="tabMember" onclick="switchView('member')"><span data-i="navMember"></span></button>
+      <button class="vtab" id="tabAdmin" onclick="switchView('admin')" style="display:none">后台</button>
+      <button class="vtab cart-icon" id="tabCart" type="button" onclick="switchView('cart')" aria-label="购物车"><i class="ti ti-shopping-bag"></i><span class="vcart-count" id="cartCount">0</span></button>
+    </div>
+  </nav>
+
+  <!-- SHOP -->
+  <div id="viewShop">
+    <section class="hero">
+      <div class="hero-text">
+        <div class="hero-tag" data-i="heroTag"></div>
+        <h1 class="hero-title" id="heroTitle"></h1>
+        <p class="hero-desc" data-i="heroDesc"></p>
+        <button class="hero-btn" onclick="switchView('shop');document.getElementById('prodSection').scrollIntoView({behavior:'smooth'})">
+          <span data-i="shopNow"></span> <i class="ti ti-arrow-right"></i>
+        </button>
+      </div>
+      <div class="hero-visual">
+        <svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+          <circle cx="370" cy="80" r="100" fill="rgba(201,118,122,0.13)"/>
+          <circle cx="120" cy="290" r="78" fill="rgba(212,236,212,0.4)"/>
+          <text x="250" y="140" font-size="100" text-anchor="middle" fill="rgba(110,64,83,0.1)" font-family="serif">☾</text>
+          <text x="250" y="260" font-size="78" text-anchor="middle">🌙</text>
+          <text x="160" y="225" font-size="50" text-anchor="middle">🧸</text>
+          <text x="340" y="235" font-size="50" text-anchor="middle">⭐</text>
+        </svg>
+        <div class="hero-badges">
+          <span class="badge" data-i="badge1"></span>
+          <span class="badge" data-i="badge2"></span>
+        </div>
+      </div>
+    </section>
+
+    <div class="panel" id="prodSection">
+      <div class="section-header">
+        <h2 class="ph" id="catTitle" data-i="prodTitle"></h2>
+      </div>
+      <div id="kidGenderBar" style="display:none;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap">
+        <button class="vtab active" id="kg_boy" type="button" onclick="setKid('boy')">男孩</button>
+        <button class="vtab" id="kg_girl" type="button" onclick="setKid('girl')">女孩</button>
+        <button class="add-btn" style="width:auto;margin:0;padding:7px 14px" type="button" onclick="toggleSizeChart()">尺码对照表</button>
+      </div>
+      <div id="sizeChart" class="hide" style="margin-bottom:14px"></div>
+      <div class="product-grid" id="productGrid"></div>
+    </div>
+
+    <div class="promo-banner">
+      <div class="promo-text">
+        <div class="promo-subtitle" data-i="promoSub"></div>
+        <div class="promo-title" data-i="promoTitle"></div>
+        <div class="promo-desc" data-i="promoDesc"></div>
+      </div>
+      <button class="promo-btn" data-i="promoBtn" onclick="document.getElementById('prodSection').scrollIntoView({behavior:'smooth'})"></button>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="panel hide" id="viewAdmin">
+    <div class="ph" data-i="adminTitle"></div>
+    <div class="psub" data-i="adminSub"></div>
+    <div class="admin-wrap">
+      <div class="form-card">
+        <div class="field"><label data-i="fNameL"></label><input id="fName" data-iph="fNameP" /></div>
+        <div class="field"><label data-i="fCatL"></label>
+          <select id="fCat"><option data-i="catW"></option><option data-i="catK"></option><option data-i="catF"></option></select>
+        </div>
+        <div class="field"><label data-i="fForL"></label><input id="fFor" data-iph="fForP" /></div>
+        <div class="row2">
+          <div class="field"><label data-i="fPriceL"></label><input id="fPrice" type="number" placeholder="89" /></div>
+          <div class="field"><label data-i="fOldL"></label><input id="fOld" type="number" placeholder="119" /></div>
+        </div>
+        <div class="field"><label data-i="fImgL"></label>
+          <div class="upload-zone" id="imgZone" onclick="document.getElementById('fImg').click()">
+            <div id="imgPlaceholder"><i class="ti ti-photo" style="font-size:24px"></i><br><span data-i="uploadImg"></span></div>
+          </div>
+          <input type="file" id="fImg" accept="image/*" class="hide" />
+        </div>
+        <button class="save-btn" onclick="addProduct()" data-i="saveBtn"></button>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:500;color:var(--berry);margin-bottom:12px;"><span data-i="curProd"></span> (<span id="prodCnt">0</span>)</div>
+        <div class="admin-list" id="adminList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART -->
+  <div class="panel hide" id="viewCart">
+    <div class="ph" data-i="cartTitle"></div>
+    <div class="psub" data-i="cartSub"></div>
+    <div id="cartBody"></div>
+  </div>
+
+  <!-- CHECKOUT -->
+  <div class="panel hide" id="viewCheckout">
+    <div class="back-link" onclick="switchView('cart')"><i class="ti ti-arrow-left"></i> <span data-i="backCart"></span></div>
+    <div class="ph" data-i="coTitle"></div>
+    <div class="psub" id="coTotal"></div>
+    <div style="font-size:13px;font-weight:500;color:var(--berry);margin-top:16px;" data-i="choosePay"></div>
+    <div class="pay-options">
+      <div class="pay-opt sel" data-pay="tngqr" onclick="selectPay('tngqr')"><i class="ti ti-qrcode"></i><div class="pn">TNG QR</div></div>
+      <div class="pay-opt" data-pay="duitnow" onclick="selectPay('duitnow')"><i class="ti ti-scan"></i><div class="pn">DuitNow QR</div></div>
+      <div class="pay-opt" data-pay="tngacc" onclick="selectPay('tngacc')"><i class="ti ti-wallet"></i><div class="pn" data-i="tngAcc"></div></div>
+    </div>
+    <div class="pay-detail" id="payDetail"></div>
+    <div class="field">
+      <label data-i="proofL"></label>
+      <div class="upload-zone" id="proofZone" onclick="document.getElementById('fProof').click()">
+        <div id="proofPlaceholder"><i class="ti ti-upload" style="font-size:22px"></i><br><span data-i="proofP"></span></div>
+      </div>
+      <input type="file" id="fProof" accept="image/*" class="hide" />
+    </div>
+    <button class="submit-order" id="submitBtn" disabled onclick="submitOrder()" data-i="submitOrder"></button>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="panel hide" id="viewSuccess">
+    <div class="success-box">
+      <i class="ti ti-circle-check"></i>
+      <h3 data-i="successH"></h3>
+      <p><span data-i="orderNo"></span> <span class="order-id" id="orderId"></span><br><span data-i="successMsg"></span></p>
+      <button class="checkout-btn" style="max-width:200px;margin:20px auto 0;display:block" onclick="switchView('shop')" data-i="keepShop"></button>
+    </div>
+  </div>
+
+  <!-- MEMBER -->
+  <div class="panel hide" id="viewMember">
+    <div class="ph" data-i="mTitle"></div>
+    <div class="psub" data-i="mSub"></div>
+
+    <div id="memberAuth">
+      <div style="background:var(--lavender);border-radius:16px;padding:24px;margin-bottom:18px;text-align:center">
+        <div style="font-family:'Playfair Display',serif;font-size:24px;color:var(--berry);margin-bottom:10px" data-i="mJoin"></div>
+        <div style="font-size:15px;color:var(--berry);line-height:2">
+          🎁 <span data-i="mB1"></span><br>
+          💰 <span data-i="mB2"></span><br>
+          🏆 <span data-i="mB3"></span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px">
+        <div class="form-card" style="text-align:center"><div id="flowerBronze" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierBronze"></div><div class="psub" style="min-height:32px" data-i="mReqBronze"></div><div style="font-size:18px;font-weight:600;color:var(--rose)" data-i="mEarnBronze"></div></div>
+        <div class="form-card" style="text-align:center"><div id="flowerSilver" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierSilver"></div><div class="psub" style="min-height:32px" data-i="mReqSilver"></div><div style="font-size:18px;font-weight:600;color:var(--rose)" data-i="mEarnSilver"></div></div>
+        <div class="form-card" style="text-align:center"><div id="flowerGold" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierGold"></div><div class="psub" style="min-height:32px" data-i="mReqGold"></div><div style="font-size:18px;font-weight:600;color:var(--rose)" data-i="mEarnGold"></div></div>
+      </div>
+      <div class="admin-wrap">
+        <div class="form-card">
+          <div style="display:flex;gap:8px;margin-bottom:14px">
+            <button class="vtab active" id="authTabReg" type="button" onclick="memberAuthTab('reg')"><span data-i="mTabReg"></span></button>
+            <button class="vtab" id="authTabLogin" type="button" onclick="memberAuthTab('login')"><span data-i="mTabLogin"></span></button>
+          </div>
+          <div id="regNameField" class="field"><label data-i="mLName"></label><input id="mName" data-iph="mPName" placeholder="你的名字"/></div>
+          <div class="field"><label data-i="mLEmail"></label><input id="mEmail" type="email" placeholder="name@email.com"/></div>
+          <div class="field"><label data-i="mLPass"></label><input id="mPass" type="password" data-iph="mPPass" placeholder="至少 6 位"/></div>
+          <div id="refNote" class="psub" style="margin-bottom:10px"></div>
+          <button class="save-btn" id="mAuthBtn" type="button" onclick="memberSubmit()">注册并获取推荐码</button>
+          <div id="mAuthMsg" class="psub" style="margin-top:10px;color:var(--rose)"></div>
+        </div>
+        <div class="form-card" style="display:flex;flex-direction:column;justify-content:center">
+          <div style="font-size:14px;color:var(--berry);line-height:2">
+            <b data-i="mHowTitle"></b><br>
+            <span data-i="mHow1"></span><br>
+            <span data-i="mHow2"></span><br>
+            <span data-i="mHow3"></span><br>
+            <span data-i="mHow4"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="memberDash" class="hide">
+      <div id="memberWelcome" style="font-family:'Playfair Display',serif;font-size:21px;color:var(--berry);margin-bottom:6px"></div>
+      <div id="memberGuide" class="form-card hide" style="margin-bottom:16px;background:linear-gradient(135deg,#FFF7FA,#F7DCE4);border:none">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+          <div style="font-weight:600;color:var(--berry)" data-i="mGuideTitle"></div>
+          <span onclick="dismissGuide()" style="cursor:pointer;color:var(--muted);font-size:20px;line-height:1">&times;</span>
+        </div>
+        <div class="psub" style="margin:8px 0 0;line-height:2;color:var(--berry)"><span data-i="mGuide1"></span><br><span data-i="mGuide2"></span><br><span data-i="mGuide3"></span></div>
+      </div>
+      <div id="tierBanner" class="form-card" style="text-align:center;margin-bottom:16px;background:var(--lavender)">
+        <div class="psub" data-i="mYourTier"></div>
+        <div id="tierName" style="font-size:22px;font-weight:600;color:var(--berry)">—</div>
+        <div id="tierProgress" class="psub"></div>
+      </div>
+      <div class="admin-wrap" style="margin-bottom:20px">
+        <div class="form-card">
+          <div class="psub" data-i="mYourLink"></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="refLink" readonly style="flex:1;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:12px;background:var(--cream);color:var(--text)"/>
+            <button class="add-btn" style="width:auto;padding:9px 14px;margin:0" type="button" onclick="copyRef()" data-i="mCopy"></button>
+          </div>
+          <div class="psub" style="margin-top:10px"><span data-i="mRefCode"></span><b id="refCode" style="color:var(--rose)"></b></div>
+        </div>
+        <div class="form-card" style="display:flex;align-items:center;justify-content:space-between">
+          <div><div class="psub" data-i="mBalance"></div><div class="cart-total-val" id="balVal">RM 0</div></div>
+          <button class="hero-btn" type="button" onclick="openWithdraw()" data-i="mWithdraw"></button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+        <div class="form-card" style="text-align:center"><div class="psub" data-i="mInvited"></div><div class="cart-total-val" id="statInvited">0</div></div>
+        <div class="form-card" style="text-align:center"><div class="psub" data-i="mFirstBuy"></div><div class="cart-total-val" id="statFirst">0</div></div>
+        <div class="form-card" style="text-align:center"><div class="psub" data-i="mEarned"></div><div class="cart-total-val" id="statEarned">RM 0</div></div>
+      </div>
+      <div class="form-card">
+        <div class="psub" style="margin-bottom:10px" data-i="mMyFriends"></div>
+        <div id="inviteList" class="psub">还没有人通过你的链接注册</div>
+      </div>
+      <button class="add-btn" style="max-width:160px;margin-top:16px" type="button" onclick="memberLogout()" data-i="mLogout"></button>
+    </div>
+
+    <div id="memberAdmin" class="hide" style="margin-top:28px">
+      <div class="ph" style="font-size:20px" data-i="admMgmt">店主管理</div>
+      <div class="psub" data-i="admOnlyYou">只有你(店主)能看到这一区</div>
+      <div class="form-card" style="margin:14px 0">
+        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admOrdersH">待确认订单 — 确认收款后会给推荐人入账佣金</div>
+        <div id="adminOrders" class="psub">没有待确认订单</div>
+      </div>
+      <div class="form-card">
+        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admWdsH">提现申请 — 打款到会员账号后点「已打款」</div>
+        <div id="adminWds" class="psub">没有提现申请</div>
+      </div>
+      <div class="form-card" style="margin-top:14px">
+        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admSetH">设置 — 佣金 / 运费（改完点保存）</div>
+        <div class="row2"><div class="field"><label data-i="admL1">L1 直接佣金 %</label><input id="setL1" type="number" step="0.5"/></div><div class="field"><label data-i="admL2">L2 佣金 %</label><input id="setL2" type="number" step="0.5"/></div></div>
+        <div class="row2"><div class="field"><label data-i="admL3">L3 佣金 %</label><input id="setL3" type="number" step="0.5"/></div><div class="field"><label data-i="admBonus">首购奖 RM</label><input id="setBonus" type="number"/></div></div>
+        <div class="row2"><div class="field"><label data-i="admShipMin">免邮门槛 RM</label><input id="setShipMin" type="number"/></div><div class="field"><label data-i="admShipFee">运费 RM</label><input id="setShipFee" type="number"/></div></div>
+        <div class="field"><label data-i="admWdMin">提现门槛 RM</label><input id="setWdMin" type="number"/></div>
+        <div class="field"><label data-i="admWa">WhatsApp 链接</label><input id="setWa" placeholder="https://wa.me/60123456789"/></div>
+        <div class="field"><label data-i="admTt">TikTok 链接</label><input id="setTt" placeholder="https://www.tiktok.com/@yourshop"/></div>
+        <button class="save-btn" type="button" onclick="saveSettings()" data-i="admSaveSet">保存设置</button>
+        <div id="setMsg" class="psub" style="margin-top:6px;color:var(--rose)"></div>
+      </div>
+      <div class="form-card" style="margin-top:14px">
+        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admChatH">客服消息 — 客户的咨询会显示在这里</div>
+        <div id="adminChatList" class="psub">—</div>
+        <div id="adminThreadBox" class="hide" style="margin-top:12px">
+          <div id="adminThreadMsgs" style="max-height:240px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--cream)"></div>
+          <div style="display:flex;gap:8px;margin-top:8px"><input id="adminReplyInput" onkeydown="if(event.key==='Enter')adminReply()" placeholder="回复…" style="flex:1;padding:8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--text)"/><button class="add-btn" style="width:auto;margin:0;padding:8px 14px" type="button" onclick="adminReply()">↑</button></div>
+        </div>
+      </div>
+      <div class="form-card" style="margin-top:14px">
+        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admProdH">上传 / 管理商品</div>
+        <div class="field"><label data-i="admCat">分类</label>
+          <select id="pmCat" onchange="pmRenderSizes()"><option value="women" data-i="admCatW">女士睡衣</option><option value="boy" data-i="admCatB">小孩 · 男孩</option><option value="girl" data-i="admCatG">小孩 · 女孩</option></select>
+        </div>
+        <div class="field"><label data-i="admNameZh">商品名称（中文）</label><input id="pmName" placeholder="例如：冰丝吊带睡裙"/></div>
+        <div class="field"><label data-i="admNameEn">英文名 (可选)</label><input id="pmNameEn" placeholder="e.g. Silky Slip Nightgown"/></div>
+        <div class="field"><label data-i="admNameMs">马来名 (可选)</label><input id="pmNameMs" placeholder="cth: Gaun Tidur Sutera"/></div>
+        <div class="field"><label data-i="admNameVi">越南名 (可选)</label><input id="pmNameVi" placeholder="vd: Vay ngu lua"/></div>
+        <div class="field"><label data-i="admNote">说明（可选）</label><input id="pmNote" placeholder="例如：冰丝 / 亲肤"/></div>
+        <div class="field"><label data-i="admTag">标签</label><select id="pmTag"><option value="" data-i="admTagNone">无</option><option value="new" data-i="admTagNew">新品</option><option value="sale" data-i="admTagSale">特惠</option></select></div>
+        <div class="field"><label data-i="admImg">商品图片</label>
+          <div class="upload-zone" id="pmImgZone" onclick="document.getElementById('pmImg').click()"><div id="pmImgPh"><i class="ti ti-photo" style="font-size:22px"></i><br>点击上传图片</div></div>
+          <input type="file" id="pmImg" accept="image/*" class="hide"/>
+        </div>
+        <div class="field"><label data-i="admSizes">各尺码 · 价格(RM) / 库存</label><div id="pmSizes"></div></div>
+        <button class="save-btn" type="button" onclick="pmSave()" data-i="admSaveProd">保存上架</button>
+        <div id="pmMsg" class="psub" style="margin-top:8px;color:var(--rose)"></div>
+        <div style="font-size:13px;font-weight:500;color:var(--berry);margin:16px 0 8px" data-i="admCurProd">现有商品</div>
+        <div id="pmList" class="psub">—</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Yuna <span>Fashion</span></div>
+        <div class="footer-slogan" data-i="slogan2"></div>
+        <div class="footer-tagline" data-i="footTag"></div>
+      </div>
+      <div class="footer-col"><h4 data-i="footShopH"></h4><ul>
+        <li data-i="footShop1"></li><li data-i="footShop2"></li><li data-i="footShop3"></li><li data-i="footShop4"></li></ul></div>
+      <div class="footer-col"><h4 data-i="footBrandH"></h4><ul>
+        <li data-i="footBrand1"></li><li data-i="footBrand2"></li><li data-i="footBrand3"></li></ul></div>
+      <div class="footer-col"><h4 data-i="footContactH"></h4><ul>
+        <li data-i="footC1"></li><li id="contactWa" style="cursor:pointer">WhatsApp</li><li id="contactTt" style="cursor:pointer">TikTok</li></ul></div>
+    </div>
+    <div class="footer-bottom">© 2025 Yuna Fashion Shop · <span data-i="rights"></span></div>
+  </footer>
+
+</div>
+
+<script>
+/* ============ 翻译文案 ============ */
+/* ===== PWA: service worker + install prompt ===== */
+window.__deferredPrompt=null; window.__pwaInstalled=false;
+if('serviceWorker' in navigator){ window.addEventListener('load',function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); }); }
+window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); window.__deferredPrompt=e; });
+window.addEventListener('appinstalled',function(){ window.__pwaInstalled=true; window.__deferredPrompt=null; try{ if(typeof onPwaInstalled==='function') onPwaInstalled(); }catch(x){} });
+function isStandalone(){ return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone===true; }
+function isIOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent); }
+function showToast(msg){ var w=document.getElementById('toastWrap'); if(!w){ w=document.createElement('div'); w.id='toastWrap'; w.className='toast-wrap'; document.body.appendChild(w); } var t=document.createElement('div'); t.className='toast'; t.textContent=msg; w.appendChild(t); requestAnimationFrame(function(){ t.classList.add('show'); }); setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ t.remove(); },300); },2200); }
+function copyShipBtn(btn){ try{ var txt=decodeURIComponent(btn.getAttribute('data-ship')); navigator.clipboard.writeText(txt); }catch(e){} showToast(aTx('admCopied')); }
+function dismissGuide(){ try{ localStorage.setItem('yuna_guide_hide','1'); }catch(e){} var g=document.getElementById('memberGuide'); if(g) g.classList.add('hide'); }
+const T = {
+  zh:{ freeShip:'免费配送满 RM 99 · 30 天退换', slogan:'柔软相伴，安睡每一夜', slogan2:'柔软相伴，安睡每一夜',
+    navShop:'商店', navAdmin:'商家后台', navCart:'购物车', navMember:'会员',
+    navHome:'主页', navWomen:'女士睡衣', navKids:'小孩服装', navSale:'优惠',
+    mTitle:'会员推荐计划', mSub:'注册成会员，分享你的专属链接，朋友下单你就能赚佣金。', mNormalMember:'普通会员',
+    mJoin:'免费加入 Yuna 会员', mB1:'满 RM99 免邮费', mB2:'推荐朋友永久赚佣金，朋友每下一单你都有分', mB3:'升级解锁更深下线收益，最多赚 3 代',
+    tierBronze:'初绽会员', tierSilver:'绽放会员', tierGold:'盛放会员',
+    mReqBronze:'完成首购即得', mReqSilver:'推荐 5 人 或 下级消费 RM1000', mReqGold:'推荐 15 人 或 下级消费 RM3000',
+    mEarnBronze:'赚 1 代 · 3%', mEarnSilver:'赚 2 代 · 3%+1%', mEarnGold:'赚 3 代 · +0.5%',
+    mHowTitle:'怎么赚佣金?', mHow1:'1. 注册成会员，系统给你专属推荐码', mHow2:'2. 把分享链接发给朋友', mHow3:'3. 朋友凭链接注册并下单', mHow4:'4. 你按比例获得佣金，满额可提现或购物抵扣',
+    mTabReg:'注册', mTabLogin:'登录', mLName:'姓名', mPName:'你的名字', mLPass:'密码', mPPass:'至少 6 位', mRegBtn:'注册并获取推荐码', mLoginBtn:'登录', mRefSaved:'推荐码已记录：',
+    mYourTier:'你的会员等级', mYourLink:'你的专属推荐链接', mCopy:'复制', mRefCode:'推荐码：', mBalance:'当前佣金余额', mWithdraw:'申请提现',
+    mInvited:'已邀请', mFirstBuy:'已首购', mEarned:'累计佣金', mMyFriends:'我邀请的朋友', mNoFriends:'还没有人通过你的链接注册', mLogout:'退出登录',
+    mProgTpl:'已有效推荐 {refs} 人 · 再推荐 {n} 人 或 下级再消费 RM{amt} 升「{next}」', mProgMaxTpl:'已有效推荐 {refs} 人 · 已是最高等级 🎉',
+    aConnecting:'系统连接中，请稍后再试', aFillLogin:'请填写邮箱和密码', aCopied:'链接已复制 🌸 快分享给朋友吧！', aCartAdded:'已加入购物车 🛒', mWelcome:'欢迎回来，{name} 🌸', mGuideTitle:'新手 3 步,轻松上手：', mGuide1:'① 填好收货资料，立领 RM3', mGuide2:'② 复制你的专属链接,分享给朋友赚佣金', mGuide3:'③ 逛逛商店,挑几件喜欢的 🌸', aWdAmt:'提现金额 (RM)。当前余额 RM {bal}：', aWdAcc:'收款 TNG 号码 / 银行账号：', aBadAmt:'请输入有效金额', aWdOk:'提现申请已提交，店主审核后会打款。',
+    aPickSize:'请选择尺码', aSoldOut:'该尺码已售罄', aStockShort:'库存不够了', aCartEmpty:'购物车是空的', aOrderFail:'下单失败，请重试',
+    addrTitle:'填写收货资料，领 RM3', addrSub:'填好资料 + 把 App 加到手机主屏幕，即领 RM3（一次性）', addrName:'姓名', addrPhone:'手机号码', addrAddr:'收货地址', addrBtn:'安装 App 并领 RM3', addrLater:'稍后再说', addrFill:'请填写完整资料', addrGot:'已获得 RM3 佣金！', installNeed:'需要把 App 加到主屏幕才能领 RM3，请点「安装」并选择添加', iosTitle:'把 Yuna 加到主屏幕：', iosStep1:'① 点手机底部/顶部的「分享」按钮', iosStep2:'② 选「加入主画面 / Add to Home Screen」', iosStep3:'③ 完成后回来点下面按钮领 RM3', iosDone:'我已添加，领取 RM3',
+    heroTag:'舒适睡衣 · 萌趣童装', heroTitle:'柔软相伴，<br><em>安睡</em>每一夜',
+    heroDesc:'精选亲肤睡衣与可爱童装，给你和宝贝最温柔的陪伴。', shopNow:'立即选购', badge1:'亲肤面料', badge2:'舒适亲子',
+    prodTitle:'热销商品', promoSub:'限时特惠', promoTitle:'儿童系列全场 8 折', promoDesc:'仅限本周，精选童装优惠中', promoBtn:'立即抢购',
+    adminTitle:'商家后台 · 上传商品', adminSub:'填写商品资料 → 上传图片 → 保存，立即出现在商店里（数据保存在本浏览器）',
+    fNameL:'商品名称', fNameP:'例如：冰丝吊带睡裙', fCatL:'分类', catW:'女士睡衣', catK:'儿童服装', catF:'亲子睡衣',
+    fForL:'尺码 / 说明', fForP:'例如：女士 / S-XL', fPriceL:'售价 (RM)', fOldL:'原价 (可留空)',
+    fImgL:'商品图片', uploadImg:'点击上传图片', saveBtn:'保存并上架', curProd:'当前商品',
+    cartTitle:'购物车', cartSub:'确认商品数量后点击结算', cartTotalLabel:'合计', checkoutBtn:'前往结算 →', emptyCart:'购物车还是空的 · 去商店挑选喜欢的吧',
+    backCart:'返回购物车', coTitle:'结算付款', choosePay:'选择付款方式', tngAcc:'TNG 户口',
+    proofL:'上传付款截图 *', proofP:'付款后点击上传截图', submitOrder:'提交订单',
+    payTng:"用 Touch 'n Go eWallet 扫码", payDuit:'用任意银行 App 扫 DuitNow QR', payAccTo:'转账到以下 TNG eWallet 户口：',
+    payee:'收款人：Yuna Fashion Shop', payAccName:'户名：Yuna Fashion Shop', replaceNote:'（上线时替换成你的真实收款码 / 号码）',
+    successH:'订单已提交！', orderNo:'订单编号', successMsg:'我们会核对你的付款截图，确认后尽快发货。', keepShop:'继续购物',
+    footTag:'为你和宝贝，<br>带来柔软温暖的睡眠时光。', footShopH:'购物指南', footShop1:'如何下单', footShop2:'尺码指南', footShop3:'配送说明', footShop4:'退换政策',
+    footBrandH:'品牌故事', footBrand1:'关于我们', footBrand2:'设计理念', footBrand3:'合作联系', footContactH:'联系我们', footC1:'在线客服', rights:'版权所有', chatTitle:'在线客服', chatHi:'你好！有什么可以帮你？我们会尽快回复 🌸', chatPh:'输入消息…', chatSendBtn:'发送',
+    admMgmt:'店主管理', admOnlyYou:'只有你(店主)能看到这一区', admOrdersH:'待确认订单 — 确认收款后会给推荐人入账佣金', admWdsH:'提现申请 — 打款到会员账号后点「已打款」', admSetH:'设置 — 佣金 / 运费（改完点保存）', admL1:'L1 直接佣金 %', admL2:'L2 佣金 %', admL3:'L3 佣金 %', admBonus:'首购奖 RM', admShipMin:'免邮门槛 RM', admShipFee:'运费 RM', admWdMin:'提现门槛 RM', admWa:'WhatsApp 链接', admTt:'TikTok 链接', admSaveSet:'保存设置', admProdH:'上传 / 管理商品', admCat:'分类', admCatW:'女士睡衣', admCatB:'小孩 · 男孩', admCatG:'小孩 · 女孩', admNameZh:'商品名称（中文）', admNameEn:'英文名 (可选)', admNameMs:'马来名 (可选)', admNameVi:'越南名 (可选)', admNote:'说明（可选）', admTag:'标签', admTagNone:'无', admTagNew:'新品', admTagSale:'特惠', admImg:'商品图片', admSizes:'各尺码 · 价格(RM) / 库存', admSaveProd:'保存上架', admCurProd:'现有商品', admChatH:'客服消息 — 客户的咨询会显示在这里', admNoChat:'暂无客服消息', admReplyPh:'回复…', admNoOrders:'没有待确认订单', admConfirmPaid:'确认收款', admNoWds:'没有提现申请', admPaid:'已打款', admReject:'拒绝', admShipTo:'收货', admCopyAddr:'复制地址', admCopied:'已复制到剪贴板', admNoAddr:'（客人还没填收货资料）',
+    newT:'新品', saleT:'特惠', addT:'加入购物车', alertFill:'请填写商品名称和售价', alertUp:'已上架！切到「商店」即可看到', alertProof:'请先上传付款截图' },
+
+  en:{ freeShip:'Free shipping over RM 99 · 30-day returns', slogan:'Soft Comfort, Sweet Dreams', slogan2:'Soft Comfort, Sweet Dreams',
+    navShop:'Shop', navAdmin:'Admin', navCart:'Cart', navMember:'Member',
+    navHome:'Home', navWomen:'Women', navKids:'Kids', navSale:'Sale',
+    mTitle:'Member Referral Program', mSub:'Become a member, share your link — earn commission when friends order.', mNormalMember:'Member',
+    mJoin:'Join Yuna membership free', mB1:'Free shipping over RM99', mB2:'Refer friends and earn commission forever — on every order they make', mB3:'Level up to earn from deeper downlines, up to 3 generations',
+    tierBronze:'Bud Member', tierSilver:'Bloom Member', tierGold:'Full Bloom',
+    mReqBronze:'Unlocked after first purchase', mReqSilver:'Refer 5 or downline spend RM1000', mReqGold:'Refer 15 or downline spend RM3000',
+    mEarnBronze:'1 gen · 3%', mEarnSilver:'2 gen · 3%+1%', mEarnGold:'3 gen · +0.5%',
+    mHowTitle:'How to earn?', mHow1:'1. Register and get your referral code', mHow2:'2. Send your link to friends', mHow3:'3. Friends register via your link and order', mHow4:'4. You earn commission — withdraw or use as store credit',
+    mTabReg:'Register', mTabLogin:'Login', mLName:'Name', mPName:'Your name', mLPass:'Password', mPPass:'At least 6 characters', mRegBtn:'Register & get code', mLoginBtn:'Login', mRefSaved:'Referral code saved: ',
+    mYourTier:'Your tier', mYourLink:'Your referral link', mCopy:'Copy', mRefCode:'Code: ', mBalance:'Commission balance', mWithdraw:'Withdraw',
+    mInvited:'Invited', mFirstBuy:'First buy', mEarned:'Total earned', mMyFriends:'Friends you invited', mNoFriends:'No one has registered via your link yet', mLogout:'Log out',
+    mProgTpl:'{refs} valid referrals · Refer {n} more or downline spend RM{amt} to reach {next}', mProgMaxTpl:'{refs} valid referrals · Top tier reached 🎉',
+    aConnecting:'Connecting, please try again', aFillLogin:'Please enter email and password', aCopied:'Link copied 🌸 share it with friends!', aCartAdded:'Added to cart 🛒', mWelcome:'Welcome back, {name} 🌸', mGuideTitle:'3 easy steps to start:', mGuide1:'1. Fill delivery info — get RM3', mGuide2:'2. Copy your link & share to earn', mGuide3:'3. Browse the shop & pick some favourites 🌸', aWdAmt:'Withdraw amount (RM). Balance RM {bal}:', aWdAcc:'Your TNG number / bank account:', aBadAmt:'Please enter a valid amount', aWdOk:'Withdrawal request submitted. Owner will pay after review.',
+    aPickSize:'Please select a size', aSoldOut:'This size is sold out', aStockShort:'Not enough stock', aCartEmpty:'Your cart is empty', aOrderFail:'Order failed, please retry',
+    addrTitle:'Fill delivery info, get RM3', addrSub:'Fill info + add the App to your home screen to get RM3 (one-time)', addrName:'Name', addrPhone:'Phone', addrAddr:'Delivery address', addrBtn:'Install App & get RM3', addrLater:'Maybe later', addrFill:'Please fill all fields', addrGot:'You earned RM3!', installNeed:'Please add the App to your home screen to get RM3 — tap Install and confirm', iosTitle:'Add Yuna to your home screen:', iosStep1:'1. Tap the Share button', iosStep2:'2. Choose "Add to Home Screen"', iosStep3:'3. Come back and tap the button below', iosDone:'I have added it — get RM3',
+    heroTag:'Cozy Sleepwear · Sweet Kids', heroTitle:'Soft Comfort,<br><em>Sweet</em> Dreams',
+    heroDesc:'Gentle sleepwear and adorable kids wear, for the softest moments with your little one.', shopNow:'Shop now', badge1:'Skin-friendly', badge2:'For you & kids',
+    prodTitle:'Best sellers', promoSub:'Limited offer', promoTitle:'20% off all kids wear', promoDesc:'This week only, selected styles', promoBtn:'Shop sale',
+    adminTitle:'Admin · Add products', adminSub:'Fill in details → upload image → save. Appears in shop instantly (saved in this browser).',
+    fNameL:'Product name', fNameP:'e.g. Silky Slip Nightgown', fCatL:'Category', catW:'Women Sleepwear', catK:'Kids Wear', catF:'Family Pajamas',
+    fForL:'Size / note', fForP:'e.g. Women / S-XL', fPriceL:'Price (RM)', fOldL:'Was (optional)',
+    fImgL:'Product image', uploadImg:'Click to upload', saveBtn:'Save & publish', curProd:'Current products',
+    cartTitle:'Cart', cartSub:'Adjust quantity, then checkout', cartTotalLabel:'Total', checkoutBtn:'Checkout →', emptyCart:'Your cart is empty · go pick something you love',
+    backCart:'Back to cart', coTitle:'Checkout', choosePay:'Choose payment method', tngAcc:'TNG Account',
+    proofL:'Upload payment screenshot *', proofP:'Upload after paying', submitOrder:'Place order',
+    payTng:"Scan with Touch 'n Go eWallet", payDuit:'Scan DuitNow QR with any bank app', payAccTo:'Transfer to this TNG eWallet account:',
+    payee:'Payee: Yuna Fashion Shop', payAccName:'Name: Yuna Fashion Shop', replaceNote:'(Replace with your real QR / number before going live)',
+    successH:'Order placed!', orderNo:'Order no.', successMsg:'We will verify your payment screenshot and ship as soon as confirmed.', keepShop:'Keep shopping',
+    footTag:'Soft, warm sleep moments<br>for you and your little one.', footShopH:'Shopping', footShop1:'How to order', footShop2:'Size guide', footShop3:'Shipping', footShop4:'Returns',
+    footBrandH:'Our story', footBrand1:'About us', footBrand2:'Design', footBrand3:'Partnership', footContactH:'Contact', footC1:'Live chat', rights:'All rights reserved', chatTitle:'Live chat', chatHi:'Hi! How can we help? We will reply soon 🌸', chatPh:'Type a message…', chatSendBtn:'Send',
+    newT:'New', saleT:'Sale', addT:'Add to cart', alertFill:'Please enter name and price', alertUp:'Published! Switch to Shop to see it', alertProof:'Please upload payment screenshot first' },
+
+  ms:{ freeShip:'Penghantaran percuma melebihi RM 99 · Pulangan 30 hari', slogan:'Lembut Selesa, Tidur Lena', slogan2:'Lembut Selesa, Tidur Lena',
+    navShop:'Kedai', navAdmin:'Pentadbir', navCart:'Troli', navMember:'Ahli',
+    navHome:'Utama', navWomen:'Wanita', navKids:'Kanak', navSale:'Promosi',
+    mTitle:'Program Rujukan Ahli', mSub:'Daftar jadi ahli, kongsi pautan anda — dapat komisen bila kawan beli.', mNormalMember:'Ahli',
+    mJoin:'Sertai keahlian Yuna percuma', mB1:'Penghantaran percuma melebihi RM99', mB2:'Ajak kawan & dapat komisen selamanya — setiap pesanan mereka', mB3:'Naik taraf untuk dapat dari downline lebih dalam, sehingga 3 generasi',
+    tierBronze:'Ahli Kuncup', tierSilver:'Ahli Mekar', tierGold:'Mekar Penuh',
+    mReqBronze:'Dibuka selepas pembelian pertama', mReqSilver:'Ajak 5 atau downline belanja RM1000', mReqGold:'Ajak 15 atau downline belanja RM3000',
+    mEarnBronze:'1 gen · 3%', mEarnSilver:'2 gen · 3%+1%', mEarnGold:'3 gen · +0.5%',
+    mHowTitle:'Cara dapat komisen?', mHow1:'1. Daftar dan dapat kod rujukan', mHow2:'2. Hantar pautan kepada kawan', mHow3:'3. Kawan daftar guna pautan & buat pesanan', mHow4:'4. Anda dapat komisen — keluarkan atau guna untuk beli',
+    mTabReg:'Daftar', mTabLogin:'Log masuk', mLName:'Nama', mPName:'Nama anda', mLPass:'Kata laluan', mPPass:'Sekurangnya 6 aksara', mRegBtn:'Daftar & dapat kod', mLoginBtn:'Log masuk', mRefSaved:'Kod rujukan disimpan: ',
+    mYourTier:'Tahap anda', mYourLink:'Pautan rujukan anda', mCopy:'Salin', mRefCode:'Kod: ', mBalance:'Baki komisen', mWithdraw:'Keluarkan',
+    mInvited:'Diajak', mFirstBuy:'Beli pertama', mEarned:'Jumlah komisen', mMyFriends:'Kawan yang anda ajak', mNoFriends:'Belum ada sesiapa daftar melalui pautan anda', mLogout:'Log keluar',
+    mProgTpl:'{refs} rujukan sah · Ajak {n} lagi atau downline belanja RM{amt} untuk {next}', mProgMaxTpl:'{refs} rujukan sah · Tahap tertinggi dicapai 🎉',
+    aConnecting:'Menyambung, sila cuba lagi', aFillLogin:'Sila isi emel dan kata laluan', aCopied:'Pautan disalin 🌸 kongsi dengan kawan!', aCartAdded:'Ditambah ke troli 🛒', mWelcome:'Selamat kembali, {name} 🌸', mGuideTitle:'3 langkah mudah untuk mula:', mGuide1:'1. Isi maklumat penghantaran — dapat RM3', mGuide2:'2. Salin pautan anda & kongsi untuk komisen', mGuide3:'3. Layari kedai & pilih kesukaan anda 🌸', aWdAmt:'Jumlah keluar (RM). Baki RM {bal}:', aWdAcc:'Nombor TNG / akaun bank anda:', aBadAmt:'Sila masukkan jumlah yang sah', aWdOk:'Permohonan keluar dihantar. Pemilik akan bayar selepas semakan.',
+    aPickSize:'Sila pilih saiz', aSoldOut:'Saiz ini habis dijual', aStockShort:'Stok tidak cukup', aCartEmpty:'Troli anda kosong', aOrderFail:'Pesanan gagal, sila cuba lagi',
+    addrTitle:'Isi maklumat penghantaran, dapat RM3', addrSub:'Isi maklumat + tambah App ke skrin utama untuk dapat RM3 (sekali)', addrName:'Nama', addrPhone:'No. telefon', addrAddr:'Alamat penghantaran', addrBtn:'Pasang App & dapat RM3', addrLater:'Kemudian', addrFill:'Sila isi semua maklumat', addrGot:'Anda dapat RM3!', installNeed:'Sila tambah App ke skrin utama untuk dapat RM3 — tekan Pasang', iosTitle:'Tambah Yuna ke skrin utama:', iosStep1:'1. Tekan butang Kongsi (Share)', iosStep2:'2. Pilih "Add to Home Screen"', iosStep3:'3. Kembali dan tekan butang di bawah', iosDone:'Saya sudah tambah — dapat RM3',
+    heroTag:'Baju Tidur Selesa · Comel untuk Anak', heroTitle:'Lembut Selesa,<br><em>Tidur</em> Lena',
+    heroDesc:'Baju tidur lembut dan pakaian kanak comel, untuk saat paling selesa bersama si kecil.', shopNow:'Beli sekarang', badge1:'Mesra kulit', badge2:'Untuk anda & anak',
+    prodTitle:'Paling laris', promoSub:'Tawaran terhad', promoTitle:'20% diskaun pakaian kanak', promoDesc:'Minggu ini sahaja, gaya terpilih', promoBtn:'Beli jualan',
+    adminTitle:'Pentadbir · Tambah produk', adminSub:'Isi maklumat → muat naik gambar → simpan. Terus muncul di kedai (disimpan dalam pelayar ini).',
+    fNameL:'Nama produk', fNameP:'cth: Gaun Tidur Sutera', fCatL:'Kategori', catW:'Baju Tidur Wanita', catK:'Pakaian Kanak', catF:'Piyama Keluarga',
+    fForL:'Saiz / nota', fForP:'cth: Wanita / S-XL', fPriceL:'Harga (RM)', fOldL:'Harga asal (pilihan)',
+    fImgL:'Gambar produk', uploadImg:'Klik untuk muat naik', saveBtn:'Simpan & terbit', curProd:'Produk semasa',
+    cartTitle:'Troli', cartSub:'Laraskan kuantiti, kemudian bayar', cartTotalLabel:'Jumlah', checkoutBtn:'Bayar →', emptyCart:'Troli anda kosong · pergi pilih kesukaan anda',
+    backCart:'Kembali ke troli', coTitle:'Pembayaran', choosePay:'Pilih kaedah pembayaran', tngAcc:'Akaun TNG',
+    proofL:'Muat naik tangkapan skrin bayaran *', proofP:'Muat naik selepas bayar', submitOrder:'Hantar pesanan',
+    payTng:"Imbas dengan Touch 'n Go eWallet", payDuit:'Imbas DuitNow QR dengan mana-mana app bank', payAccTo:'Pindah ke akaun TNG eWallet ini:',
+    payee:'Penerima: Yuna Fashion Shop', payAccName:'Nama: Yuna Fashion Shop', replaceNote:'(Ganti dengan QR / nombor sebenar sebelum dilancarkan)',
+    successH:'Pesanan dihantar!', orderNo:'No. pesanan', successMsg:'Kami akan sahkan tangkapan skrin bayaran anda dan hantar sebaik disahkan.', keepShop:'Terus beli-belah',
+    footTag:'Saat tidur lembut dan hangat<br>untuk anda dan si kecil.', footShopH:'Membeli-belah', footShop1:'Cara pesanan', footShop2:'Panduan saiz', footShop3:'Penghantaran', footShop4:'Pulangan',
+    footBrandH:'Kisah kami', footBrand1:'Tentang kami', footBrand2:'Reka bentuk', footBrand3:'Kerjasama', footContactH:'Hubungi', footC1:'Sembang langsung', rights:'Hak cipta terpelihara', chatTitle:'Sembang langsung', chatHi:'Hai! Boleh kami bantu? Kami akan balas segera 🌸', chatPh:'Taip mesej…', chatSendBtn:'Hantar',
+    newT:'Baharu', saleT:'Jualan', addT:'Tambah ke troli', alertFill:'Sila isi nama dan harga', alertUp:'Diterbitkan! Tukar ke Kedai untuk lihat', alertProof:'Sila muat naik tangkapan skrin bayaran dahulu' },
+
+  vi:{ freeShip:'Miễn phí vận chuyển trên RM 99 · Đổi trả 30 ngày', slogan:'Êm ái mỗi đêm, ngọt ngào giấc mơ', slogan2:'Êm ái mỗi đêm, ngọt ngào giấc mơ',
+    navShop:'Cửa hàng', navAdmin:'Quản trị', navCart:'Giỏ hàng', navMember:'Thành viên',
+    navHome:'Trang chủ', navWomen:'Đồ nữ', navKids:'Trẻ em', navSale:'Ưu đãi',
+    mTitle:'Chương trình giới thiệu', mSub:'Đăng ký thành viên, chia sẻ link — nhận hoa hồng khi bạn bè đặt hàng.', mNormalMember:'Thành viên',
+    mJoin:'Tham gia thành viên Yuna miễn phí', mB1:'Miễn phí ship trên RM99', mB2:'Giới thiệu bạn & hưởng hoa hồng mãi mãi — mỗi đơn họ mua', mB3:'Lên hạng để hưởng từ tuyến dưới sâu hơn, tối đa 3 đời',
+    tierBronze:'Thành viên Hé nở', tierSilver:'Thành viên Nở rộ', tierGold:'Mãn khai',
+    mReqBronze:'Mở khóa sau lần mua đầu', mReqSilver:'Giới thiệu 5 hoặc tuyến dưới mua RM1000', mReqGold:'Giới thiệu 15 hoặc tuyến dưới mua RM3000',
+    mEarnBronze:'1 đời · 3%', mEarnSilver:'2 đời · 3%+1%', mEarnGold:'3 đời · +0.5%',
+    mHowTitle:'Kiếm hoa hồng thế nào?', mHow1:'1. Đăng ký và nhận mã giới thiệu', mHow2:'2. Gửi link cho bạn bè', mHow3:'3. Bạn bè đăng ký qua link và đặt hàng', mHow4:'4. Bạn nhận hoa hồng — rút hoặc dùng để mua hàng',
+    mTabReg:'Đăng ký', mTabLogin:'Đăng nhập', mLName:'Tên', mPName:'Tên của bạn', mLPass:'Mật khẩu', mPPass:'Ít nhất 6 ký tự', mRegBtn:'Đăng ký & nhận mã', mLoginBtn:'Đăng nhập', mRefSaved:'Đã lưu mã giới thiệu: ',
+    mYourTier:'Hạng của bạn', mYourLink:'Link giới thiệu của bạn', mCopy:'Sao chép', mRefCode:'Mã: ', mBalance:'Số dư hoa hồng', mWithdraw:'Rút tiền',
+    mInvited:'Đã mời', mFirstBuy:'Đã mua đầu', mEarned:'Tổng hoa hồng', mMyFriends:'Bạn bè bạn đã mời', mNoFriends:'Chưa có ai đăng ký qua link của bạn', mLogout:'Đăng xuất',
+    mProgTpl:'{refs} giới thiệu hợp lệ · Giới thiệu thêm {n} hoặc tuyến dưới mua RM{amt} để lên {next}', mProgMaxTpl:'{refs} giới thiệu hợp lệ · Đã đạt hạng cao nhất 🎉',
+    aConnecting:'Đang kết nối, vui lòng thử lại', aFillLogin:'Vui lòng nhập email và mật khẩu', aCopied:'Đã sao chép link 🌸 chia sẻ với bạn bè nhé!', aCartAdded:'Đã thêm vào giỏ 🛒', mWelcome:'Chào mừng trở lại, {name} 🌸', mGuideTitle:'3 bước dễ để bắt đầu:', mGuide1:'1. Điền thông tin giao hàng — nhận RM3', mGuide2:'2. Sao chép link & chia sẻ để kiếm hoa hồng', mGuide3:'3. Dạo cửa hàng & chọn vài món yêu thích 🌸', aWdAmt:'Số tiền rút (RM). Số dư RM {bal}:', aWdAcc:'Số TNG / tài khoản ngân hàng của bạn:', aBadAmt:'Vui lòng nhập số tiền hợp lệ', aWdOk:'Đã gửi yêu cầu rút. Chủ shop sẽ thanh toán sau khi duyệt.',
+    aPickSize:'Vui lòng chọn size', aSoldOut:'Size này đã hết hàng', aStockShort:'Không đủ hàng', aCartEmpty:'Giỏ hàng trống', aOrderFail:'Đặt hàng thất bại, vui lòng thử lại',
+    addrTitle:'Điền thông tin giao hàng, nhận RM3', addrSub:'Điền thông tin + thêm App vào màn hình chính để nhận RM3 (một lần)', addrName:'Tên', addrPhone:'Số điện thoại', addrAddr:'Địa chỉ giao hàng', addrBtn:'Cài App & nhận RM3', addrLater:'Để sau', addrFill:'Vui lòng điền đủ thông tin', addrGot:'Bạn nhận được RM3!', installNeed:'Vui lòng thêm App vào màn hình chính để nhận RM3 — bấm Cài đặt', iosTitle:'Thêm Yuna vào màn hình chính:', iosStep1:'1. Bấm nút Chia sẻ (Share)', iosStep2:'2. Chọn "Add to Home Screen"', iosStep3:'3. Quay lại và bấm nút bên dưới', iosDone:'Tôi đã thêm — nhận RM3',
+    heroTag:'Đồ ngủ êm ái · Đồ trẻ em xinh xắn', heroTitle:'Êm ái mỗi đêm,<br>ngọt ngào <em>giấc mơ</em>',
+    heroDesc:'Đồ ngủ mềm mại và đồ trẻ em đáng yêu, cho những khoảnh khắc êm dịu bên bé yêu.', shopNow:'Mua ngay', badge1:'Thân thiện da', badge2:'Cho mẹ & bé',
+    prodTitle:'Bán chạy nhất', promoSub:'Ưu đãi có hạn', promoTitle:'Giảm 20% đồ trẻ em', promoDesc:'Chỉ tuần này, mẫu chọn lọc', promoBtn:'Mua ngay',
+    adminTitle:'Quản trị · Thêm sản phẩm', adminSub:'Điền thông tin → tải ảnh → lưu. Hiện ngay trong cửa hàng (lưu trong trình duyệt này).',
+    fNameL:'Tên sản phẩm', fNameP:'vd: Váy ngủ lụa', fCatL:'Danh mục', catW:'Đồ ngủ nữ', catK:'Đồ trẻ em', catF:'Pyjama gia đình',
+    fForL:'Size / ghi chú', fForP:'vd: Nữ / S-XL', fPriceL:'Giá (RM)', fOldL:'Giá gốc (tùy chọn)',
+    fImgL:'Ảnh sản phẩm', uploadImg:'Nhấn để tải lên', saveBtn:'Lưu & đăng bán', curProd:'Sản phẩm hiện có',
+    cartTitle:'Giỏ hàng', cartSub:'Điều chỉnh số lượng rồi thanh toán', cartTotalLabel:'Tổng', checkoutBtn:'Thanh toán →', emptyCart:'Giỏ hàng trống · hãy chọn món bạn thích',
+    backCart:'Về giỏ hàng', coTitle:'Thanh toán', choosePay:'Chọn phương thức thanh toán', tngAcc:'Tài khoản TNG',
+    proofL:'Tải ảnh chụp thanh toán *', proofP:'Tải lên sau khi thanh toán', submitOrder:'Đặt hàng',
+    payTng:"Quét bằng Touch 'n Go eWallet", payDuit:'Quét DuitNow QR bằng app ngân hàng', payAccTo:'Chuyển vào tài khoản TNG eWallet này:',
+    payee:'Người nhận: Yuna Fashion Shop', payAccName:'Tên: Yuna Fashion Shop', replaceNote:'(Thay bằng QR / số thật trước khi vận hành)',
+    successH:'Đã đặt hàng!', orderNo:'Mã đơn', successMsg:'Chúng tôi sẽ kiểm tra ảnh thanh toán và giao hàng sớm nhất sau khi xác nhận.', keepShop:'Tiếp tục mua',
+    footTag:'Khoảnh khắc ngủ êm ấm<br>cho bạn và bé yêu.', footShopH:'Mua sắm', footShop1:'Cách đặt hàng', footShop2:'Hướng dẫn size', footShop3:'Vận chuyển', footShop4:'Đổi trả',
+    footBrandH:'Câu chuyện', footBrand1:'Về chúng tôi', footBrand2:'Thiết kế', footBrand3:'Hợp tác', footContactH:'Liên hệ', footC1:'Trò chuyện', rights:'Bảo lưu mọi quyền', chatTitle:'Trò chuyện', chatHi:'Xin chào! Chúng tôi giúp gì được? Sẽ trả lời sớm 🌸', chatPh:'Nhập tin nhắn…', chatSendBtn:'Gửi',
+    admMgmt:'Quản lý cửa hàng', admOnlyYou:'Chỉ chủ shop thấy khu vực này', admOrdersH:'Đơn chờ xác nhận — xác nhận thanh toán sẽ ghi hoa hồng cho người giới thiệu', admWdsH:'Yêu cầu rút tiền — chuyển cho hội viên xong bấm「Đã trả」', admSetH:'Cài đặt — hoa hồng / phí ship (sửa xong bấm lưu)', admL1:'Hoa hồng L1 %', admL2:'Hoa hồng L2 %', admL3:'Hoa hồng L3 %', admBonus:'Thưởng mua đầu RM', admShipMin:'Mức miễn ship RM', admShipFee:'Phí ship RM', admWdMin:'Mức rút tối thiểu RM', admWa:'Liên kết WhatsApp', admTt:'Liên kết TikTok', admSaveSet:'Lưu cài đặt', admProdH:'Tải lên / quản lý sản phẩm', admCat:'Phân loại', admCatW:'Đồ ngủ nữ', admCatB:'Trẻ em · Bé trai', admCatG:'Trẻ em · Bé gái', admNameZh:'Tên sản phẩm (tiếng Trung)', admNameEn:'Tên tiếng Anh (tùy chọn)', admNameMs:'Tên tiếng Mã Lai (tùy chọn)', admNameVi:'Tên tiếng Việt (tùy chọn)', admNote:'Mô tả (tùy chọn)', admTag:'Nhãn', admTagNone:'Không', admTagNew:'Mới', admTagSale:'Ưu đãi', admImg:'Hình sản phẩm', admSizes:'Từng size · Giá(RM) / Tồn kho', admSaveProd:'Lưu & đăng bán', admCurProd:'Sản phẩm hiện có', admChatH:'Tin nhắn CSKH — câu hỏi của khách hiện ở đây', admNoChat:'Chưa có tin nhắn', admReplyPh:'Trả lời…', admNoOrders:'Không có đơn chờ', admConfirmPaid:'Xác nhận đã nhận tiền', admNoWds:'Không có yêu cầu rút', admPaid:'Đã trả', admReject:'Từ chối', admShipTo:'Giao đến', admCopyAddr:'Sao chép địa chỉ', admCopied:'Đã sao chép', admNoAddr:'(Khách chưa điền thông tin giao hàng)',
+    newT:'Mới', saleT:'Sale', addT:'Thêm vào giỏ', alertFill:'Vui lòng nhập tên và giá', alertUp:'Đã đăng! Chuyển sang Cửa hàng để xem', alertProof:'Vui lòng tải ảnh thanh toán trước' }
+};
+
+/* ============ 默认商品 ============ */
+const defaultProducts = [
+  { name:'冰丝吊带睡裙', for:'女士 / S-XL', price:89, old:119, tag:'new', emoji:'👗', img:null },
+  { name:'小熊珊瑚绒套装', for:'儿童 / 90-140cm', price:79, old:0, tag:'new', emoji:'🧸', img:null },
+  { name:'纯棉短袖睡衣', for:'女士 / S-XXL', price:69, old:99, tag:'sale', emoji:'👚', img:null },
+  { name:'星星连体睡衣', for:'儿童 / 80-120cm', price:75, old:0, tag:'', emoji:'⭐', img:null }
+];
+
+let products, cart = [], pendingImg = null, payMethod = 'tngqr', proofUploaded = false, lang = 'zh';
+
+/* ============ 后台密码（可自行修改）============ */
+const ADMIN_PASS = 'yuna2580';
+let adminUnlocked = false;
+function openAdmin(){
+  if(adminUnlocked) return true;
+  const p = prompt('请输入管理密码 / Admin password');
+  if(p === null) return false;
+  if(p !== ADMIN_PASS){ alert('密码错误 / Wrong password'); return false; }
+  adminUnlocked = true; return true;
+}
+
+/* 从浏览器本地读取已保存的商品 */
+try {
+  const saved = localStorage.getItem('yuna_products');
+  products = saved ? JSON.parse(saved) : defaultProducts.slice();
+} catch(e){ products = defaultProducts.slice(); }
+try { lang = localStorage.getItem('yuna_lang') || 'zh'; } catch(e){}
+
+function saveProducts(){ try{ localStorage.setItem('yuna_products', JSON.stringify(products)); }catch(e){} }
+
+/* ============ 语言 ============ */
+function applyLang(){
+  const t = T[lang];
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i]').forEach(el=>{
+    const k = el.getAttribute('data-i'); if(t[k]!==undefined) el.innerHTML = t[k];
+  });
+  document.querySelectorAll('[data-iph]').forEach(el=>{
+    const k = el.getAttribute('data-iph'); if(t[k]!==undefined) el.placeholder = t[k];
+  });
+  document.getElementById('heroTitle').innerHTML = t.heroTitle;
+  try{
+    const fb=document.getElementById('flowerBronze'); if(fb) fb.innerHTML=flowerSVG('#C9824A',50,'bronze');
+    const fs=document.getElementById('flowerSilver'); if(fs) fs.innerHTML=flowerSVG('#B9BFC9',50,'silver');
+    const fg=document.getElementById('flowerGold'); if(fg) fg.innerHTML=flowerSVG('#E7B53C',50,'gold');
+  }catch(e){}
+  renderShop(); renderAdmin(); renderCart();
+  if(typeof renderMember==='function'){ try{ renderMember(); }catch(e){} }
+}
+
+function toggleLangMenu(e){ if(e) e.stopPropagation(); document.getElementById('langMenu').classList.toggle('hide'); }
+document.getElementById('langMenu').addEventListener('click', e=>{
+  const btn = e.target.closest('.lang-opt'); if(!btn) return;
+  lang = btn.getAttribute('data-lang');
+  try{ localStorage.setItem('yuna_lang', lang); }catch(e){}
+  document.querySelectorAll('.lang-opt').forEach(b=>b.classList.toggle('active', b===btn));
+  document.getElementById('langCurLabel').textContent = btn.textContent;
+  document.getElementById('langMenu').classList.add('hide');
+  applyLang();
+});
+document.addEventListener('click', e=>{ if(!e.target.closest('#langDD')){ const m=document.getElementById('langMenu'); if(m) m.classList.add('hide'); } });
+
+/* ============ 视图切换 ============ */
+let shopFilter='all'; let dbProducts=[]; let kidGender='boy';
+function switchView(v){
+  if(v==='admin' && !openAdmin()) return;
+  ['Shop','Admin','Cart','Checkout','Success','Member'].forEach(n=>document.getElementById('view'+n).classList.add('hide'));
+  if(v!=='shop') document.querySelectorAll('.nav-tabs .vtab').forEach(b=>b.classList.remove('active'));
+  const tm=document.getElementById('tabMember'); if(tm) tm.classList.toggle('active', v==='member');
+  const tc=document.getElementById('tabCart'); if(tc) tc.classList.toggle('active', v==='cart');
+  if(v==='shop') document.getElementById('viewShop').classList.remove('hide');
+  if(v==='admin'){ document.getElementById('viewAdmin').classList.remove('hide'); renderAdmin(); }
+  if(v==='cart'){ document.getElementById('viewCart').classList.remove('hide'); renderCart(); }
+  if(v==='checkout'){ document.getElementById('viewCheckout').classList.remove('hide'); renderCheckout(); }
+  if(v==='success') document.getElementById('viewSuccess').classList.remove('hide');
+  if(v==='member'){ document.getElementById('viewMember').classList.remove('hide'); renderMember(); }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showShop(f){
+  shopFilter=f;
+  switchView('shop');
+  document.querySelectorAll('.nav-tabs .vtab').forEach(b=>b.classList.remove('active'));
+  const tab=document.getElementById('tab_'+f); if(tab) tab.classList.add('active');
+  const hero=document.querySelector('.hero'); if(hero) hero.style.display=f==='all'?'':'none';
+  const promo=document.querySelector('.promo-banner'); if(promo) promo.style.display=f==='all'?'':'none';
+  renderShop();
+}
+function matchFilter(p){
+  if(shopFilter==='all') return true;
+  if(shopFilter==='sale') return p.tag==='sale' || (p.old && p.old>0);
+  const f=(p.for||'')+' '+(p.name||'');
+  const isKid=/儿童|童|小孩|kid|kanak|trẻ/i.test(f);
+  if(shopFilter==='kids') return isKid;
+  if(shopFilter==='women') return !isKid;
+  return true;
+}
+
+/* ============ 商店 ============ */
+function flowerSVG(metal,size,tier){
+  size=size||46;
+  return `<svg class="vipflower vipf-${tier||'bronze'}" viewBox="-33 -37 66 72" width="${size}" height="${size}" style="vertical-align:middle;overflow:visible">
+    <g fill="#FBB6CE"><circle cy="-19" r="15"/><circle transform="rotate(72)" cy="-19" r="15"/><circle transform="rotate(144)" cy="-19" r="15"/><circle transform="rotate(216)" cy="-19" r="15"/><circle transform="rotate(288)" cy="-19" r="15"/></g>
+    <circle r="19" fill="#FFF3F7" stroke="${metal}" stroke-width="2.6"/>
+    <path d="M-11,-4 q3.5,4 7,0" fill="none" stroke="#C26B82" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M4,-4 q3.5,4 7,0" fill="none" stroke="#C26B82" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="-10" cy="4" r="3.2" fill="#FF9EBE"/>
+    <circle cx="10" cy="4" r="3.2" fill="#FF9EBE"/>
+    <path d="M-3,5 q3,3 6,0" fill="none" stroke="#C26B82" stroke-width="2" stroke-linecap="round"/>
+    <path transform="translate(23,-25) scale(.85)" d="M0,-6 L1.6,-1.6 L6,0 L1.6,1.6 L0,6 L-1.6,1.6 L-6,0 L-1.6,-1.6 Z" fill="${metal}"/>
+  </svg>`;
+}
+const TIER_METAL={bronze:'#C9824A',silver:'#B9BFC9',gold:'#E7B53C'};
+function prodName(p){ if(!p) return ''; if(lang==='zh') return p.name||''; return (p['name_'+lang]||p.name||''); }
+function renderShop(){
+  const t = T[lang];
+  const kg=document.getElementById('kidGenderBar'); if(kg) kg.style.display = shopFilter==='kids'?'flex':'none';
+  const items = dbProducts.filter(p=>{ if(p.active===false) return false; if(shopFilter==='all') return true; if(shopFilter==='sale') return p.tag==='sale'; if(shopFilter==='women') return p.category==='women'; if(shopFilter==='kids') return p.category===kidGender; return true; });
+  const grid = document.getElementById('productGrid');
+  const ct = document.getElementById('catTitle'); if(ct) ct.textContent = {all:t.prodTitle,women:t.navWomen,kids:t.navKids,sale:t.navSale}[shopFilter]||t.prodTitle;
+  if(!items.length){ grid.innerHTML='<div class="psub" style="padding:24px 0">这个分类暂时还没有商品 🌷</div>'; return; }
+  grid.innerHTML = items.map(p=>{
+    const sizes=p.sizes||[];
+    const prices=sizes.map(s=>Number(s.price)).filter(x=>x>0);
+    const minP=prices.length?Math.min(...prices):0;
+    const anyStock=sizes.some(s=>s.stock>0);
+    const opts=sizes.map(s=>`<option value="${s.size}" ${s.stock<=0?'disabled':''}>${s.size} · RM ${s.price}${s.stock<=0?' (售罄)':' · 剩'+s.stock+'件'}</option>`).join('');
+    return `<div class="product-card">
+      <div class="product-img">
+        ${p.tag==='new'?`<span class="product-tag tag-new">${t.newT}</span>`:p.tag==='sale'?`<span class="product-tag tag-sale">${t.saleT}</span>`:''}
+        ${p.image?`<img src="${p.image}" alt="">`:`<span style="font-size:50px">🛍️</span>`}
+      </div>
+      <div class="product-info">
+        <div class="product-name">${prodName(p)}</div>
+        <div class="product-for">${p.note||''}</div>
+        <div class="product-price"><span class="price-now">RM ${minP}</span>${sizes.length>1?'<span class="product-for" style="margin:0"> 起</span>':''}</div>
+        <select id="sz_${p.id}" style="width:100%;margin-bottom:8px;padding:7px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text);font-size:12px">${opts}</select>
+        <button class="add-btn" ${anyStock?'':'disabled'} onclick="addToCartDB('${p.id}')">${anyStock?t.addT:'已售罄'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ============ 后台 ============ */
+function renderAdmin(){
+  const t = T[lang];
+  const cnt = document.getElementById('prodCnt'); if(cnt) cnt.textContent = products.length;
+  const list = document.getElementById('adminList'); if(!list) return;
+  list.innerHTML = products.map((p,i)=>`
+    <div class="admin-item">
+      <div class="admin-thumb">${p.img?`<img src="${p.img}">`:(p.emoji||'🛍️')}</div>
+      <div class="admin-meta"><div class="nm">${p.name}</div><div class="pr">RM ${p.price} ${p.old?`<span style="color:var(--muted);text-decoration:line-through;font-weight:400">RM ${p.old}</span>`:''}</div></div>
+      <button class="del-btn" onclick="delProduct(${i})" aria-label="delete"><i class="ti ti-trash"></i></button>
+    </div>`).join('');
+}
+
+document.getElementById('fImg').addEventListener('change', e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ev=>{ pendingImg = ev.target.result;
+    document.getElementById('imgPlaceholder').innerHTML = `<img src="${pendingImg}"><br>${T[lang].uploadImg}`; };
+  r.readAsDataURL(f);
+});
+
+function addProduct(){
+  const t = T[lang];
+  const name = document.getElementById('fName').value.trim();
+  const price = parseInt(document.getElementById('fPrice').value);
+  if(!name || !price){ alert(t.alertFill); return; }
+  products.unshift({ name, for:document.getElementById('fFor').value.trim(),
+    price, old:parseInt(document.getElementById('fOld').value)||0, tag:'new', emoji:'🛍️', img:pendingImg });
+  saveProducts();
+  ['fName','fFor','fPrice','fOld'].forEach(id=>document.getElementById(id).value='');
+  pendingImg=null;
+  document.getElementById('imgPlaceholder').innerHTML=`<i class="ti ti-photo" style="font-size:24px"></i><br>${t.uploadImg}`;
+  renderAdmin(); renderShop(); alert(t.alertUp);
+}
+function delProduct(i){ products.splice(i,1); saveProducts(); renderAdmin(); renderShop(); }
+
+/* ============ 购物车 ============ */
+function addToCartDB(pid){
+  const p = dbProducts.find(x=>x.id===pid); if(!p) return;
+  const sel=document.getElementById('sz_'+pid); const size=sel?sel.value:'';
+  const sz=(p.sizes||[]).find(s=>s.size===size);
+  if(!sz){ alert(T[lang].aPickSize); return; }
+  if(sz.stock<=0){ alert(T[lang].aSoldOut); return; }
+  const key=pid+'|'+size;
+  const ex=cart.find(c=>c.key===key);
+  if(ex){ if(ex.qty<sz.stock) ex.qty++; else { alert(T[lang].aStockShort); return; } }
+  else cart.push({key,product_id:pid,name:prodName(p),baseName:p.name,size,price:Number(sz.price),image:p.image,qty:1,stock:sz.stock});
+  updateCount();
+  try{ showToast(T[lang].aCartAdded); }catch(e){}
+  const b=document.getElementById('tabCart');
+  b.style.background='var(--rose)'; b.style.color='#fff';
+  setTimeout(()=>{ if(!b.classList.contains('active')){b.style.background='';b.style.color='';} },300);
+}
+function updateCount(){ document.getElementById('cartCount').textContent = cart.reduce((s,c)=>s+c.qty,0); }
+function changeQty(i,d){ const c=cart[i]; if(!c) return; c.qty+=d; if(c.stock && c.qty>c.stock) c.qty=c.stock; if(c.qty<=0) cart.splice(i,1); updateCount(); renderCart(); }
+function cartTotal(){ return cart.reduce((s,c)=>s+c.price*c.qty,0); }
+
+function renderCart(){
+  const t = T[lang], body = document.getElementById('cartBody'); if(!body) return;
+  if(cart.length===0){ body.innerHTML=`<div class="empty">${t.emptyCart}</div>`; return; }
+  body.innerHTML = cart.map((c,i)=>`
+    <div class="cart-item">
+      <div class="cart-thumb">${c.image?`<img src="${c.image}">`:'🛍️'}</div>
+      <div class="cart-mid"><div class="nm">${c.name}</div><div class="pr">尺码 ${c.size} · RM ${c.price}</div></div>
+      <div class="qty"><button onclick="changeQty(${i},-1)">−</button><span>${c.qty}</span><button onclick="changeQty(${i},1)">+</button></div>
+      <div class="cart-line-total">RM ${c.price*c.qty}</div>
+    </div>`).join('') +
+    `<div class="cart-summary"><span class="cart-total-label">${t.cartTotalLabel}</span><span class="cart-total-val">RM ${cartTotal()}</span></div>
+     <button class="checkout-btn" onclick="switchView('checkout')">${t.checkoutBtn}</button>`;
+}
+
+/* ============ 结算 ============ */
+function renderCheckout(){
+  const t = T[lang];
+  const sub=cartTotal(), ship=shipFee();
+  document.getElementById('coTotal').innerHTML = '商品 RM '+sub+' · 运费 '+(ship===0?'<span style="color:#5a9a5c">免费</span>':'RM '+ship)+' · <span style="color:var(--rose);font-weight:600">应付 RM '+(sub+ship)+'</span>';
+  selectPay(payMethod);
+}
+function selectPay(m){
+  const t = T[lang]; payMethod = m;
+  document.querySelectorAll('.pay-opt').forEach(o=>o.classList.toggle('sel', o.getAttribute('data-pay')===m));
+  const d = document.getElementById('payDetail');
+  const qrSVG = `<div class="qr-box"><svg width="140" height="140" viewBox="0 0 140 140"><rect width="140" height="140" fill="#fff"/><g fill="#6E4053">${qrPattern()}</g></svg></div>`;
+  if(m==='tngqr') d.innerHTML = qrSVG + `<div class="pay-note">${t.payTng}<br>${t.payee}<br><span style="font-size:11px">${t.replaceNote}</span></div>`;
+  else if(m==='duitnow') d.innerHTML = qrSVG + `<div class="pay-note">${t.payDuit}<br>${t.payee}<br><span style="font-size:11px">${t.replaceNote}</span></div>`;
+  else d.innerHTML = `<div class="pay-note">${t.payAccTo}</div><div class="pay-acc">012-345 6789</div><div class="pay-note">${t.payAccName}<br><span style="font-size:11px">${t.replaceNote}</span></div>`;
+}
+function qrPattern(){
+  let s=''; const seed=[0,1,1,0,1,0,1,1,0,1,0,0,1,1,0,1,1,0,1,0,1,1,0,0,1];
+  for(let y=0;y<14;y++)for(let x=0;x<14;x++){ if((seed[(x*3+y*5)%25]+x+y)%2===0) s+=`<rect x="${10+x*8}" y="${10+y*8}" width="8" height="8"/>`; }
+  s+='<rect x="10" y="10" width="24" height="24" fill="none" stroke="#6E4053" stroke-width="4"/>';
+  s+='<rect x="106" y="10" width="24" height="24" fill="none" stroke="#6E4053" stroke-width="4"/>';
+  s+='<rect x="10" y="106" width="24" height="24" fill="none" stroke="#6E4053" stroke-width="4"/>';
+  return s;
+}
+
+document.getElementById('fProof').addEventListener('change', e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ev=>{
+    document.getElementById('proofPlaceholder').innerHTML = `<img src="${ev.target.result}" style="max-height:90px;border-radius:8px"><br>${T[lang].proofP}`;
+    proofUploaded = true; document.getElementById('submitBtn').disabled = false;
+  };
+  r.readAsDataURL(f);
+});
+
+function shipFee(){ const total=cartTotal(); const S=window.SBS||{}; const minv=(S.free_ship_min!=null?S.free_ship_min:99), fee=(S.ship_fee!=null?S.ship_fee:7); return total>=minv?0:fee; }
+function setKid(g){ kidGender=g; const b=document.getElementById('kg_boy'),gi=document.getElementById('kg_girl'); if(b)b.classList.toggle('active',g==='boy'); if(gi)gi.classList.toggle('active',g==='girl'); renderShop(); }
+function sizeChartHTML(){
+  const rows=[['4','9-10 Kg','80 cm'],['5','10-11 Kg','81-85 cm'],['6','12-13 Kg','86-90 cm'],['7','14-15 Kg','91-95 cm'],['8','16-17 Kg','96-100 cm'],['9','18-20 Kg','101-105 cm'],['10','21-23 Kg','106-110 cm'],['11','24-27 Kg','111-117 cm'],['12','28-30 Kg','118-125 cm'],['S','31-36 Kg','126-135 cm'],['M','37-42 Kg','136-142 cm']];
+  return '<div class="form-card" style="padding:14px"><div style="font-weight:600;color:var(--berry);margin-bottom:8px">小孩尺码对照表</div><table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="color:var(--berry);font-weight:600"><td style="padding:6px;border-bottom:1px solid var(--line)">尺码</td><td style="padding:6px;border-bottom:1px solid var(--line)">体重</td><td style="padding:6px;border-bottom:1px solid var(--line)">身高</td></tr>'+rows.map(r=>'<tr><td style="padding:6px;border-bottom:1px solid var(--line)">'+r[0]+'</td><td style="padding:6px;border-bottom:1px solid var(--line)">'+r[1]+'</td><td style="padding:6px;border-bottom:1px solid var(--line)">'+r[2]+'</td></tr>').join('')+'</table></div>';
+}
+function toggleSizeChart(){ const el=document.getElementById('sizeChart'); if(!el) return; if(el.classList.contains('hide')){ el.innerHTML=sizeChartHTML(); el.classList.remove('hide'); } else el.classList.add('hide'); }
+async function submitOrder(){
+  const t = T[lang];
+  if(!proofUploaded){ alert(t.alertProof); return; }
+  if(!cart.length){ alert(T[lang].aCartEmpty); return; }
+  const btn=document.getElementById('submitBtn'); btn.disabled=true;
+  try{
+    if(typeof sb!=='undefined' && sb){
+      const items=cart.map(c=>({product_id:c.product_id,name:(c.baseName||c.name),size:c.size,qty:c.qty}));
+      const { error } = await sb.rpc('place_order_items',{ p_items: items, p_use_credit: 0 });
+      if(error){ alert('下单失败：'+error.message); btn.disabled=false; return; }
+    }
+  }catch(e){ alert(T[lang].aOrderFail); btn.disabled=false; return; }
+  document.getElementById('orderId').textContent = '#YN' + Date.now().toString().slice(-6);
+  cart = []; updateCount(); proofUploaded=false;
+  document.getElementById('proofPlaceholder').innerHTML=`<i class="ti ti-upload" style="font-size:22px"></i><br>${t.proofP}`;
+  if(typeof loadProducts==='function') loadProducts();
+  switchView('success');
+}
+
+/* 初始化 */
+document.querySelectorAll('.lang-opt').forEach(b=>{ const on=b.getAttribute('data-lang')===lang; b.classList.toggle('active', on); if(on) document.getElementById('langCurLabel').textContent=b.textContent; });
+applyLang();
+function _chkAdmin(){ if(location.hash.replace('#','')==='admin'){ switchView('admin'); } }
+window.addEventListener('hashchange', _chkAdmin);
+_chkAdmin();
+</script>
+
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  window.supabase = { createClient };
+  if (window.__initSB) window.__initSB();
+</script>
+<script>
+/* ============ 会员推荐系统 (Supabase) ============ */
+const SB_URL='https://xwrsmxmnbfmyiadhaiqe.supabase.co';
+const SB_KEY='sb_publishable_e5AxbvESu9zod9a0bFeVsQ_NFcRp7l0';
+let sb=null, sbUser=null, sbProfile=null, authMode='reg';
+window.__initSB = function(){
+  try { sb = window.supabase.createClient(SB_URL, SB_KEY); } catch(e){ console.warn('supabase init failed', e); return; }
+  loadProducts();
+  sb.auth.getSession().then(({data})=>{ const session=data&&data.session; if(session){ sbUser=session.user; loadProfile().then(()=>{ var mv=document.getElementById('viewMember'); if(mv && !mv.classList.contains('hide')) renderMember(); }); } });
+};
+if (window.supabase && window.supabase.createClient) window.__initSB();
+
+(function(){ try{
+  const ref = new URL(location.href).searchParams.get('ref');
+  if(ref){ localStorage.setItem('yuna_ref', ref); }
+}catch(e){} })();
+
+function memberAuthTab(m){
+  authMode=m;
+  document.getElementById('authTabReg').classList.toggle('active', m==='reg');
+  document.getElementById('authTabLogin').classList.toggle('active', m==='login');
+  document.getElementById('regNameField').style.display = m==='reg'?'':'none';
+  document.getElementById('mAuthBtn').textContent = m==='reg'?T[lang].mRegBtn:T[lang].mLoginBtn;
+  const ref = localStorage.getItem('yuna_ref');
+  document.getElementById('refNote').textContent = (m==='reg' && ref)? (T[lang].mRefSaved+ref) : '';
+}
+
+async function memberSubmit(){
+  if(!sb){ alert(T[lang].aConnecting); return; }
+  const email=document.getElementById('mEmail').value.trim();
+  const pass=document.getElementById('mPass').value;
+  const msg=document.getElementById('mAuthMsg'); msg.textContent='';
+  if(!email||!pass){ msg.textContent=T[lang].aFillLogin; return; }
+  document.getElementById('mAuthBtn').disabled=true;
+  try{
+    if(authMode==='reg'){
+      const name=document.getElementById('mName').value.trim();
+      const ref=localStorage.getItem('yuna_ref')||'';
+      const { error } = await sb.auth.signUp({ email, password:pass, options:{ data:{ full_name:name, ref:ref } } });
+      if(error){ msg.textContent=error.message; return; }
+    } else {
+      const { error } = await sb.auth.signInWithPassword({ email, password:pass });
+      if(error){ msg.textContent=error.message; return; }
+    }
+    const { data:{ user } } = await sb.auth.getUser();
+    sbUser=user; await loadProfile(); renderMember();
+  } finally { document.getElementById('mAuthBtn').disabled=false; }
+}
+
+async function loadProfile(){
+  if(!sb||!sbUser){ sbProfile=null; return; }
+  for(let i=0;i<6;i++){
+    const { data } = await sb.from('profiles').select('*').eq('id', sbUser.id).maybeSingle();
+    if(data){ sbProfile=data; return; }
+    await new Promise(r=>setTimeout(r,400));
+  }
+  sbProfile=null;
+}
+
+async function renderMember(){
+  if(!sb) return;
+  if(!sbUser){ const {data:{session}}=await sb.auth.getSession(); if(session){ sbUser=session.user; await loadProfile(); } }
+  const authBox=document.getElementById('memberAuth'), dash=document.getElementById('memberDash');
+  if(sbUser && sbProfile){
+    authBox.classList.add('hide'); dash.classList.remove('hide');
+    try{ var _nm=(sbProfile.full_name||(sbProfile.email||'').split('@')[0]||'').trim()||T[lang].mNormalMember; document.getElementById('memberWelcome').textContent=(T[lang].mWelcome||'{name}').replace('{name}',_nm); }catch(e){}
+    try{ var _g=document.getElementById('memberGuide'); var _hide=false; try{ _hide=localStorage.getItem('yuna_guide_hide')==='1'; }catch(e){} if(_g){ if(_hide||sbProfile.profile_bonus_claimed) _g.classList.add('hide'); else _g.classList.remove('hide'); } }catch(e){}
+    const link = location.origin + location.pathname + '?ref=' + sbProfile.referral_code;
+    document.getElementById('refLink').value = link;
+    document.getElementById('refCode').textContent = sbProfile.referral_code;
+    document.getElementById('balVal').textContent = 'RM ' + Number(sbProfile.balance||0).toFixed(2);
+    const { data:invs } = await sb.from('profiles').select('full_name,email,created_at').eq('referred_by', sbUser.id);
+    document.getElementById('statInvited').textContent = invs? invs.length : 0;
+    const { data:firsts } = await sb.from('commissions').select('id').eq('earner_id', sbUser.id).eq('kind','first');
+    document.getElementById('statFirst').textContent = firsts? firsts.length : 0;
+    const { data:comms } = await sb.from('commissions').select('amount').eq('earner_id', sbUser.id);
+    const total = (comms||[]).reduce((s,c)=>s+Number(c.amount),0);
+    document.getElementById('statEarned').textContent = 'RM ' + total.toFixed(2);
+    if(invs && invs.length){
+      document.getElementById('inviteList').innerHTML = invs.map(x=>`<div style="padding:6px 0;border-bottom:1px solid var(--line)">${x.full_name||x.email||'会员'} · ${new Date(x.created_at).toLocaleDateString()}</div>`).join('');
+    } else { document.getElementById('inviteList').textContent=T[lang].mNoFriends; }
+    try{
+      const { data:sum } = await sb.rpc('member_summary');
+      if(sum){
+        const tlabel={bronze:T[lang].tierBronze,silver:T[lang].tierSilver,gold:T[lang].tierGold};
+        const tn=document.getElementById('tierName');
+        if(tlabel[sum.tier] && typeof flowerSVG==='function'){ tn.innerHTML='<span style="display:inline-flex;align-items:center;gap:8px">'+flowerSVG(TIER_METAL[sum.tier],58,sum.tier)+'<span>'+tlabel[sum.tier]+'</span></span>'; }
+        else { tn.textContent=T[lang].mNormalMember; }
+        const T0=T[lang]; let prog;
+        if(sum.tier==='bronze') prog=T0.mProgTpl.replace('{refs}',sum.valid_refs).replace('{n}',Math.max(0,5-sum.valid_refs)).replace('{amt}',Math.max(0,1000-Math.round(sum.downline_sales))).replace('{next}',T0.tierSilver);
+        else if(sum.tier==='silver') prog=T0.mProgTpl.replace('{refs}',sum.valid_refs).replace('{n}',Math.max(0,15-sum.valid_refs)).replace('{amt}',Math.max(0,3000-Math.round(sum.downline_sales))).replace('{next}',T0.tierGold);
+        else prog=T0.mProgMaxTpl.replace('{refs}',sum.valid_refs);
+        document.getElementById('tierProgress').textContent = prog;
+      }
+    }catch(e){}
+    const adm=document.getElementById('memberAdmin');
+    if(sbProfile.is_admin){ adm.classList.remove('hide'); await renderAdminPanel(); } else { adm.classList.add('hide'); }
+    if(!sbProfile.profile_bonus_claimed){ try{ if(!sessionStorage.getItem('addrShown')){ sessionStorage.setItem('addrShown','1'); openAddr(); } }catch(e){} }
+  } else {
+    authBox.classList.remove('hide'); dash.classList.add('hide'); memberAuthTab(authMode);
+  }
+}
+
+function copyRef(){
+  const el=document.getElementById('refLink'); el.select();
+  try{ navigator.clipboard.writeText(el.value); }catch(e){ document.execCommand('copy'); }
+  showToast(T[lang].aCopied);
+}
+
+async function openWithdraw(){
+  if(!sb||!sbProfile) return;
+  const bal=Number(sbProfile.balance||0);
+  const amtStr=prompt(T[lang].aWdAmt.replace('{bal}',bal.toFixed(2)));
+  if(amtStr===null) return;
+  const amt=parseFloat(amtStr);
+  if(!amt||amt<=0){ alert(T[lang].aBadAmt); return; }
+  const acc=prompt(T[lang].aWdAcc);
+  if(!acc) return;
+  const { error } = await sb.rpc('request_withdrawal', { p_amount:amt, p_method:'TNG', p_account:acc });
+  if(error){ alert('提现失败：'+error.message); return; }
+  showToast(T[lang].aWdOk);
+  await loadProfile(); renderMember();
+}
+
+async function memberLogout(){
+  if(sb) await sb.auth.signOut();
+  sbUser=null; sbProfile=null; renderMember();
+}
+
+async function recordMemberOrder(amount){
+  if(sb && sbUser){ try{ await sb.rpc('place_order', { p_amount: amount, p_use_credit: 0 }); }catch(e){} }
+}
+
+function aTx(k){ return (T[lang]&&T[lang][k]!==undefined)?T[lang][k]:T.zh[k]; }
+async function renderAdminPanel(){
+  try{ loadSettingsUI(); }catch(e){}
+  try{ loadAdminChats(); }catch(e){}
+  const { data:orders } = await sb.from('orders').select('id,amount,created_at,member:member_id(full_name,email,phone,address)').eq('status','pending').order('created_at',{ascending:true});
+  const oEl=document.getElementById('adminOrders');
+  if(orders && orders.length){
+    oEl.innerHTML = orders.map(o=>{
+      const m=o.member||{}; const nm=(m.full_name||m.email||'会员');
+      let ship;
+      if(m.full_name||m.phone||m.address){
+        const cp=encodeURIComponent((m.full_name||'')+'\n'+(m.phone||'')+'\n'+(m.address||''));
+        ship=`<div style="background:var(--cream);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:6px;font-size:12px;line-height:1.7">
+          <b style="color:var(--berry)">📦 ${aTx('admShipTo')}:</b> ${esc(m.full_name||'')}${m.phone?(' · '+esc(m.phone)):''}<br>${esc(m.address||'—')}
+          <button class="add-btn" style="width:auto;margin:6px 0 0;padding:4px 12px;font-size:11px" type="button" data-ship="${cp}" onclick="copyShipBtn(this)">📋 ${aTx('admCopyAddr')}</button>
+        </div>`;
+      } else { ship=`<div class="psub" style="font-size:12px;margin-top:4px;color:var(--muted)">${aTx('admNoAddr')}</div>`; }
+      return `<div style="padding:10px 0;border-bottom:1px solid var(--line)">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+          <span style="font-size:13px">${esc(nm)} · RM ${Number(o.amount).toFixed(2)} · ${new Date(o.created_at).toLocaleDateString()}</span>
+          <button class="add-btn" style="width:auto;margin:0;padding:6px 12px;white-space:nowrap" type="button" onclick="confirmPaid('${o.id}')">${aTx('admConfirmPaid')}</button>
+        </div>${ship}</div>`;
+    }).join('');
+  } else { oEl.textContent=aTx('admNoOrders'); }
+  const { data:wds } = await sb.from('withdrawals').select('id,amount,account,created_at,member:member_id(full_name,email)').eq('status','requested').order('created_at',{ascending:true});
+  const wEl=document.getElementById('adminWds');
+  if(wds && wds.length){
+    wEl.innerHTML = wds.map(w=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)">
+      <span style="font-size:13px">${(w.member&&(w.member.full_name||w.member.email))||'会员'} · RM ${Number(w.amount).toFixed(2)} · ${w.account||''}</span>
+      <span style="white-space:nowrap"><button class="add-btn" style="width:auto;margin:0;padding:6px 10px" type="button" onclick="setWd('${w.id}','paid')">${aTx('admPaid')}</button>
+      <button class="del-btn" type="button" onclick="setWd('${w.id}','rejected')" style="margin-left:6px">${aTx('admReject')}</button></span>
+    </div>`).join('');
+  } else { wEl.textContent=aTx('admNoWds'); }
+  try{ pmRenderSizes(); pmRenderList(); }catch(e){}
+}
+async function confirmPaid(id){
+  if(!confirm('确认已收到这笔订单的款项？确认后推荐人会获得佣金。')) return;
+  const { error } = await sb.rpc('admin_set_order_paid',{ p_order:id });
+  if(error){ alert('失败：'+error.message); return; }
+  alert('已确认收款，佣金已入账。'); renderAdminPanel();
+}
+async function setWd(id,status){
+  const { error } = await sb.rpc('admin_set_withdrawal',{ p_id:id, p_status:status });
+  if(error){ alert('失败：'+error.message); return; }
+  alert(status==='paid'?'已标记打款':'已拒绝，余额已退回会员'); renderAdminPanel();
+}
+async function saveBonus(){
+  const v=parseFloat(document.getElementById('setBonus').value);
+  if(!(v>=0)){ alert('请输入有效金额'); return; }
+  const { error } = await sb.rpc('admin_set_setting',{ p_key:'first_bonus', p_value:v });
+  if(error){ alert('失败：'+error.message); return; }
+  alert('已保存，下级首购奖金现在是 RM '+v.toFixed(2)); renderAdminPanel();
+}
+function loadSettingsUI(){
+  const S=window.SBS||{}; const put=(id,v)=>{ const e=document.getElementById(id); if(e) e.value=v; };
+  put('setL1',((S.l1_rate||0)*100)); put('setL2',((S.l2_rate||0)*100)); put('setL3',((S.l3_rate||0)*100));
+  put('setBonus',(S.first_bonus!=null?S.first_bonus:2)); put('setShipMin',(S.free_ship_min!=null?S.free_ship_min:99));
+  put('setShipFee',(S.ship_fee!=null?S.ship_fee:7)); put('setWdMin',(S.withdraw_min!=null?S.withdraw_min:50));
+  const Cf=window.CFG||{}; const putc=(id,v)=>{ const e=document.getElementById(id); if(e) e.value=v||''; }; putc('setWa',Cf.whatsapp_url); putc('setTt',Cf.tiktok_url);
+}
+async function saveSettings(){
+  if(!sb) return; const num=id=>parseFloat(document.getElementById(id).value);
+  const pairs=[['l1_rate',num('setL1')/100],['l2_rate',num('setL2')/100],['l3_rate',num('setL3')/100],['first_bonus',num('setBonus')],['free_ship_min',num('setShipMin')],['ship_fee',num('setShipFee')],['withdraw_min',num('setWdMin')]];
+  try{ for(const kv of pairs){ if(!isNaN(kv[1])) await sb.rpc('admin_set_setting',{p_key:kv[0],p_value:kv[1]}); }
+    try{ await sb.rpc('admin_set_config',{p_key:'whatsapp_url',p_value:(document.getElementById('setWa').value||'').trim()}); await sb.rpc('admin_set_config',{p_key:'tiktok_url',p_value:(document.getElementById('setTt').value||'').trim()}); }catch(e){}
+    await loadProducts(); document.getElementById('setMsg').textContent='已保存 ✅'; }
+  catch(e){ document.getElementById('setMsg').textContent='保存失败'; }
+}
+
+/* ============ 商品管理（数据库）============ */
+let pendingPmImg=null, pmEditId=null, pmCurImg=null;
+const PM_SIZES={women:['M','L','XL'], boy:['4','5','6','7','8','9','10','11','12','S','M'], girl:['4','5','6','7','8','9','10','11','12','S','M']};
+function pmRenderSizes(){
+  const catEl=document.getElementById('pmCat'); if(!catEl) return;
+  const box=document.getElementById('pmSizes'); if(!box) return;
+  box.innerHTML = PM_SIZES[catEl.value].map(sz=>'<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px"><span style="width:34px;font-weight:500">'+sz+'</span><input id="pmp_'+sz+'" type="number" placeholder="价格" style="flex:1;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text)"/><input id="pms_'+sz+'" type="number" placeholder="库存" style="width:74px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text)"/></div>').join('');
+}
+function pmCollect(){
+  const cat=document.getElementById('pmCat').value;
+  return PM_SIZES[cat].map((sz,i)=>({size:sz, price:parseFloat((document.getElementById('pmp_'+sz)||{}).value)||0, stock:parseInt((document.getElementById('pms_'+sz)||{}).value)||0, sort:i+1}));
+}
+async function pmSave(){
+  if(!sb){ alert('系统未连接'); return; }
+  const msg=document.getElementById('pmMsg'); msg.textContent='';
+  const cat=document.getElementById('pmCat').value;
+  const name=document.getElementById('pmName').value.trim();
+  const nEn=(document.getElementById('pmNameEn').value||'').trim()||null;
+  const nMs=(document.getElementById('pmNameMs').value||'').trim()||null;
+  const nVi=(document.getElementById('pmNameVi').value||'').trim()||null;
+  if(!name){ msg.textContent='请填商品名称'; return; }
+  const note=document.getElementById('pmNote').value.trim();
+  const tag=document.getElementById('pmTag').value;
+  const sizes=pmCollect().filter(x=>x.price>0||x.stock>0);
+  if(!sizes.some(x=>x.price>0)){ msg.textContent='至少填一个尺码的价格'; return; }
+  try{
+    let pid=pmEditId;
+    if(pid){
+      await sb.from('products').update({category:cat,name:name,name_en:nEn,name_ms:nMs,name_vi:nVi,note:note,tag:tag,image:(pendingPmImg||pmCurImg)}).eq('id',pid);
+      await sb.from('product_sizes').delete().eq('product_id',pid);
+    } else {
+      const res=await sb.from('products').insert({category:cat,name:name,name_en:nEn,name_ms:nMs,name_vi:nVi,note:note,tag:tag,image:pendingPmImg}).select('id').single();
+      if(res.error){ msg.textContent='保存失败：'+res.error.message; return; }
+      pid=res.data.id;
+    }
+    await sb.from('product_sizes').insert(sizes.map(x=>({product_id:pid,size:x.size,price:x.price,stock:x.stock,sort:x.sort})));
+    pmReset(); alert('已保存上架 ✅'); await loadProducts(); pmRenderList();
+  }catch(e){ msg.textContent='保存失败'; }
+}
+function pmReset(){
+  pmEditId=null; pendingPmImg=null; pmCurImg=null;
+  ['pmName','pmNote','pmNameEn','pmNameMs','pmNameVi'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  const tg=document.getElementById('pmTag'); if(tg) tg.value='';
+  const ph=document.getElementById('pmImgPh'); if(ph) ph.innerHTML='<i class="ti ti-photo" style="font-size:22px"></i><br>点击上传图片';
+  pmRenderSizes();
+}
+function pmRenderList(){
+  const box=document.getElementById('pmList'); if(!box) return;
+  if(!dbProducts.length){ box.textContent='还没有商品'; return; }
+  const cn={women:'女士',boy:'男孩',girl:'女孩'};
+  box.innerHTML = dbProducts.map(p=>{
+    const stk=(p.sizes||[]).reduce((a,x)=>a+(x.stock||0),0);
+    return '<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)"><div style="flex:1;font-size:13px">'+p.name+' <span class="psub">· '+(cn[p.category]||p.category)+' · 共'+stk+'件</span></div><button class="add-btn" style="width:auto;margin:0;padding:5px 10px" type="button" onclick="pmEdit(\''+p.id+'\')">编辑</button> <button class="del-btn" type="button" onclick="pmDelete(\''+p.id+'\')"><i class="ti ti-trash"></i></button></div>';
+  }).join('');
+}
+function pmEdit(pid){
+  const p=dbProducts.find(x=>x.id===pid); if(!p) return;
+  pmEditId=pid; pmCurImg=p.image||null; pendingPmImg=null;
+  document.getElementById('pmCat').value=p.category;
+  document.getElementById('pmName').value=p.name||'';
+  document.getElementById('pmNameEn').value=p.name_en||''; document.getElementById('pmNameMs').value=p.name_ms||''; document.getElementById('pmNameVi').value=p.name_vi||'';
+  document.getElementById('pmNote').value=p.note||'';
+  document.getElementById('pmTag').value=p.tag||'';
+  pmRenderSizes();
+  (p.sizes||[]).forEach(s=>{ const pe=document.getElementById('pmp_'+s.size), se=document.getElementById('pms_'+s.size); if(pe)pe.value=s.price; if(se)se.value=s.stock; });
+  const ph=document.getElementById('pmImgPh'); if(ph && p.image) ph.innerHTML='<img src="'+p.image+'" style="max-height:70px;border-radius:8px"><br>点击换图';
+  document.getElementById('pmName').scrollIntoView({behavior:'smooth',block:'center'});
+}
+async function pmDelete(pid){
+  if(!confirm('确定删除这个商品？')) return;
+  await sb.from('products').delete().eq('id',pid);
+  await loadProducts(); pmRenderList();
+}
+async function loadProducts(){
+  if(!sb) return;
+  try{ const stt=await sb.from('settings').select('*'); window.SBS={}; (stt.data||[]).forEach(r=>window.SBS[r.key]=Number(r.value)); }catch(e){}
+  try{ const cfg=await sb.from('config').select('*'); window.CFG={}; (cfg.data||[]).forEach(r=>window.CFG[r.key]=r.value); wireContacts(); }catch(e){}
+  try{
+    const pr=await sb.from('products').select('*').eq('active',true).order('created_at',{ascending:false});
+    const sz=await sb.from('product_sizes').select('*').order('sort',{ascending:true});
+    const by={}; (sz.data||[]).forEach(x=>{ (by[x.product_id]=by[x.product_id]||[]).push(x); });
+    dbProducts = (pr.data||[]).map(p=>Object.assign({}, p, {sizes: by[p.id]||[]}));
+    if(typeof renderShop==='function') renderShop();
+  }catch(e){ console.warn('loadProducts',e); }
+}
+function wireContacts(){
+  const C=window.CFG||{};
+  var fc=document.querySelector('[data-i="footC1"]'); if(fc){ fc.style.cursor='pointer'; fc.onclick=openChat; }
+  const wa=document.getElementById('contactWa'); if(wa){ if(C.whatsapp_url){ wa.style.display=''; wa.onclick=function(){ window.open(C.whatsapp_url,'_blank'); }; } else wa.style.display='none'; }
+  const tt=document.getElementById('contactTt'); if(tt){ if(C.tiktok_url){ tt.style.display=''; tt.onclick=function(){ window.open(C.tiktok_url,'_blank'); }; } else tt.style.display='none'; }
+}
+function openAddr(){ const m=document.getElementById('addrModal'); if(!m) return; if(sbProfile){ document.getElementById('adName').value=sbProfile.full_name||''; document.getElementById('adPhone').value=sbProfile.phone||''; document.getElementById('adAddr').value=sbProfile.address||''; } var b=document.getElementById('adrIos'); if(b) b.classList.add('hide'); var am=document.getElementById('adMsg'); if(am) am.textContent=''; m.classList.remove('hide'); }
+function closeAddr(){ const m=document.getElementById('addrModal'); if(m) m.classList.add('hide'); }
+var __pendAddr=null;
+async function submitAddr(){
+  const t=T[lang]; const name=document.getElementById('adName').value.trim(), phone=document.getElementById('adPhone').value.trim(), addr=document.getElementById('adAddr').value.trim();
+  if(!name||!phone||!addr){ document.getElementById('adMsg').textContent=t.addrFill; return; }
+  __pendAddr={name:name,phone:phone,addr:addr};
+  document.getElementById('adMsg').textContent='';
+  // already installed -> grant directly
+  if(isStandalone()||window.__pwaInstalled){ return grantAddrBonus(); }
+  // Android / desktop: native install prompt
+  if(window.__deferredPrompt){
+    try{
+      window.__deferredPrompt.prompt();
+      const c=await window.__deferredPrompt.userChoice; window.__deferredPrompt=null;
+      if(c && c.outcome==='accepted'){ return grantAddrBonus(); }
+      document.getElementById('adMsg').textContent=t.installNeed; showAddrInstallHint(); return;
+    }catch(e){ showAddrInstallHint(); return; }
+  }
+  // iOS or no prompt available: show manual add-to-home instructions
+  showAddrInstallHint();
+}
+function showAddrInstallHint(){ const b=document.getElementById('adrIos'); if(b) b.classList.remove('hide'); }
+function onPwaInstalled(){ var m=document.getElementById('addrModal'); if(__pendAddr && m && !m.classList.contains('hide')) grantAddrBonus(); }
+async function grantAddrBonus(){
+  const t=T[lang]; if(!__pendAddr){ return; }
+  const name=__pendAddr.name, phone=__pendAddr.phone, addr=__pendAddr.addr;
+  try{ const r=await sb.rpc('claim_profile_bonus',{p_name:name,p_phone:phone,p_address:addr});
+    if(r.error){ document.getElementById('adMsg').textContent=r.error.message; return; }
+    __pendAddr=null; closeAddr(); await loadProfile(); renderMember(); if(Number(r.data)>0) showToast(t.addrGot);
+  }catch(e){ document.getElementById('adMsg').textContent='出错了'; }
+}
+/* ============ 在线客服（客户端）============ */
+var __chatTid=null, __chatTimer=null;
+try{ __chatTid=localStorage.getItem('yuna_chat_tid')||null; }catch(e){}
+function esc(x){ return (x||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function openChat(){
+  var m=document.getElementById('chatPanel'); if(!m) return;
+  m.classList.remove('hide');
+  var hi=document.getElementById('chatHi'); if(hi) hi.textContent=T[lang].chatHi;
+  document.getElementById('chatInput').placeholder=T[lang].chatPh;
+  document.getElementById('chatTitleT').textContent=T[lang].chatTitle;
+  document.getElementById('chatSendT').textContent=T[lang].chatSendBtn;
+  chatFetch();
+  if(__chatTimer) clearInterval(__chatTimer);
+  __chatTimer=setInterval(chatFetch,4000);
+  setTimeout(function(){ document.getElementById('chatInput').focus(); },100);
+}
+function closeChat(){ var m=document.getElementById('chatPanel'); if(m) m.classList.add('hide'); if(__chatTimer){ clearInterval(__chatTimer); __chatTimer=null; } }
+function toggleChat(){ var m=document.getElementById('chatPanel'); if(m && m.classList.contains('hide')) openChat(); else closeChat(); }
+async function chatFetch(){
+  if(!__chatTid || !window.sb) return;
+  try{ var r=await sb.rpc('chat_fetch',{p_thread:__chatTid});
+    if(r.error) return; chatRender(r.data||[]);
+  }catch(e){}
+}
+function chatRender(msgs){
+  var box=document.getElementById('chatMsgs'); if(!box) return;
+  box.innerHTML=msgs.map(function(m){
+    var me=m.sender==='customer';
+    return '<div style="display:flex;justify-content:'+(me?'flex-end':'flex-start')+';margin:4px 0"><span style="max-width:78%;padding:7px 11px;border-radius:12px;font-size:13px;line-height:1.4;'+(me?'background:var(--rose);color:#fff':'background:#f1e6ea;color:var(--text)')+'">'+esc(m.body)+'</span></div>';
+  }).join('');
+  box.scrollTop=box.scrollHeight;
+}
+async function chatSend(){
+  var inp=document.getElementById('chatInput'); var txt=(inp.value||'').trim(); if(!txt) return;
+  if(!window.sb){ alert('系统未连接'); return; }
+  inp.value='';
+  var nm=(window.sbProfile&&sbProfile.full_name)||'';
+  try{ var r=await sb.rpc('chat_send',{p_thread:__chatTid,p_name:nm,p_body:txt});
+    if(r.error){ inp.value=txt; return; }
+    __chatTid=r.data; try{ localStorage.setItem('yuna_chat_tid',__chatTid); }catch(e){}
+    chatFetch();
+  }catch(e){ inp.value=txt; }
+}
+/* ============ 客服消息（店主）============ */
+var __admTid=null;
+async function loadAdminChats(){
+  var el=document.getElementById('adminChatList'); if(!el||!window.sb) return;
+  try{ var r=await sb.rpc('admin_chat_threads'); if(r.error){ el.textContent=aTx('admNoChat'); return; }
+    var rows=r.data||[];
+    if(!rows.length){ el.textContent=aTx('admNoChat'); return; }
+    el.innerHTML=rows.map(function(t){
+      var badge=t.unread_owner>0?'<span style="background:var(--rose);color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;margin-left:6px">'+t.unread_owner+'</span>':'';
+      var nm=t.name||'访客';
+      return '<div onclick="openAdminThread(\''+t.id+'\')" style="cursor:pointer;padding:8px 0;border-bottom:1px solid var(--line)"><b style="font-size:13px">'+esc(nm)+'</b>'+badge+'<div style="font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(t.last_msg||'')+'</div></div>';
+    }).join('');
+  }catch(e){ el.textContent=aTx('admNoChat'); }
+}
+async function openAdminThread(id){
+  __admTid=id;
+  document.getElementById('adminThreadBox').classList.remove('hide');
+  document.getElementById('adminReplyInput').placeholder=aTx('admReplyPh');
+  try{ var r=await sb.rpc('admin_chat_fetch',{p_thread:id}); if(r.error) return;
+    var box=document.getElementById('adminThreadMsgs');
+    box.innerHTML=(r.data||[]).map(function(m){
+      var own=m.sender==='owner';
+      return '<div style="display:flex;justify-content:'+(own?'flex-end':'flex-start')+';margin:4px 0"><span style="max-width:78%;padding:7px 11px;border-radius:12px;font-size:13px;'+(own?'background:var(--rose);color:#fff':'background:#f1e6ea;color:var(--text)')+'">'+esc(m.body)+'</span></div>';
+    }).join('');
+    box.scrollTop=box.scrollHeight; loadAdminChats();
+  }catch(e){}
+}
+async function adminReply(){
+  var inp=document.getElementById('adminReplyInput'); var txt=(inp.value||'').trim(); if(!txt||!__admTid) return;
+  inp.value='';
+  try{ var r=await sb.rpc('admin_chat_reply',{p_thread:__admTid,p_body:txt}); if(r.error){ inp.value=txt; return; } openAdminThread(__admTid); }catch(e){ inp.value=txt; }
+}
+document.addEventListener('change', function(e){
+  if(e.target && e.target.id==='pmImg'){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ pendingPmImg=ev.target.result; const ph=document.getElementById('pmImgPh'); if(ph) ph.innerHTML='<img src="'+pendingPmImg+'" style="max-height:70px;border-radius:8px"><br>点击换图'; }; r.readAsDataURL(f); }
+});
+
+</script>
+  <div id="addrModal" class="hide" style="position:fixed;inset:0;background:rgba(44,26,31,.5);display:flex;align-items:center;justify-content:center;z-index:600;padding:20px">
+    <div style="background:#fff;border-radius:16px;padding:24px;max-width:380px;width:100%;box-shadow:0 12px 40px rgba(110,64,83,.3)">
+      <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--berry);margin-bottom:4px" data-i="addrTitle"></div>
+      <div class="psub" data-i="addrSub"></div>
+      <div class="field" style="margin-top:12px"><label data-i="addrName"></label><input id="adName"/></div>
+      <div class="field"><label data-i="addrPhone"></label><input id="adPhone" type="tel"/></div>
+      <div class="field"><label data-i="addrAddr"></label><input id="adAddr"/></div>
+      <button class="save-btn" type="button" onclick="submitAddr()" data-i="addrBtn"></button>
+      <div id="adrIos" class="hide" style="margin-top:12px;background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:12px">
+        <div style="font-weight:600;color:var(--berry);font-size:13px;margin-bottom:6px" data-i="iosTitle"></div>
+        <div class="psub" style="font-size:12px;line-height:1.7"><span data-i="iosStep1"></span><br><span data-i="iosStep2"></span><br><span data-i="iosStep3"></span></div>
+        <button class="save-btn" type="button" style="margin-top:10px" onclick="grantAddrBonus()" data-i="iosDone"></button>
+      </div>
+      <div style="text-align:center;margin-top:8px"><span style="cursor:pointer;color:var(--muted);font-size:13px" onclick="closeAddr()" data-i="addrLater"></span></div>
+      <div id="adMsg" class="psub" style="margin-top:8px;color:var(--rose)"></div>
+    </div>
+  </div>
+  <div id="chatBtn" onclick="toggleChat()" style="position:fixed;right:18px;bottom:18px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--berry));box-shadow:0 6px 20px rgba(110,64,83,.4);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:550">
+    <i class="ti ti-message-circle" style="color:#fff;font-size:26px"></i>
+  </div>
+  <div id="chatPanel" class="hide" style="position:fixed;right:18px;bottom:84px;width:330px;max-width:calc(100vw - 36px);height:440px;max-height:calc(100vh - 120px);background:#fff;border-radius:16px;box-shadow:0 12px 40px rgba(110,64,83,.35);display:flex;flex-direction:column;overflow:hidden;z-index:560">
+    <div style="background:linear-gradient(135deg,var(--rose),var(--berry));color:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between">
+      <b id="chatTitleT" style="font-size:15px">在线客服</b>
+      <span onclick="closeChat()" style="cursor:pointer;font-size:20px;line-height:1">&times;</span>
+    </div>
+    <div id="chatHi" style="padding:10px 14px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line)"></div>
+    <div id="chatMsgs" style="flex:1;overflow-y:auto;padding:10px 14px;background:var(--cream)"></div>
+    <div style="display:flex;gap:6px;padding:10px;border-top:1px solid var(--line)">
+      <input id="chatInput" onkeydown="if(event.key==='Enter')chatSend()" placeholder="输入消息…" style="flex:1;padding:9px 11px;border:1px solid var(--line);border-radius:20px;background:#fff;color:var(--text);outline:none"/>
+      <button onclick="chatSend()" style="border:none;background:var(--rose);color:#fff;border-radius:20px;padding:0 14px;cursor:pointer;font-size:13px"><span id="chatSendT">发送</span></button>
+    </div>
+  </div>
+</body>
+</html>
