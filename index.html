@@ -187,11 +187,28 @@
 
   .hide { display:none !important; }
   @media (max-width:760px){
+    .topbar { padding:6px 16px; }
+    nav { padding:12px 16px; gap:10px; }
+    .nav-tabs { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:2px; scrollbar-width:none; }
+    .nav-tabs::-webkit-scrollbar { display:none; }
+    .vtab { white-space:nowrap; flex:0 0 auto; }
     .hero { grid-template-columns:1fr; }
-    .product-grid { grid-template-columns:repeat(2,1fr); }
+    .hero-text { padding:34px 22px; }
+    .hero-title { font-size:27px; }
+    .hero-desc { max-width:none; }
+    .hero-visual { min-height:200px; }
+    .panel { padding:28px 16px; }
+    .product-grid { grid-template-columns:repeat(2,1fr); gap:12px; }
     .admin-wrap { grid-template-columns:1fr; }
-    .footer-grid { grid-template-columns:1fr 1fr; }
-    nav { flex-direction:column; align-items:flex-start; }
+    footer { padding:30px 18px 20px; }
+    .footer-grid { grid-template-columns:1fr 1fr; gap:22px; }
+    .footer-grid > div:first-child { grid-column:1 / -1; }
+  }
+  @media (max-width:430px){
+    .hero-title { font-size:24px; }
+    .product-grid { gap:10px; }
+    .footer-grid { grid-template-columns:1fr; gap:20px; }
+    .section-header { flex-direction:column; align-items:flex-start; gap:4px; }
   }
 </style>
 </head>
@@ -266,14 +283,6 @@
       <div class="product-grid" id="productGrid"></div>
     </div>
 
-    <div class="promo-banner">
-      <div class="promo-text">
-        <div class="promo-subtitle" data-i="promoSub"></div>
-        <div class="promo-title" data-i="promoTitle"></div>
-        <div class="promo-desc" data-i="promoDesc"></div>
-      </div>
-      <button class="promo-btn" data-i="promoBtn" onclick="document.getElementById('prodSection').scrollIntoView({behavior:'smooth'})"></button>
-    </div>
   </div>
 
   <!-- ADMIN -->
@@ -491,9 +500,9 @@
         <div class="footer-tagline" data-i="footTag"></div>
       </div>
       <div class="footer-col"><h4 data-i="footShopH"></h4><ul>
-        <li data-i="footShop1"></li><li data-i="footShop2"></li><li data-i="footShop3"></li><li data-i="footShop4"></li></ul></div>
+        <li data-i="footShop1" style="cursor:pointer" onclick="openInfo('order')"></li><li data-i="footShop2" style="cursor:pointer" onclick="openInfo('size')"></li><li data-i="footShop3" style="cursor:pointer" onclick="openInfo('shipping')"></li><li data-i="footShop4" style="cursor:pointer" onclick="openInfo('returns')"></li></ul></div>
       <div class="footer-col"><h4 data-i="footBrandH"></h4><ul>
-        <li data-i="footBrand1"></li><li data-i="footBrand2"></li><li data-i="footBrand3"></li></ul></div>
+        <li data-i="footBrand1" style="cursor:pointer" onclick="openInfo('about')"></li><li data-i="footBrand2" style="cursor:pointer" onclick="openInfo('design')"></li><li data-i="footBrand3" style="cursor:pointer" onclick="openInfo('partner')"></li></ul></div>
       <div class="footer-col"><h4 data-i="footContactH"></h4><ul>
         <li data-i="footC1"></li><li id="contactWa" style="cursor:pointer">WhatsApp</li><li id="contactTt" style="cursor:pointer">TikTok</li></ul></div>
     </div>
@@ -530,7 +539,7 @@ const T = {
     mProgTpl:'已有效推荐 {refs} 人 · 再推荐 {n} 人 或 下级再消费 RM{amt} 升「{next}」', mProgMaxTpl:'已有效推荐 {refs} 人 · 已是最高等级 🎉',
     aConnecting:'系统连接中，请稍后再试', aFillLogin:'请填写邮箱和密码', aCopied:'链接已复制 🌸 快分享给朋友吧！', aCartAdded:'已加入购物车 🛒', mWelcome:'欢迎回来，{name} 🌸', mGuideTitle:'新手 3 步,轻松上手：', mGuide1:'① 填好收货资料，立领 RM3', mGuide2:'② 复制你的专属链接,分享给朋友赚佣金', mGuide3:'③ 逛逛商店,挑几件喜欢的 🌸', aWdAmt:'提现金额 (RM)。当前余额 RM {bal}：', aWdAcc:'收款 TNG 号码 / 银行账号：', aBadAmt:'请输入有效金额', aWdOk:'提现申请已提交，店主审核后会打款。',
     aPickSize:'请选择尺码', aSoldOut:'该尺码已售罄', aStockShort:'库存不够了', aCartEmpty:'购物车是空的', aOrderFail:'下单失败，请重试',
-    addrTitle:'填写收货资料，领 RM3', addrSub:'填好资料 + 把 App 加到手机主屏幕，即领 RM3（一次性）', addrName:'姓名', addrPhone:'手机号码', addrAddr:'收货地址', addrBtn:'安装 App 并领 RM3', addrLater:'稍后再说', addrFill:'请填写完整资料', addrGot:'已获得 RM3 佣金！', installNeed:'需要把 App 加到主屏幕才能领 RM3，请点「安装」并选择添加', iosTitle:'把 Yuna 加到主屏幕：', iosStep1:'① 点手机底部/顶部的「分享」按钮', iosStep2:'② 选「加入主画面 / Add to Home Screen」', iosStep3:'③ 完成后回来点下面按钮领 RM3', iosDone:'我已添加，领取 RM3',
+    addrTitle:'填写收货资料，领 RM3', addrSub:'填好资料 + 把 App 加到手机主屏幕，即领 RM3（一次性）', addrName:'姓名', addrPhone:'手机号码', addrAddr:'收货地址', addrNameP:'收货人姓名', addrPhoneP:'手机号,例如 012-3456789', addrAddrP:'详细地址(含邮编)', addrBtn:'安装 App 并领 RM3', addrLater:'稍后再说', addrFill:'请填写完整资料', addrGot:'已获得 RM3 佣金！', installNeed:'需要把 App 加到主屏幕才能领 RM3，请点「安装」并选择添加', iosTitle:'把 Yuna 加到主屏幕：', iosStep1:'① 点手机底部/顶部的「分享」按钮', iosStep2:'② 选「加入主画面 / Add to Home Screen」', iosStep3:'③ 完成后回来点下面按钮领 RM3', iosDone:'我已添加，领取 RM3',
     heroTag:'舒适睡衣 · 萌趣童装', heroTitle:'柔软相伴，<br><em>安睡</em>每一夜',
     heroDesc:'精选亲肤睡衣与可爱童装，给你和宝贝最温柔的陪伴。', shopNow:'立即选购', badge1:'亲肤面料', badge2:'舒适亲子',
     prodTitle:'热销商品', promoSub:'限时特惠', promoTitle:'儿童系列全场 8 折', promoDesc:'仅限本周，精选童装优惠中', promoBtn:'立即抢购',
@@ -564,7 +573,7 @@ const T = {
     mProgTpl:'{refs} valid referrals · Refer {n} more or downline spend RM{amt} to reach {next}', mProgMaxTpl:'{refs} valid referrals · Top tier reached 🎉',
     aConnecting:'Connecting, please try again', aFillLogin:'Please enter email and password', aCopied:'Link copied 🌸 share it with friends!', aCartAdded:'Added to cart 🛒', mWelcome:'Welcome back, {name} 🌸', mGuideTitle:'3 easy steps to start:', mGuide1:'1. Fill delivery info — get RM3', mGuide2:'2. Copy your link & share to earn', mGuide3:'3. Browse the shop & pick some favourites 🌸', aWdAmt:'Withdraw amount (RM). Balance RM {bal}:', aWdAcc:'Your TNG number / bank account:', aBadAmt:'Please enter a valid amount', aWdOk:'Withdrawal request submitted. Owner will pay after review.',
     aPickSize:'Please select a size', aSoldOut:'This size is sold out', aStockShort:'Not enough stock', aCartEmpty:'Your cart is empty', aOrderFail:'Order failed, please retry',
-    addrTitle:'Fill delivery info, get RM3', addrSub:'Fill info + add the App to your home screen to get RM3 (one-time)', addrName:'Name', addrPhone:'Phone', addrAddr:'Delivery address', addrBtn:'Install App & get RM3', addrLater:'Maybe later', addrFill:'Please fill all fields', addrGot:'You earned RM3!', installNeed:'Please add the App to your home screen to get RM3 — tap Install and confirm', iosTitle:'Add Yuna to your home screen:', iosStep1:'1. Tap the Share button', iosStep2:'2. Choose "Add to Home Screen"', iosStep3:'3. Come back and tap the button below', iosDone:'I have added it — get RM3',
+    addrTitle:'Fill delivery info, get RM3', addrSub:'Fill info + add the App to your home screen to get RM3 (one-time)', addrName:'Name', addrPhone:'Phone', addrAddr:'Delivery address', addrNameP:'Recipient name', addrPhoneP:'Phone e.g. 012-3456789', addrAddrP:'Full address (with postcode)', addrBtn:'Install App & get RM3', addrLater:'Maybe later', addrFill:'Please fill all fields', addrGot:'You earned RM3!', installNeed:'Please add the App to your home screen to get RM3 — tap Install and confirm', iosTitle:'Add Yuna to your home screen:', iosStep1:'1. Tap the Share button', iosStep2:'2. Choose "Add to Home Screen"', iosStep3:'3. Come back and tap the button below', iosDone:'I have added it — get RM3',
     heroTag:'Cozy Sleepwear · Sweet Kids', heroTitle:'Soft Comfort,<br><em>Sweet</em> Dreams',
     heroDesc:'Gentle sleepwear and adorable kids wear, for the softest moments with your little one.', shopNow:'Shop now', badge1:'Skin-friendly', badge2:'For you & kids',
     prodTitle:'Best sellers', promoSub:'Limited offer', promoTitle:'20% off all kids wear', promoDesc:'This week only, selected styles', promoBtn:'Shop sale',
@@ -597,7 +606,7 @@ const T = {
     mProgTpl:'{refs} rujukan sah · Ajak {n} lagi atau downline belanja RM{amt} untuk {next}', mProgMaxTpl:'{refs} rujukan sah · Tahap tertinggi dicapai 🎉',
     aConnecting:'Menyambung, sila cuba lagi', aFillLogin:'Sila isi emel dan kata laluan', aCopied:'Pautan disalin 🌸 kongsi dengan kawan!', aCartAdded:'Ditambah ke troli 🛒', mWelcome:'Selamat kembali, {name} 🌸', mGuideTitle:'3 langkah mudah untuk mula:', mGuide1:'1. Isi maklumat penghantaran — dapat RM3', mGuide2:'2. Salin pautan anda & kongsi untuk komisen', mGuide3:'3. Layari kedai & pilih kesukaan anda 🌸', aWdAmt:'Jumlah keluar (RM). Baki RM {bal}:', aWdAcc:'Nombor TNG / akaun bank anda:', aBadAmt:'Sila masukkan jumlah yang sah', aWdOk:'Permohonan keluar dihantar. Pemilik akan bayar selepas semakan.',
     aPickSize:'Sila pilih saiz', aSoldOut:'Saiz ini habis dijual', aStockShort:'Stok tidak cukup', aCartEmpty:'Troli anda kosong', aOrderFail:'Pesanan gagal, sila cuba lagi',
-    addrTitle:'Isi maklumat penghantaran, dapat RM3', addrSub:'Isi maklumat + tambah App ke skrin utama untuk dapat RM3 (sekali)', addrName:'Nama', addrPhone:'No. telefon', addrAddr:'Alamat penghantaran', addrBtn:'Pasang App & dapat RM3', addrLater:'Kemudian', addrFill:'Sila isi semua maklumat', addrGot:'Anda dapat RM3!', installNeed:'Sila tambah App ke skrin utama untuk dapat RM3 — tekan Pasang', iosTitle:'Tambah Yuna ke skrin utama:', iosStep1:'1. Tekan butang Kongsi (Share)', iosStep2:'2. Pilih "Add to Home Screen"', iosStep3:'3. Kembali dan tekan butang di bawah', iosDone:'Saya sudah tambah — dapat RM3',
+    addrTitle:'Isi maklumat penghantaran, dapat RM3', addrSub:'Isi maklumat + tambah App ke skrin utama untuk dapat RM3 (sekali)', addrName:'Nama', addrPhone:'No. telefon', addrAddr:'Alamat penghantaran', addrNameP:'Nama penerima', addrPhoneP:'No. telefon cth 012-3456789', addrAddrP:'Alamat penuh (dengan poskod)', addrBtn:'Pasang App & dapat RM3', addrLater:'Kemudian', addrFill:'Sila isi semua maklumat', addrGot:'Anda dapat RM3!', installNeed:'Sila tambah App ke skrin utama untuk dapat RM3 — tekan Pasang', iosTitle:'Tambah Yuna ke skrin utama:', iosStep1:'1. Tekan butang Kongsi (Share)', iosStep2:'2. Pilih "Add to Home Screen"', iosStep3:'3. Kembali dan tekan butang di bawah', iosDone:'Saya sudah tambah — dapat RM3',
     heroTag:'Baju Tidur Selesa · Comel untuk Anak', heroTitle:'Lembut Selesa,<br><em>Tidur</em> Lena',
     heroDesc:'Baju tidur lembut dan pakaian kanak comel, untuk saat paling selesa bersama si kecil.', shopNow:'Beli sekarang', badge1:'Mesra kulit', badge2:'Untuk anda & anak',
     prodTitle:'Paling laris', promoSub:'Tawaran terhad', promoTitle:'20% diskaun pakaian kanak', promoDesc:'Minggu ini sahaja, gaya terpilih', promoBtn:'Beli jualan',
@@ -630,7 +639,7 @@ const T = {
     mProgTpl:'{refs} giới thiệu hợp lệ · Giới thiệu thêm {n} hoặc tuyến dưới mua RM{amt} để lên {next}', mProgMaxTpl:'{refs} giới thiệu hợp lệ · Đã đạt hạng cao nhất 🎉',
     aConnecting:'Đang kết nối, vui lòng thử lại', aFillLogin:'Vui lòng nhập email và mật khẩu', aCopied:'Đã sao chép link 🌸 chia sẻ với bạn bè nhé!', aCartAdded:'Đã thêm vào giỏ 🛒', mWelcome:'Chào mừng trở lại, {name} 🌸', mGuideTitle:'3 bước dễ để bắt đầu:', mGuide1:'1. Điền thông tin giao hàng — nhận RM3', mGuide2:'2. Sao chép link & chia sẻ để kiếm hoa hồng', mGuide3:'3. Dạo cửa hàng & chọn vài món yêu thích 🌸', aWdAmt:'Số tiền rút (RM). Số dư RM {bal}:', aWdAcc:'Số TNG / tài khoản ngân hàng của bạn:', aBadAmt:'Vui lòng nhập số tiền hợp lệ', aWdOk:'Đã gửi yêu cầu rút. Chủ shop sẽ thanh toán sau khi duyệt.',
     aPickSize:'Vui lòng chọn size', aSoldOut:'Size này đã hết hàng', aStockShort:'Không đủ hàng', aCartEmpty:'Giỏ hàng trống', aOrderFail:'Đặt hàng thất bại, vui lòng thử lại',
-    addrTitle:'Điền thông tin giao hàng, nhận RM3', addrSub:'Điền thông tin + thêm App vào màn hình chính để nhận RM3 (một lần)', addrName:'Tên', addrPhone:'Số điện thoại', addrAddr:'Địa chỉ giao hàng', addrBtn:'Cài App & nhận RM3', addrLater:'Để sau', addrFill:'Vui lòng điền đủ thông tin', addrGot:'Bạn nhận được RM3!', installNeed:'Vui lòng thêm App vào màn hình chính để nhận RM3 — bấm Cài đặt', iosTitle:'Thêm Yuna vào màn hình chính:', iosStep1:'1. Bấm nút Chia sẻ (Share)', iosStep2:'2. Chọn "Add to Home Screen"', iosStep3:'3. Quay lại và bấm nút bên dưới', iosDone:'Tôi đã thêm — nhận RM3',
+    addrTitle:'Điền thông tin giao hàng, nhận RM3', addrSub:'Điền thông tin + thêm App vào màn hình chính để nhận RM3 (một lần)', addrName:'Tên', addrPhone:'Số điện thoại', addrAddr:'Địa chỉ giao hàng', addrNameP:'Tên người nhận', addrPhoneP:'SĐT vd 012-3456789', addrAddrP:'Địa chỉ đầy đủ (kèm mã bưu)', addrBtn:'Cài App & nhận RM3', addrLater:'Để sau', addrFill:'Vui lòng điền đủ thông tin', addrGot:'Bạn nhận được RM3!', installNeed:'Vui lòng thêm App vào màn hình chính để nhận RM3 — bấm Cài đặt', iosTitle:'Thêm Yuna vào màn hình chính:', iosStep1:'1. Bấm nút Chia sẻ (Share)', iosStep2:'2. Chọn "Add to Home Screen"', iosStep3:'3. Quay lại và bấm nút bên dưới', iosDone:'Tôi đã thêm — nhận RM3',
     heroTag:'Đồ ngủ êm ái · Đồ trẻ em xinh xắn', heroTitle:'Êm ái mỗi đêm,<br>ngọt ngào <em>giấc mơ</em>',
     heroDesc:'Đồ ngủ mềm mại và đồ trẻ em đáng yêu, cho những khoảnh khắc êm dịu bên bé yêu.', shopNow:'Mua ngay', badge1:'Thân thiện da', badge2:'Cho mẹ & bé',
     prodTitle:'Bán chạy nhất', promoSub:'Ưu đãi có hạn', promoTitle:'Giảm 20% đồ trẻ em', promoDesc:'Chỉ tuần này, mẫu chọn lọc', promoBtn:'Mua ngay',
@@ -1343,12 +1352,13 @@ document.addEventListener('change', function(e){
 
 </script>
   <div id="addrModal" class="hide" style="position:fixed;inset:0;background:rgba(44,26,31,.5);display:flex;align-items:center;justify-content:center;z-index:600;padding:20px">
-    <div style="background:#fff;border-radius:16px;padding:24px;max-width:380px;width:100%;box-shadow:0 12px 40px rgba(110,64,83,.3)">
+    <div style="position:relative;background:#fff;border-radius:16px;padding:24px;max-width:380px;width:100%;box-shadow:0 12px 40px rgba(110,64,83,.3)">
+      <span onclick="closeAddr()" style="position:absolute;top:8px;right:14px;font-size:26px;line-height:1;color:var(--muted);cursor:pointer;z-index:2" aria-label="close">&times;</span>
       <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--berry);margin-bottom:4px" data-i="addrTitle"></div>
       <div class="psub" data-i="addrSub"></div>
-      <div class="field" style="margin-top:12px"><label data-i="addrName"></label><input id="adName"/></div>
-      <div class="field"><label data-i="addrPhone"></label><input id="adPhone" type="tel"/></div>
-      <div class="field"><label data-i="addrAddr"></label><input id="adAddr"/></div>
+      <div class="field" style="margin-top:12px"><label data-i="addrName"></label><input id="adName" data-iph="addrNameP"/></div>
+      <div class="field"><label data-i="addrPhone"></label><input id="adPhone" type="tel" data-iph="addrPhoneP"/></div>
+      <div class="field"><label data-i="addrAddr"></label><input id="adAddr" data-iph="addrAddrP"/></div>
       <button class="save-btn" type="button" onclick="submitAddr()" data-i="addrBtn"></button>
       <div id="adrIos" class="hide" style="margin-top:12px;background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:12px">
         <div style="font-weight:600;color:var(--berry);font-size:13px;margin-bottom:6px" data-i="iosTitle"></div>
@@ -1374,5 +1384,18 @@ document.addEventListener('change', function(e){
       <button onclick="chatSend()" style="border:none;background:var(--rose);color:#fff;border-radius:20px;padding:0 14px;cursor:pointer;font-size:13px"><span id="chatSendT">发送</span></button>
     </div>
   </div>
+  <div id="infoModal" class="hide" style="position:fixed;inset:0;background:rgba(44,26,31,.55);display:flex;align-items:center;justify-content:center;z-index:620;padding:16px" onclick="if(event.target===this)closeInfo()">
+    <div style="position:relative;background:#fff;border-radius:16px;padding:26px 22px;max-width:560px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 12px 40px rgba(110,64,83,.3)">
+      <span onclick="closeInfo()" style="position:absolute;top:8px;right:16px;font-size:26px;line-height:1;color:var(--muted);cursor:pointer" aria-label="close">&times;</span>
+      <div id="infoTitle" style="font-family:'Playfair Display',serif;font-size:22px;color:var(--berry);margin-bottom:14px;padding-right:22px"></div>
+      <div id="infoBody" style="font-size:14px;line-height:1.9;color:var(--text);white-space:pre-line"></div>
+    </div>
+  </div>
+  <script>
+const INFO={"order": {"t": {"zh": "如何下单", "en": "How to order", "ms": "Cara pesanan", "vi": "Cách đặt hàng"}, "c": {"zh": "1. 浏览商店,挑选喜欢的睡衣或童装\n2. 选好尺码,点「加入购物车」\n3. 进入购物车,确认商品与数量,点「前往结算」\n4. 选择付款方式(Touch 'n Go eWallet / DuitNow QR),转账后上传付款截图\n5. 提交订单 ✅ 我们核对付款后会尽快安排发货,并以 WhatsApp / 短信通知你 🌸", "en": "1. Browse the shop and pick what you like\n2. Choose your size and tap “Add to cart”\n3. Open the cart, check items & quantity, tap “Checkout”\n4. Pay via Touch 'n Go eWallet / DuitNow QR, then upload the payment screenshot\n5. Submit your order. Once we verify payment we’ll ship it and notify you via WhatsApp/SMS 🌸"}}, "size": {"t": {"zh": "尺码指南", "en": "Size guide", "ms": "Panduan saiz", "vi": "Hướng dẫn size"}, "c": {"zh": "👗 女士睡衣:M / L / XL(版型偏宽松,居家舒适)\n\n🧒 小孩服装:共 11 个尺码\n4 · 5 · 6 · 7 · 8 · 9 · 10 · 11 · 12 · S · M\n(依孩子年龄 / 身高选择)\n\n📏 小贴士:\n• 以孩子的身高和平时穿着尺码为准\n• 若介于两个尺码之间,建议选大一码更舒适\n\n需要帮忙?点右下角「在线客服」,告诉我们宝贝的身高体重,我们帮你推荐尺码 🌸", "en": "👗 Women's sleepwear: M / L / XL (relaxed, comfy fit)\n\n🧒 Kids: 11 sizes\n4 · 5 · 6 · 7 · 8 · 9 · 10 · 11 · 12 · S · M (by age / height)\n\n📏 Tip: go by your child's height and usual size; if in between, size up for comfort.\n\nNeed help? Tap Live Chat with your child's height & weight and we'll recommend a size 🌸"}}, "shipping": {"t": {"zh": "配送说明", "en": "Shipping", "ms": "Penghantaran", "vi": "Vận chuyển"}, "c": {"zh": "🚚 运费\n• 单笔满 RM99 —— 免邮\n• 未满 RM99 —— 运费 RM7(全马统一)\n\n📦 发货时间\n• 确认付款后 1–3 个工作日内寄出\n• 透过 J&T / Pos Laju 等快递派送\n\n⏱️ 送达时间\n• 西马:约 2–4 个工作日\n• 东马(沙巴 / 砂拉越):约 3–7 个工作日\n\n• 发货后我们会以 WhatsApp / 短信提供追踪号码\n• 公共假期或大促期间或略有延迟,敬请谅解 🌸", "en": "🚚 Shipping fee\n• Orders RM99 & above — FREE\n• Below RM99 — RM7 flat (all Malaysia)\n\n📦 Dispatch: within 1–3 working days after payment is confirmed, via J&T / Pos Laju.\n\n⏱️ Delivery: West Malaysia ~2–4 working days; East Malaysia (Sabah/Sarawak) ~3–7 working days.\n\nA tracking number is shared via WhatsApp/SMS after dispatch. Slight delays may occur during holidays/sales 🌸"}}, "returns": {"t": {"zh": "退换政策", "en": "Returns", "ms": "Pulangan", "vi": "Đổi trả"}, "c": {"zh": "我们希望你和宝贝都满意 🌸\n\n↩️ 退换期限:收到货起 7 天内可申请\n\n✅ 条件:\n• 商品全新、未穿着 / 未洗涤,吊牌完整,连同原包装\n• 基于卫生考量,睡衣 / 贴身衣物一经拆封,非质量问题恕不退换\n\n🛠️ 若收到瑕疵或错发商品:\n请在 3 天内联系我们并附上照片,我们免费更换或退款\n\n🚚 退换运费:\n• 质量问题:由我们承担\n• 个人原因(如尺码不合):由买家承担来回运费\n\n📩 申请方式:点「在线客服」或 WhatsApp,提供订单号 + 照片\n\n(本政策依据马来西亚消费者权益保障常规制定)", "en": "We want you and your little one to be happy 🌸\n\n↩️ Window: request within 7 days of delivery.\n\n✅ Conditions: item unused/unwashed, tags intact, in original packaging. For hygiene, opened sleepwear/intimates are non-returnable unless defective.\n\n🛠️ Faulty/wrong item: contact us within 3 days with photos for a free replacement or refund.\n\n🚚 Return shipping: covered by us for quality issues; buyer covers two-way postage for personal reasons (e.g. wrong size).\n\n📩 How: Live Chat or WhatsApp us with your order number + photos.\n\n(In line with Malaysian consumer-protection norms.)"}}, "about": {"t": {"zh": "关于我们", "en": "About us", "ms": "Tentang kami", "vi": "Về chúng tôi"}, "c": {"zh": "Yuna Fashion 始于一个简单的心愿 —— 让每一个家庭,都能拥有柔软安稳的睡眠时光。\n\n我们相信,睡衣不只是衣服,而是夜里最贴近肌肤的温柔陪伴。忙碌了一天,换上一件亲肤舒适的睡衣,是给自己和家人的一份小小关怀。\n\n从妈妈到宝贝,我们用心挑选每一块面料、每一道车缝,只为把这份温暖带进你的家。\n\n愿 Yuna 陪你和最爱的人,安睡每一夜 🌙", "en": "Yuna Fashion began with one simple wish — that every family could enjoy soft, peaceful nights.\n\nTo us, sleepwear isn't just clothing; it's the gentlest companion against your skin at night. After a long day, slipping into something soft is a small act of care for you and those you love.\n\nFrom mum to little one, we choose every fabric and stitch with heart, to bring that warmth into your home.\n\nMay Yuna keep you and your dearest sleeping soundly, every night 🌙"}}, "design": {"t": {"zh": "设计理念", "en": "Design", "ms": "Reka bentuk", "vi": "Thiết kế"}, "c": {"zh": "柔软 · 关怀 · 安稳 —— 这是 Yuna 的三个设计初心。\n\n🕊️ 柔软:精选亲肤面料(冰丝、纯棉),贴身不刺激,让肌肤自在呼吸。\n\n💗 关怀:剪裁宽松不勒身,细节车缝顺滑,连宝贝娇嫩的肌肤也能安心穿着。\n\n🌙 安稳:温柔的色调与简约版型,陪你卸下一天疲惫,把安稳与好眠带回家。\n\n每一件 Yuna,都愿成为你和家人夜晚里最安心的依靠。", "en": "Soft · Caring · Calm — the three hearts behind every Yuna piece.\n\n🕊️ Soft: skin-friendly fabrics (silky, pure cotton) that let skin breathe.\n\n💗 Caring: relaxed cuts and smooth seams, gentle enough for little ones' delicate skin.\n\n🌙 Calm: soothing tones and simple shapes to help you unwind and sleep well.\n\nEvery Yuna piece hopes to be your family's most reassuring comfort at night."}}, "partner": {"t": {"zh": "合作联系", "en": "Partnership", "ms": "Kerjasama", "vi": "Hợp tác"}, "c": {"zh": "欢迎批发、代理或品牌合作洽谈 🤝\n\n如果你也想把这份柔软与温暖带给更多家庭,欢迎联系我们:\n\n• 点右下角「在线客服」留言\n• 或透过页脚的 WhatsApp 与我们联系\n\n请留下你的称呼、联系方式与合作意向,我们会尽快回复你 🌸", "en": "We welcome wholesale, reseller and brand collaborations 🤝\n\nIf you'd love to bring this softness and warmth to more families, reach us:\n\n• Tap Live Chat (bottom-right) to leave a message\n• Or contact us via the WhatsApp link in the footer\n\nLeave your name, contact and what you have in mind — we'll get back to you soon 🌸"}}};
+function openInfo(k){var m=document.getElementById('infoModal');if(!m||!INFO[k])return;var it=INFO[k];document.getElementById('infoTitle').textContent=(it.t[lang]||it.t.zh);document.getElementById('infoBody').textContent=(it.c[lang]||it.c.en||it.c.zh);m.classList.remove('hide');}
+function closeInfo(){var m=document.getElementById('infoModal');if(m)m.classList.add('hide');}
+  </script>
+<script>try{applyLang();}catch(e){}</script>
 </body>
 </html>
