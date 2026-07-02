@@ -280,6 +280,7 @@
         <button class="add-btn" style="width:auto;margin:0;padding:7px 14px" type="button" onclick="toggleSizeChart()">尺码对照表</button>
       </div>
       <div id="sizeChart" class="hide" style="margin-bottom:14px"></div>
+      <div id="offersBox" class="hide" style="margin-bottom:22px"></div>
       <div class="product-grid" id="productGrid"></div>
     </div>
 
@@ -772,13 +773,41 @@ function flowerSVG(metal,size,tier){
 }
 const TIER_METAL={bronze:'#C9824A',silver:'#B9BFC9',gold:'#E7B53C'};
 function prodName(p){ if(!p) return ''; if(lang==='zh') return p.name||''; return (p['name_'+lang]||p.name||''); }
+const OFFERS={
+  memberT:{zh:'成为会员,边睡边赚 🌙',en:'Become a member — earn while you sleep 🌙'},
+  memberD:{zh:'把你喜欢的睡衣分享给朋友,朋友下单你就有佣金 —— 躺着也有回馈。等级越高,赚得越多。',en:'Share the sleepwear you love; when friends order, you earn commission — even while you rest. The higher your tier, the more you earn.'},
+  memberBtn:{zh:'免费加入会员',en:'Join free'},
+  rm3T:{zh:'免费领 RM3 🎁',en:'Get RM3 free 🎁'},
+  rm3D:{zh:'填写收货资料(姓名 · 电话 · 地址),立即领取 RM3 佣金(一次性)。以后下单还能直接抵扣。',en:'Fill in your delivery details (name · phone · address) and instantly get RM3 credit (one-time). Use it on future orders.'},
+  rm3Btn:{zh:'填资料领 RM3',en:'Claim RM3'}
+};
+function offG(k){ var o=OFFERS[k]; return (o&&(o[lang]||o.en||o.zh))||''; }
+function offersHTML(){
+  return '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">'
+   +'<div style="background:linear-gradient(135deg,var(--berry),var(--rose));color:#fff;border-radius:16px;padding:22px 20px;display:flex;flex-direction:column">'
+     +'<div style="font-family:\'Playfair Display\',serif;font-size:20px;margin-bottom:8px">'+offG('memberT')+'</div>'
+     +'<div style="font-size:13px;line-height:1.7;opacity:.92;flex:1">'+offG('memberD')+'</div>'
+     +'<button class="promo-btn" style="margin-top:16px;align-self:flex-start" onclick="switchView(\'member\')">'+offG('memberBtn')+'</button>'
+   +'</div>'
+   +'<div style="background:linear-gradient(135deg,#E7B53C,#C9767A);color:#fff;border-radius:16px;padding:22px 20px;display:flex;flex-direction:column">'
+     +'<div style="font-family:\'Playfair Display\',serif;font-size:20px;margin-bottom:8px">'+offG('rm3T')+'</div>'
+     +'<div style="font-size:13px;line-height:1.7;opacity:.95;flex:1">'+offG('rm3D')+'</div>'
+     +'<button class="promo-btn" style="margin-top:16px;align-self:flex-start" onclick="claimRM3()">'+offG('rm3Btn')+'</button>'
+   +'</div>'
+  +'</div>';
+}
+function claimRM3(){
+  if(typeof sbUser!=='undefined' && sbUser){ if(typeof openAddr==='function') openAddr(); }
+  else { switchView('member'); try{ showToast(lang==='zh'?'请先登录 / 注册会员,再领 RM3 🌸':'Please log in / register first'); }catch(e){} }
+}
 function renderShop(){
   const t = T[lang];
   const kg=document.getElementById('kidGenderBar'); if(kg) kg.style.display = shopFilter==='kids'?'flex':'none';
   const items = dbProducts.filter(p=>{ if(p.active===false) return false; if(shopFilter==='all') return true; if(shopFilter==='sale') return p.tag==='sale'; if(shopFilter==='women') return p.category==='women'; if(shopFilter==='kids') return p.category===kidGender; return true; });
   const grid = document.getElementById('productGrid');
   const ct = document.getElementById('catTitle'); if(ct) ct.textContent = {all:t.prodTitle,women:t.navWomen,kids:t.navKids,sale:t.navSale}[shopFilter]||t.prodTitle;
-  if(!items.length){ grid.innerHTML='<div class="psub" style="padding:24px 0">这个分类暂时还没有商品 🌷</div>'; return; }
+  var _ob=document.getElementById('offersBox'); if(_ob){ if(shopFilter==='sale'){ _ob.classList.remove('hide'); _ob.innerHTML=offersHTML(); } else { _ob.classList.add('hide'); _ob.innerHTML=''; } }
+  if(!items.length){ grid.innerHTML = shopFilter==='sale' ? '' : '<div class="psub" style="padding:24px 0">这个分类暂时还没有商品 🌷</div>'; return; }
   grid.innerHTML = items.map(p=>{
     const sizes=p.sizes||[];
     const prices=sizes.map(s=>Number(s.price)).filter(x=>x>0);
