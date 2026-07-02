@@ -1290,7 +1290,7 @@ function openChat(){
 function closeChat(){ var m=document.getElementById('chatPanel'); if(m) m.classList.add('hide'); if(__chatTimer){ clearInterval(__chatTimer); __chatTimer=null; } }
 function toggleChat(){ var m=document.getElementById('chatPanel'); if(m && m.classList.contains('hide')) openChat(); else closeChat(); }
 async function chatFetch(){
-  if(!__chatTid || !window.sb) return;
+  if(!__chatTid || !sb) return;
   try{ var r=await sb.rpc('chat_fetch',{p_thread:__chatTid});
     if(r.error) return; chatRender(r.data||[]);
   }catch(e){}
@@ -1305,9 +1305,9 @@ function chatRender(msgs){
 }
 async function chatSend(){
   var inp=document.getElementById('chatInput'); var txt=(inp.value||'').trim(); if(!txt) return;
-  if(!window.sb){ alert('系统未连接'); return; }
+  if(!sb){ alert('系统未连接'); return; }
   inp.value='';
-  var nm=(window.sbProfile&&sbProfile.full_name)||'';
+  var nm=(sbProfile&&sbProfile.full_name)||'';
   try{ var r=await sb.rpc('chat_send',{p_thread:__chatTid,p_name:nm,p_body:txt});
     if(r.error){ inp.value=txt; return; }
     __chatTid=r.data; try{ localStorage.setItem('yuna_chat_tid',__chatTid); }catch(e){}
@@ -1317,7 +1317,7 @@ async function chatSend(){
 /* ============ 客服消息（店主）============ */
 var __admTid=null;
 async function loadAdminChats(){
-  var el=document.getElementById('adminChatList'); if(!el||!window.sb) return;
+  var el=document.getElementById('adminChatList'); if(!el||!sb) return;
   try{ var r=await sb.rpc('admin_chat_threads'); if(r.error){ el.textContent=aTx('admNoChat'); return; }
     var rows=r.data||[];
     if(!rows.length){ el.textContent=aTx('admNoChat'); return; }
