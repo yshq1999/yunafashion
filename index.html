@@ -803,6 +803,7 @@ function claimRM3(){
 function renderShop(){
   const t = T[lang];
   const kg=document.getElementById('kidGenderBar'); if(kg) kg.style.display = shopFilter==='kids'?'flex':'none';
+  const _sc=document.getElementById('sizeChart'); if(_sc && shopFilter!=='kids'){ _sc.classList.add('hide'); _sc.innerHTML=''; }
   const items = dbProducts.filter(p=>{ if(p.active===false) return false; if(shopFilter==='all') return true; if(shopFilter==='sale') return p.tag==='sale'; if(shopFilter==='women') return p.category==='women'; if(shopFilter==='kids') return p.category===kidGender; return true; });
   const grid = document.getElementById('productGrid');
   const ct = document.getElementById('catTitle'); if(ct) ct.textContent = {all:t.prodTitle,women:t.navWomen,kids:t.navKids,sale:t.navSale}[shopFilter]||t.prodTitle;
