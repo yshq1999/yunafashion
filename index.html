@@ -19,7 +19,7 @@
   * { box-sizing:border-box; margin:0; padding:0; }
   :root {
     --rose:#C9767A; --rose-light:#F7DCE4; --cream:#FDF8F5; --berry:#6E4053;
-    --lavender:#E5D8EC; --sage:#D4ECD4; --text:#2C1A1F; --muted:#927580; --line:#f0e6ea;
+    --lavender:#E5D8EC; --sage:#D4ECD4; --text:#2C1A1F; --muted:#927580; --line:#ddc0c8;
   }
   body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--text); }
   .wrap { max-width:1180px; margin:0 auto; }
@@ -540,7 +540,7 @@ const T = {
     mProgTpl:'已有效推荐 {refs} 人 · 再推荐 {n} 人 或 下级再消费 RM{amt} 升「{next}」', mProgMaxTpl:'已有效推荐 {refs} 人 · 已是最高等级 🎉',
     aConnecting:'系统连接中，请稍后再试', aFillLogin:'请填写邮箱和密码', aCopied:'链接已复制 🌸 快分享给朋友吧！', aCartAdded:'已加入购物车 🛒', mWelcome:'欢迎回来，{name} 🌸', mGuideTitle:'新手 3 步,轻松上手：', mGuide1:'① 填好收货资料，立领 RM3', mGuide2:'② 复制你的专属链接,分享给朋友赚佣金', mGuide3:'③ 逛逛商店,挑几件喜欢的 🌸', aWdAmt:'提现金额 (RM)。当前余额 RM {bal}：', aWdAcc:'收款 TNG 号码 / 银行账号：', aBadAmt:'请输入有效金额', aWdOk:'提现申请已提交，店主审核后会打款。',
     aPickSize:'请选择尺码', aSoldOut:'该尺码已售罄', aStockShort:'库存不够了', aCartEmpty:'购物车是空的', aOrderFail:'下单失败，请重试',
-    addrTitle:'填写收货资料，领 RM3', addrSub:'填好资料 + 把 App 加到手机主屏幕，即领 RM3（一次性）', addrName:'姓名', addrPhone:'手机号码', addrAddr:'收货地址', addrNameP:'收货人姓名', addrPhoneP:'手机号,例如 012-3456789', addrAddrP:'详细地址(含邮编)', addrBtn:'安装 App 并领 RM3', addrLater:'稍后再说', addrFill:'请填写完整资料', addrGot:'已获得 RM3 佣金！', installNeed:'需要把 App 加到主屏幕才能领 RM3，请点「安装」并选择添加', iosTitle:'把 Yuna 加到主屏幕：', iosStep1:'① 点手机底部/顶部的「分享」按钮', iosStep2:'② 选「加入主画面 / Add to Home Screen」', iosStep3:'③ 完成后回来点下面按钮领 RM3', iosDone:'我已添加，领取 RM3',
+    addrTitle:'填写收货资料，领 RM3', addrSub:'填好资料 + 把 App 加到手机主屏幕，即领 RM3（一次性）', addrName:'姓名', addrPhone:'手机号码', addrAddr:'详细地址', addrNameP:'收货人姓名', addrPhoneP:'手机号,例如 012-3456789', addrAddrP:'门牌号、街道、花园/区', addrCity:'城市', addrCityP:'例如：八打灵再也', addrPostcode:'邮政编码', addrPostcodeP:'例如：47800', addrState:'州属', addrStateP:'请选择州属', addrBtn:'安装 App 并领 RM3', addrLater:'稍后再说', addrFill:'请填写完整资料', addrPhoneInvalid:'请输入有效的手机号码', addrPostcodeInvalid:'请输入 5 位邮政编码', addrGot:'已获得 RM3 佣金！', installNeed:'需要把 App 加到主屏幕才能领 RM3，请点「安装」并选择添加', iosTitle:'把 Yuna 加到主屏幕：', iosStep1:'① 点手机底部/顶部的「分享」按钮', iosStep2:'② 选「加入主画面 / Add to Home Screen」', iosStep3:'③ 完成后回来点下面按钮领 RM3', iosDone:'我已添加，领取 RM3',
     heroTag:'舒适睡衣 · 萌趣童装', heroTitle:'柔软相伴，<br><em>安睡</em>每一夜',
     heroDesc:'精选亲肤睡衣与可爱童装，给你和宝贝最温柔的陪伴。', shopNow:'立即选购', badge1:'亲肤面料', badge2:'舒适亲子',
     prodTitle:'热销商品', promoSub:'限时特惠', promoTitle:'儿童系列全场 8 折', promoDesc:'仅限本周，精选童装优惠中', promoBtn:'立即抢购',
@@ -574,7 +574,7 @@ const T = {
     mProgTpl:'{refs} valid referrals · Refer {n} more or downline spend RM{amt} to reach {next}', mProgMaxTpl:'{refs} valid referrals · Top tier reached 🎉',
     aConnecting:'Connecting, please try again', aFillLogin:'Please enter email and password', aCopied:'Link copied 🌸 share it with friends!', aCartAdded:'Added to cart 🛒', mWelcome:'Welcome back, {name} 🌸', mGuideTitle:'3 easy steps to start:', mGuide1:'1. Fill delivery info — get RM3', mGuide2:'2. Copy your link & share to earn', mGuide3:'3. Browse the shop & pick some favourites 🌸', aWdAmt:'Withdraw amount (RM). Balance RM {bal}:', aWdAcc:'Your TNG number / bank account:', aBadAmt:'Please enter a valid amount', aWdOk:'Withdrawal request submitted. Owner will pay after review.',
     aPickSize:'Please select a size', aSoldOut:'This size is sold out', aStockShort:'Not enough stock', aCartEmpty:'Your cart is empty', aOrderFail:'Order failed, please retry',
-    addrTitle:'Fill delivery info, get RM3', addrSub:'Fill info + add the App to your home screen to get RM3 (one-time)', addrName:'Name', addrPhone:'Phone', addrAddr:'Delivery address', addrNameP:'Recipient name', addrPhoneP:'Phone e.g. 012-3456789', addrAddrP:'Full address (with postcode)', addrBtn:'Install App & get RM3', addrLater:'Maybe later', addrFill:'Please fill all fields', addrGot:'You earned RM3!', installNeed:'Please add the App to your home screen to get RM3 — tap Install and confirm', iosTitle:'Add Yuna to your home screen:', iosStep1:'1. Tap the Share button', iosStep2:'2. Choose "Add to Home Screen"', iosStep3:'3. Come back and tap the button below', iosDone:'I have added it — get RM3',
+    addrTitle:'Fill delivery info, get RM3', addrSub:'Fill info + add the App to your home screen to get RM3 (one-time)', addrName:'Name', addrPhone:'Phone', addrAddr:'Address', addrNameP:'Recipient name', addrPhoneP:'Phone e.g. 012-3456789', addrAddrP:'Unit no, street, taman/area', addrCity:'City', addrCityP:'e.g. Petaling Jaya', addrPostcode:'Postcode', addrPostcodeP:'e.g. 47800', addrState:'State', addrStateP:'Select state', addrBtn:'Install App & get RM3', addrLater:'Maybe later', addrFill:'Please fill all fields', addrPhoneInvalid:'Please enter a valid phone number', addrPostcodeInvalid:'Please enter a 5-digit postcode', addrGot:'You earned RM3!', installNeed:'Please add the App to your home screen to get RM3 — tap Install and confirm', iosTitle:'Add Yuna to your home screen:', iosStep1:'1. Tap the Share button', iosStep2:'2. Choose "Add to Home Screen"', iosStep3:'3. Come back and tap the button below', iosDone:'I have added it — get RM3',
     heroTag:'Cozy Sleepwear · Sweet Kids', heroTitle:'Soft Comfort,<br><em>Sweet</em> Dreams',
     heroDesc:'Gentle sleepwear and adorable kids wear, for the softest moments with your little one.', shopNow:'Shop now', badge1:'Skin-friendly', badge2:'For you & kids',
     prodTitle:'Best sellers', promoSub:'Limited offer', promoTitle:'20% off all kids wear', promoDesc:'This week only, selected styles', promoBtn:'Shop sale',
@@ -607,7 +607,7 @@ const T = {
     mProgTpl:'{refs} rujukan sah · Ajak {n} lagi atau downline belanja RM{amt} untuk {next}', mProgMaxTpl:'{refs} rujukan sah · Tahap tertinggi dicapai 🎉',
     aConnecting:'Menyambung, sila cuba lagi', aFillLogin:'Sila isi emel dan kata laluan', aCopied:'Pautan disalin 🌸 kongsi dengan kawan!', aCartAdded:'Ditambah ke troli 🛒', mWelcome:'Selamat kembali, {name} 🌸', mGuideTitle:'3 langkah mudah untuk mula:', mGuide1:'1. Isi maklumat penghantaran — dapat RM3', mGuide2:'2. Salin pautan anda & kongsi untuk komisen', mGuide3:'3. Layari kedai & pilih kesukaan anda 🌸', aWdAmt:'Jumlah keluar (RM). Baki RM {bal}:', aWdAcc:'Nombor TNG / akaun bank anda:', aBadAmt:'Sila masukkan jumlah yang sah', aWdOk:'Permohonan keluar dihantar. Pemilik akan bayar selepas semakan.',
     aPickSize:'Sila pilih saiz', aSoldOut:'Saiz ini habis dijual', aStockShort:'Stok tidak cukup', aCartEmpty:'Troli anda kosong', aOrderFail:'Pesanan gagal, sila cuba lagi',
-    addrTitle:'Isi maklumat penghantaran, dapat RM3', addrSub:'Isi maklumat + tambah App ke skrin utama untuk dapat RM3 (sekali)', addrName:'Nama', addrPhone:'No. telefon', addrAddr:'Alamat penghantaran', addrNameP:'Nama penerima', addrPhoneP:'No. telefon cth 012-3456789', addrAddrP:'Alamat penuh (dengan poskod)', addrBtn:'Pasang App & dapat RM3', addrLater:'Kemudian', addrFill:'Sila isi semua maklumat', addrGot:'Anda dapat RM3!', installNeed:'Sila tambah App ke skrin utama untuk dapat RM3 — tekan Pasang', iosTitle:'Tambah Yuna ke skrin utama:', iosStep1:'1. Tekan butang Kongsi (Share)', iosStep2:'2. Pilih "Add to Home Screen"', iosStep3:'3. Kembali dan tekan butang di bawah', iosDone:'Saya sudah tambah — dapat RM3',
+    addrTitle:'Isi maklumat penghantaran, dapat RM3', addrSub:'Isi maklumat + tambah App ke skrin utama untuk dapat RM3 (sekali)', addrName:'Nama', addrPhone:'No. telefon', addrAddr:'Alamat', addrNameP:'Nama penerima', addrPhoneP:'No. telefon cth 012-3456789', addrAddrP:'No. unit, jalan, taman/kawasan', addrCity:'Bandar', addrCityP:'cth. Petaling Jaya', addrPostcode:'Poskod', addrPostcodeP:'cth. 47800', addrState:'Negeri', addrStateP:'Pilih negeri', addrBtn:'Pasang App & dapat RM3', addrLater:'Kemudian', addrFill:'Sila isi semua maklumat', addrPhoneInvalid:'Sila masukkan nombor telefon yang sah', addrPostcodeInvalid:'Sila masukkan poskod 5 digit', addrGot:'Anda dapat RM3!', installNeed:'Sila tambah App ke skrin utama untuk dapat RM3 — tekan Pasang', iosTitle:'Tambah Yuna ke skrin utama:', iosStep1:'1. Tekan butang Kongsi (Share)', iosStep2:'2. Pilih "Add to Home Screen"', iosStep3:'3. Kembali dan tekan butang di bawah', iosDone:'Saya sudah tambah — dapat RM3',
     heroTag:'Baju Tidur Selesa · Comel untuk Anak', heroTitle:'Lembut Selesa,<br><em>Tidur</em> Lena',
     heroDesc:'Baju tidur lembut dan pakaian kanak comel, untuk saat paling selesa bersama si kecil.', shopNow:'Beli sekarang', badge1:'Mesra kulit', badge2:'Untuk anda & anak',
     prodTitle:'Paling laris', promoSub:'Tawaran terhad', promoTitle:'20% diskaun pakaian kanak', promoDesc:'Minggu ini sahaja, gaya terpilih', promoBtn:'Beli jualan',
@@ -640,7 +640,7 @@ const T = {
     mProgTpl:'{refs} giới thiệu hợp lệ · Giới thiệu thêm {n} hoặc tuyến dưới mua RM{amt} để lên {next}', mProgMaxTpl:'{refs} giới thiệu hợp lệ · Đã đạt hạng cao nhất 🎉',
     aConnecting:'Đang kết nối, vui lòng thử lại', aFillLogin:'Vui lòng nhập email và mật khẩu', aCopied:'Đã sao chép link 🌸 chia sẻ với bạn bè nhé!', aCartAdded:'Đã thêm vào giỏ 🛒', mWelcome:'Chào mừng trở lại, {name} 🌸', mGuideTitle:'3 bước dễ để bắt đầu:', mGuide1:'1. Điền thông tin giao hàng — nhận RM3', mGuide2:'2. Sao chép link & chia sẻ để kiếm hoa hồng', mGuide3:'3. Dạo cửa hàng & chọn vài món yêu thích 🌸', aWdAmt:'Số tiền rút (RM). Số dư RM {bal}:', aWdAcc:'Số TNG / tài khoản ngân hàng của bạn:', aBadAmt:'Vui lòng nhập số tiền hợp lệ', aWdOk:'Đã gửi yêu cầu rút. Chủ shop sẽ thanh toán sau khi duyệt.',
     aPickSize:'Vui lòng chọn size', aSoldOut:'Size này đã hết hàng', aStockShort:'Không đủ hàng', aCartEmpty:'Giỏ hàng trống', aOrderFail:'Đặt hàng thất bại, vui lòng thử lại',
-    addrTitle:'Điền thông tin giao hàng, nhận RM3', addrSub:'Điền thông tin + thêm App vào màn hình chính để nhận RM3 (một lần)', addrName:'Tên', addrPhone:'Số điện thoại', addrAddr:'Địa chỉ giao hàng', addrNameP:'Tên người nhận', addrPhoneP:'SĐT vd 012-3456789', addrAddrP:'Địa chỉ đầy đủ (kèm mã bưu)', addrBtn:'Cài App & nhận RM3', addrLater:'Để sau', addrFill:'Vui lòng điền đủ thông tin', addrGot:'Bạn nhận được RM3!', installNeed:'Vui lòng thêm App vào màn hình chính để nhận RM3 — bấm Cài đặt', iosTitle:'Thêm Yuna vào màn hình chính:', iosStep1:'1. Bấm nút Chia sẻ (Share)', iosStep2:'2. Chọn "Add to Home Screen"', iosStep3:'3. Quay lại và bấm nút bên dưới', iosDone:'Tôi đã thêm — nhận RM3',
+    addrTitle:'Điền thông tin giao hàng, nhận RM3', addrSub:'Điền thông tin + thêm App vào màn hình chính để nhận RM3 (một lần)', addrName:'Tên', addrPhone:'Số điện thoại', addrAddr:'Địa chỉ', addrNameP:'Tên người nhận', addrPhoneP:'SĐT vd 012-3456789', addrAddrP:'Số nhà, đường, khu vực', addrCity:'Thành phố', addrCityP:'vd: Petaling Jaya', addrPostcode:'Mã bưu điện', addrPostcodeP:'vd: 47800', addrState:'Bang', addrStateP:'Chọn bang', addrBtn:'Cài App & nhận RM3', addrLater:'Để sau', addrFill:'Vui lòng điền đủ thông tin', addrPhoneInvalid:'Vui lòng nhập số điện thoại hợp lệ', addrPostcodeInvalid:'Vui lòng nhập mã bưu điện 5 chữ số', addrGot:'Bạn nhận được RM3!', installNeed:'Vui lòng thêm App vào màn hình chính để nhận RM3 — bấm Cài đặt', iosTitle:'Thêm Yuna vào màn hình chính:', iosStep1:'1. Bấm nút Chia sẻ (Share)', iosStep2:'2. Chọn "Add to Home Screen"', iosStep3:'3. Quay lại và bấm nút bên dưới', iosDone:'Tôi đã thêm — nhận RM3',
     heroTag:'Đồ ngủ êm ái · Đồ trẻ em xinh xắn', heroTitle:'Êm ái mỗi đêm,<br>ngọt ngào <em>giấc mơ</em>',
     heroDesc:'Đồ ngủ mềm mại và đồ trẻ em đáng yêu, cho những khoảnh khắc êm dịu bên bé yêu.', shopNow:'Mua ngay', badge1:'Thân thiện da', badge2:'Cho mẹ & bé',
     prodTitle:'Bán chạy nhất', promoSub:'Ưu đãi có hạn', promoTitle:'Giảm 20% đồ trẻ em', promoDesc:'Chỉ tuần này, mẫu chọn lọc', promoBtn:'Mua ngay',
@@ -1270,12 +1270,18 @@ function wireContacts(){
   const wa=document.getElementById('contactWa'); if(wa){ if(C.whatsapp_url){ wa.style.display=''; wa.onclick=function(){ window.open(C.whatsapp_url,'_blank'); }; } else wa.style.display='none'; }
   const tt=document.getElementById('contactTt'); if(tt){ if(C.tiktok_url){ tt.style.display=''; tt.onclick=function(){ window.open(C.tiktok_url,'_blank'); }; } else tt.style.display='none'; }
 }
-function openAddr(){ const m=document.getElementById('addrModal'); if(!m) return; if(sbProfile){ document.getElementById('adName').value=sbProfile.full_name||''; document.getElementById('adPhone').value=sbProfile.phone||''; document.getElementById('adAddr').value=sbProfile.address||''; } var b=document.getElementById('adrIos'); if(b) b.classList.add('hide'); var am=document.getElementById('adMsg'); if(am) am.textContent=''; m.classList.remove('hide'); }
+function openAddr(){ const m=document.getElementById('addrModal'); if(!m) return; if(sbProfile){ document.getElementById('adName').value=sbProfile.full_name||''; document.getElementById('adPhone').value=sbProfile.phone||''; document.getElementById('adAddr').value=sbProfile.address||''; document.getElementById('adCity').value=''; document.getElementById('adPostcode').value=''; document.getElementById('adState').value=''; } var b=document.getElementById('adrIos'); if(b) b.classList.add('hide'); var am=document.getElementById('adMsg'); if(am) am.textContent=''; m.classList.remove('hide'); }
 function closeAddr(){ const m=document.getElementById('addrModal'); if(m) m.classList.add('hide'); }
 var __pendAddr=null;
 async function submitAddr(){
-  const t=T[lang]; const name=document.getElementById('adName').value.trim(), phone=document.getElementById('adPhone').value.trim(), addr=document.getElementById('adAddr').value.trim();
-  if(!name||!phone||!addr){ document.getElementById('adMsg').textContent=t.addrFill; return; }
+  const t=T[lang];
+  const name=document.getElementById('adName').value.trim(), phone=document.getElementById('adPhone').value.trim(),
+        addrLine=document.getElementById('adAddr').value.trim(), city=document.getElementById('adCity').value.trim(),
+        postcode=document.getElementById('adPostcode').value.trim(), state=document.getElementById('adState').value;
+  if(!name||!phone||!addrLine||!city||!postcode||!state){ document.getElementById('adMsg').textContent=t.addrFill; return; }
+  if(!/^0\d{1,2}-?\d{7,8}$/.test(phone.replace(/\s/g,''))){ document.getElementById('adMsg').textContent=t.addrPhoneInvalid; return; }
+  if(!/^\d{5}$/.test(postcode)){ document.getElementById('adMsg').textContent=t.addrPostcodeInvalid; return; }
+  const addr=addrLine+', '+postcode+' '+city+', '+state;
   __pendAddr={name:name,phone:phone,addr:addr};
   document.getElementById('adMsg').textContent='';
   // already installed -> grant directly
@@ -1390,6 +1396,20 @@ document.addEventListener('change', function(e){
       <div class="field" style="margin-top:12px"><label data-i="addrName"></label><input id="adName" data-iph="addrNameP"/></div>
       <div class="field"><label data-i="addrPhone"></label><input id="adPhone" type="tel" data-iph="addrPhoneP"/></div>
       <div class="field"><label data-i="addrAddr"></label><input id="adAddr" data-iph="addrAddrP"/></div>
+      <div class="row2">
+        <div class="field"><label data-i="addrCity"></label><input id="adCity" data-iph="addrCityP"/></div>
+        <div class="field"><label data-i="addrPostcode"></label><input id="adPostcode" type="tel" inputmode="numeric" maxlength="5" data-iph="addrPostcodeP"/></div>
+      </div>
+      <div class="field">
+        <label data-i="addrState"></label>
+        <select id="adState">
+          <option value="" data-i="addrStateP"></option>
+          <option>Johor</option><option>Kedah</option><option>Kelantan</option><option>Melaka</option>
+          <option>Negeri Sembilan</option><option>Pahang</option><option>Perak</option><option>Perlis</option>
+          <option>Pulau Pinang</option><option>Sabah</option><option>Sarawak</option><option>Selangor</option>
+          <option>Terengganu</option><option>Kuala Lumpur</option><option>Labuan</option><option>Putrajaya</option>
+        </select>
+      </div>
       <button class="save-btn" type="button" onclick="submitAddr()" data-i="addrBtn"></button>
       <div id="adrIos" class="hide" style="margin-top:12px;background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:12px">
         <div style="font-weight:600;color:var(--berry);font-size:13px;margin-bottom:6px" data-i="iosTitle"></div>
