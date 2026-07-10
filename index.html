@@ -53,6 +53,8 @@
   @keyframes memberFlash { 0%,100%{ background:var(--rose-light); color:var(--berry); box-shadow:0 0 0 0 rgba(201,118,122,.0);} 50%{ background:var(--rose); color:#fff; box-shadow:0 0 12px 2px rgba(201,118,122,.55);} }
   #chatBtn { animation: chatGlow 2.4s ease-in-out infinite; }
   @keyframes chatGlow { 0%,100%{ box-shadow:0 6px 20px rgba(110,64,83,.4), 0 0 0 0 rgba(201,118,122,.5);} 50%{ box-shadow:0 6px 20px rgba(110,64,83,.4), 0 0 16px 6px rgba(201,118,122,.65);} }
+  .tier-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:18px; }
+  .tier-earn { font-size:15px; font-weight:600; color:var(--rose); line-height:1.3; }
   .vtab-flash.active { animation:none; background:var(--berry); color:#fff; border-color:var(--berry); }
   .cart-icon { padding:8px 12px; position:relative; }
   .cart-icon .vcart-count { position:absolute; top:-5px; right:-5px; }
@@ -75,8 +77,6 @@
   .hero-btn { display:inline-flex; align-items:center; gap:8px; background:var(--berry); color:#fff; padding:12px 26px; border-radius:24px; font-size:14px; font-weight:500; border:none; cursor:pointer; width:fit-content; transition:background .2s; }
   .hero-btn:hover { background:var(--rose); }
   .hero-visual { background:linear-gradient(135deg,#e8dcf0,#f3e2e8); display:flex; align-items:center; justify-content:center; position:relative; }
-  .hero-badges { position:absolute; bottom:20px; left:20px; display:flex; gap:8px; }
-  .badge { background:#fff; border-radius:20px; padding:6px 14px; font-size:12px; font-weight:500; color:var(--berry); }
 
   /* PANELS */
   .panel { padding:36px 28px; }
@@ -203,14 +203,18 @@
     .product-grid { grid-template-columns:repeat(2,1fr); gap:12px; }
     .admin-wrap { grid-template-columns:1fr; }
     footer { padding:30px 18px 20px; }
-    .footer-grid { grid-template-columns:1fr 1fr; gap:22px; }
+    .footer-grid { grid-template-columns:1fr 1fr 1fr; gap:14px; }
     .footer-grid > div:first-child { grid-column:1 / -1; }
   }
   @media (max-width:430px){
     .hero-title { font-size:24px; }
     .product-grid { gap:10px; }
-    .footer-grid { grid-template-columns:1fr; gap:20px; }
+    .footer-grid { grid-template-columns:1fr 1fr 1fr; gap:8px; }
+    .footer-col h4 { font-size:10px; margin-bottom:10px; }
+    .footer-col li { font-size:11px; margin-bottom:7px; }
     .section-header { flex-direction:column; align-items:flex-start; gap:4px; }
+    .tier-grid { grid-template-columns:1fr; gap:8px; }
+    .tier-earn { font-size:13px; }
   }
 </style>
 </head>
@@ -265,10 +269,6 @@
           <text x="160" y="225" font-size="50" text-anchor="middle">🧸</text>
           <text x="340" y="235" font-size="50" text-anchor="middle">⭐</text>
         </svg>
-        <div class="hero-badges">
-          <span class="badge" data-i="badge1"></span>
-          <span class="badge" data-i="badge2"></span>
-        </div>
       </div>
     </section>
 
@@ -378,10 +378,10 @@
           🏆 <span data-i="mB3"></span>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px">
-        <div class="form-card" style="text-align:center"><div id="flowerBronze" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierBronze"></div><div class="psub" style="min-height:32px" data-i="mReqBronze"></div><div id="mEarnBronzeEl" style="font-size:15px;font-weight:600;color:var(--rose)" data-i="mEarnBronze"></div></div>
-        <div class="form-card" style="text-align:center"><div id="flowerSilver" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierSilver"></div><div class="psub" style="min-height:32px" data-i="mReqSilver"></div><div id="mEarnSilverEl" style="font-size:15px;font-weight:600;color:var(--rose)" data-i="mEarnSilver"></div></div>
-        <div class="form-card" style="text-align:center"><div id="flowerGold" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierGold"></div><div class="psub" style="min-height:32px" data-i="mReqGold"></div><div id="mEarnGoldEl" style="font-size:15px;font-weight:600;color:var(--rose)" data-i="mEarnGold"></div></div>
+      <div class="tier-grid">
+        <div class="form-card" style="text-align:center"><div id="flowerBronze" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierBronze"></div><div class="psub" style="min-height:32px" data-i="mReqBronze"></div><div id="mEarnBronzeEl" class="tier-earn" data-i="mEarnBronze"></div></div>
+        <div class="form-card" style="text-align:center"><div id="flowerSilver" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierSilver"></div><div class="psub" style="min-height:32px" data-i="mReqSilver"></div><div id="mEarnSilverEl" class="tier-earn" data-i="mEarnSilver"></div></div>
+        <div class="form-card" style="text-align:center"><div id="flowerGold" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierGold"></div><div class="psub" style="min-height:32px" data-i="mReqGold"></div><div id="mEarnGoldEl" class="tier-earn" data-i="mEarnGold"></div></div>
       </div>
       <div class="admin-wrap">
         <div class="form-card">
@@ -392,6 +392,7 @@
           <div id="regNameField" class="field"><label data-i="mLName"></label><input id="mName" data-iph="mPName" placeholder="你的名字"/></div>
           <div class="field"><label data-i="mLEmail"></label><input id="mEmail" type="email" placeholder="name@email.com"/></div>
           <div class="field"><label data-i="mLPass"></label><input id="mPass" type="password" data-iph="mPPass" placeholder="至少 6 位"/></div>
+          <div id="forgotPwLink" class="hide psub" style="text-align:right;margin:-6px 0 10px;cursor:pointer;color:var(--rose)" onclick="forgotPassword()" data-i="mForgotPw"></div>
           <div id="refNote" class="psub" style="margin-bottom:10px"></div>
           <button class="save-btn" id="mAuthBtn" type="button" onclick="memberSubmit()">注册并获取推荐码</button>
           <div id="mAuthMsg" class="psub" style="margin-top:10px;color:var(--rose)"></div>
@@ -435,6 +436,13 @@
           <div><div class="psub" data-i="mBalance"></div><div class="cart-total-val" id="balVal">RM 0</div></div>
           <button class="hero-btn" type="button" onclick="openWithdraw()" data-i="mWithdraw"></button>
         </div>
+      </div>
+      <div class="form-card" style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <div>
+          <div class="psub" data-i="mMyAddr"></div>
+          <div id="myAddrText" style="font-size:13px;color:var(--text);margin-top:4px;line-height:1.6"></div>
+        </div>
+        <button class="add-btn" style="width:auto;padding:8px 14px;margin:0;white-space:nowrap" type="button" onclick="openAddr()" data-i="mEditAddr"></button>
       </div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
         <div class="form-card" style="text-align:center"><div class="psub" data-i="mInvited"></div><div class="cart-total-val" id="statInvited">0</div></div>
@@ -541,9 +549,11 @@ const T = {
     mJoin:'免费加入 Yuna 会员', mB1:'满 RM99 免邮费', mB2:'推荐朋友永久赚佣金，朋友每下一单你都有分', mB3:'升级解锁更深下线收益，最多赚 3 代',
     tierBronze:'初绽会员', tierSilver:'绽放会员', tierGold:'盛放会员',
     mReqBronze:'完成首购即得', mReqSilver:'推荐 5 人 或 下级消费 RM1000', mReqGold:'推荐 15 人 或 下级消费 RM3000',
-    mEarnBronze:'赚第一代佣金', mEarnSilver:'赚第一、二代佣金', mEarnGold:'赚第一、二、三代佣金',
+    mEarnBronze:'第一代', mEarnSilver:'第一、二代', mEarnGold:'第一、二、三代',
     mHowTitle:'怎么赚佣金?', mHow1:'1. 注册成会员，系统给你专属推荐码', mHow2:'2. 把分享链接发给朋友', mHow3:'3. 朋友凭链接注册并下单', mHow4:'4. 你按比例获得佣金，满额可提现或购物抵扣',
     mTabReg:'注册', mTabLogin:'登录', mLName:'姓名', mPName:'你的名字', mLPass:'密码', mPPass:'至少 6 位', mRegBtn:'注册并获取推荐码', mLoginBtn:'登录', mRefSaved:'推荐码已记录：',
+    mForgotPw:'忘记密码？', mForgotNeedEmail:'请先填写邮箱地址', mForgotSent:'重置密码邮件已发送，请查收邮箱', mResetTitle:'设置新密码', mResetSub:'请输入你的新密码', mResetBtn:'确认修改密码', mResetTooShort:'密码至少需要 6 位', mResetDone:'密码已更新！',
+    mMyAddr:'我的收货地址', mEditAddr:'编辑地址', mNoAddrYet:'还没有填写收货地址',
     mYourTier:'你的会员等级', mYourLink:'你的专属推荐链接', mCopy:'复制', mRefCode:'推荐码：', mBalance:'当前佣金余额', mWithdraw:'申请提现',
     mInvited:'已邀请', mFirstBuy:'已首购', mEarned:'累计佣金', mMyFriends:'我邀请的朋友', mNoFriends:'还没有人通过你的链接注册', mLogout:'退出登录', mGen1:'第一代', mGen2:'第二代', mGen3:'第三代', mFirstNo:'未首购',
     mProgTpl:'已有效推荐 {refs} 人 · 再推荐 {n} 人 或 下级再消费 RM{amt} 升「{next}」', mProgMaxTpl:'已有效推荐 {refs} 人 · 已是最高等级 🎉',
@@ -551,7 +561,7 @@ const T = {
     aPickSize:'请选择尺码', aSoldOut:'该尺码已售罄', aStockShort:'库存不够了', aCartEmpty:'购物车是空的', aOrderFail:'下单失败，请重试',
     addrTitle:'填写收货资料，领 RM3', addrSub:'填好资料 + 把 App 加到手机主屏幕，即领 RM3（一次性）', addrName:'姓名', addrPhone:'手机号码', addrAddr:'详细地址', addrNameP:'收货人姓名', addrPhoneP:'手机号,例如 012-3456789', addrAddrP:'门牌号、街道、花园/区', addrCity:'城市', addrCityP:'例如：八打灵再也', addrPostcode:'邮政编码', addrPostcodeP:'例如：47800', addrState:'州属', addrStateP:'请选择州属', addrBtn:'安装 App 并领 RM3', addrLater:'稍后再说', addrFill:'请填写完整资料', addrPhoneInvalid:'请输入有效的手机号码', addrPostcodeInvalid:'请输入 5 位邮政编码', addrGot:'已获得 RM3 佣金！', installNeed:'需要把 App 加到主屏幕才能领 RM3，请点「安装」并选择添加', iosTitle:'把 Yuna 加到主屏幕：', iosStep1:'① 点手机底部/顶部的「分享」按钮', iosStep2:'② 选「加入主画面 / Add to Home Screen」', iosStep3:'③ 完成后回来点下面按钮领 RM3', iosDone:'我已添加，领取 RM3',
     heroTag:'舒适睡衣 · 萌趣童装', heroTitle:'柔软相伴，<br><em>安睡</em>每一夜',
-    heroDesc:'精选亲肤睡衣与可爱童装，给你和宝贝最温柔的陪伴。', shopNow:'立即选购', badge1:'亲肤面料', badge2:'舒适亲子',
+    heroDesc:'精选亲肤睡衣与可爱童装，给你和宝贝最温柔的陪伴。', shopNow:'立即选购',
     prodTitle:'热销商品', promoSub:'限时特惠', promoTitle:'儿童系列全场 8 折', promoDesc:'仅限本周，精选童装优惠中', promoBtn:'立即抢购',
     adminTitle:'商家后台 · 上传商品', adminSub:'填写商品资料 → 上传图片 → 保存，立即出现在商店里（数据保存在本浏览器）',
     fNameL:'商品名称', fNameP:'例如：冰丝吊带睡裙', fCatL:'分类', catW:'女士睡衣', catK:'儿童服装', catF:'亲子睡衣',
@@ -575,9 +585,11 @@ const T = {
     mJoin:'Join Yuna membership free', mB1:'Free shipping over RM99', mB2:'Refer friends and earn commission forever — on every order they make', mB3:'Level up to earn from deeper downlines, up to 3 generations',
     tierBronze:'Bud Member', tierSilver:'Bloom Member', tierGold:'Full Bloom',
     mReqBronze:'Unlocked after first purchase', mReqSilver:'Refer 5 or downline spend RM1000', mReqGold:'Refer 15 or downline spend RM3000',
-    mEarnBronze:'Earn Gen-1 commission', mEarnSilver:'Earn Gen-1 & 2 commission', mEarnGold:'Earn Gen-1, 2 & 3 commission',
+    mEarnBronze:'Gen-1', mEarnSilver:'Gen-1 & 2', mEarnGold:'Gen-1, 2 & 3',
     mHowTitle:'How to earn?', mHow1:'1. Register and get your referral code', mHow2:'2. Send your link to friends', mHow3:'3. Friends register via your link and order', mHow4:'4. You earn commission — withdraw or use as store credit',
     mTabReg:'Register', mTabLogin:'Login', mLName:'Name', mPName:'Your name', mLPass:'Password', mPPass:'At least 6 characters', mRegBtn:'Register & get code', mLoginBtn:'Login', mRefSaved:'Referral code saved: ',
+    mForgotPw:'Forgot password?', mForgotNeedEmail:'Please enter your email first', mForgotSent:'Password reset email sent — please check your inbox', mResetTitle:'Set a new password', mResetSub:'Enter your new password', mResetBtn:'Confirm new password', mResetTooShort:'Password must be at least 6 characters', mResetDone:'Password updated!',
+    mMyAddr:'My delivery address', mEditAddr:'Edit address', mNoAddrYet:'No delivery address saved yet',
     mYourTier:'Your tier', mYourLink:'Your referral link', mCopy:'Copy', mRefCode:'Code: ', mBalance:'Commission balance', mWithdraw:'Withdraw',
     mInvited:'Invited', mFirstBuy:'First buy', mEarned:'Total earned', mMyFriends:'Friends you invited', mNoFriends:'No one has registered via your link yet', mLogout:'Log out', mGen1:'Gen 1', mGen2:'Gen 2', mGen3:'Gen 3', mFirstNo:'No purchase yet',
     mProgTpl:'{refs} valid referrals · Refer {n} more or downline spend RM{amt} to reach {next}', mProgMaxTpl:'{refs} valid referrals · Top tier reached 🎉',
@@ -585,7 +597,7 @@ const T = {
     aPickSize:'Please select a size', aSoldOut:'This size is sold out', aStockShort:'Not enough stock', aCartEmpty:'Your cart is empty', aOrderFail:'Order failed, please retry',
     addrTitle:'Fill delivery info, get RM3', addrSub:'Fill info + add the App to your home screen to get RM3 (one-time)', addrName:'Name', addrPhone:'Phone', addrAddr:'Address', addrNameP:'Recipient name', addrPhoneP:'Phone e.g. 012-3456789', addrAddrP:'Unit no, street, taman/area', addrCity:'City', addrCityP:'e.g. Petaling Jaya', addrPostcode:'Postcode', addrPostcodeP:'e.g. 47800', addrState:'State', addrStateP:'Select state', addrBtn:'Install App & get RM3', addrLater:'Maybe later', addrFill:'Please fill all fields', addrPhoneInvalid:'Please enter a valid phone number', addrPostcodeInvalid:'Please enter a 5-digit postcode', addrGot:'You earned RM3!', installNeed:'Please add the App to your home screen to get RM3 — tap Install and confirm', iosTitle:'Add Yuna to your home screen:', iosStep1:'1. Tap the Share button', iosStep2:'2. Choose "Add to Home Screen"', iosStep3:'3. Come back and tap the button below', iosDone:'I have added it — get RM3',
     heroTag:'Cozy Sleepwear · Sweet Kids', heroTitle:'Soft Comfort,<br><em>Sweet</em> Dreams',
-    heroDesc:'Gentle sleepwear and adorable kids wear, for the softest moments with your little one.', shopNow:'Shop now', badge1:'Skin-friendly', badge2:'For you & kids',
+    heroDesc:'Gentle sleepwear and adorable kids wear, for the softest moments with your little one.', shopNow:'Shop now',
     prodTitle:'Best sellers', promoSub:'Limited offer', promoTitle:'20% off all kids wear', promoDesc:'This week only, selected styles', promoBtn:'Shop sale',
     adminTitle:'Admin · Add products', adminSub:'Fill in details → upload image → save. Appears in shop instantly (saved in this browser).',
     fNameL:'Product name', fNameP:'e.g. Silky Slip Nightgown', fCatL:'Category', catW:'Women Sleepwear', catK:'Kids Wear', catF:'Family Pajamas',
@@ -608,9 +620,11 @@ const T = {
     mJoin:'Sertai keahlian Yuna percuma', mB1:'Penghantaran percuma melebihi RM99', mB2:'Ajak kawan & dapat komisen selamanya — setiap pesanan mereka', mB3:'Naik taraf untuk dapat dari downline lebih dalam, sehingga 3 generasi',
     tierBronze:'Ahli Kuncup', tierSilver:'Ahli Mekar', tierGold:'Mekar Penuh',
     mReqBronze:'Dibuka selepas pembelian pertama', mReqSilver:'Ajak 5 atau downline belanja RM1000', mReqGold:'Ajak 15 atau downline belanja RM3000',
-    mEarnBronze:'Dapat komisen Gen-1', mEarnSilver:'Dapat komisen Gen-1 & 2', mEarnGold:'Dapat komisen Gen-1, 2 & 3',
+    mEarnBronze:'Gen-1', mEarnSilver:'Gen-1 & 2', mEarnGold:'Gen-1, 2 & 3',
     mHowTitle:'Cara dapat komisen?', mHow1:'1. Daftar dan dapat kod rujukan', mHow2:'2. Hantar pautan kepada kawan', mHow3:'3. Kawan daftar guna pautan & buat pesanan', mHow4:'4. Anda dapat komisen — keluarkan atau guna untuk beli',
     mTabReg:'Daftar', mTabLogin:'Log masuk', mLName:'Nama', mPName:'Nama anda', mLPass:'Kata laluan', mPPass:'Sekurangnya 6 aksara', mRegBtn:'Daftar & dapat kod', mLoginBtn:'Log masuk', mRefSaved:'Kod rujukan disimpan: ',
+    mForgotPw:'Lupa kata laluan?', mForgotNeedEmail:'Sila isi emel dahulu', mForgotSent:'E-mel set semula kata laluan dihantar — sila semak emel anda', mResetTitle:'Tetapkan kata laluan baharu', mResetSub:'Masukkan kata laluan baharu anda', mResetBtn:'Sahkan kata laluan baharu', mResetTooShort:'Kata laluan mestilah sekurang-kurangnya 6 aksara', mResetDone:'Kata laluan dikemaskini!',
+    mMyAddr:'Alamat penghantaran saya', mEditAddr:'Edit alamat', mNoAddrYet:'Belum ada alamat penghantaran disimpan',
     mYourTier:'Tahap anda', mYourLink:'Pautan rujukan anda', mCopy:'Salin', mRefCode:'Kod: ', mBalance:'Baki komisen', mWithdraw:'Keluarkan',
     mInvited:'Diajak', mFirstBuy:'Beli pertama', mEarned:'Jumlah komisen', mMyFriends:'Kawan yang anda ajak', mNoFriends:'Belum ada sesiapa daftar melalui pautan anda', mLogout:'Log keluar', mGen1:'Gen 1', mGen2:'Gen 2', mGen3:'Gen 3', mFirstNo:'Belum beli',
     mProgTpl:'{refs} rujukan sah · Ajak {n} lagi atau downline belanja RM{amt} untuk {next}', mProgMaxTpl:'{refs} rujukan sah · Tahap tertinggi dicapai 🎉',
@@ -618,7 +632,7 @@ const T = {
     aPickSize:'Sila pilih saiz', aSoldOut:'Saiz ini habis dijual', aStockShort:'Stok tidak cukup', aCartEmpty:'Troli anda kosong', aOrderFail:'Pesanan gagal, sila cuba lagi',
     addrTitle:'Isi maklumat penghantaran, dapat RM3', addrSub:'Isi maklumat + tambah App ke skrin utama untuk dapat RM3 (sekali)', addrName:'Nama', addrPhone:'No. telefon', addrAddr:'Alamat', addrNameP:'Nama penerima', addrPhoneP:'No. telefon cth 012-3456789', addrAddrP:'No. unit, jalan, taman/kawasan', addrCity:'Bandar', addrCityP:'cth. Petaling Jaya', addrPostcode:'Poskod', addrPostcodeP:'cth. 47800', addrState:'Negeri', addrStateP:'Pilih negeri', addrBtn:'Pasang App & dapat RM3', addrLater:'Kemudian', addrFill:'Sila isi semua maklumat', addrPhoneInvalid:'Sila masukkan nombor telefon yang sah', addrPostcodeInvalid:'Sila masukkan poskod 5 digit', addrGot:'Anda dapat RM3!', installNeed:'Sila tambah App ke skrin utama untuk dapat RM3 — tekan Pasang', iosTitle:'Tambah Yuna ke skrin utama:', iosStep1:'1. Tekan butang Kongsi (Share)', iosStep2:'2. Pilih "Add to Home Screen"', iosStep3:'3. Kembali dan tekan butang di bawah', iosDone:'Saya sudah tambah — dapat RM3',
     heroTag:'Baju Tidur Selesa · Comel untuk Anak', heroTitle:'Lembut Selesa,<br><em>Tidur</em> Lena',
-    heroDesc:'Baju tidur lembut dan pakaian kanak comel, untuk saat paling selesa bersama si kecil.', shopNow:'Beli sekarang', badge1:'Mesra kulit', badge2:'Untuk anda & anak',
+    heroDesc:'Baju tidur lembut dan pakaian kanak comel, untuk saat paling selesa bersama si kecil.', shopNow:'Beli sekarang',
     prodTitle:'Paling laris', promoSub:'Tawaran terhad', promoTitle:'20% diskaun pakaian kanak', promoDesc:'Minggu ini sahaja, gaya terpilih', promoBtn:'Beli jualan',
     adminTitle:'Pentadbir · Tambah produk', adminSub:'Isi maklumat → muat naik gambar → simpan. Terus muncul di kedai (disimpan dalam pelayar ini).',
     fNameL:'Nama produk', fNameP:'cth: Gaun Tidur Sutera', fCatL:'Kategori', catW:'Baju Tidur Wanita', catK:'Pakaian Kanak', catF:'Piyama Keluarga',
@@ -641,9 +655,11 @@ const T = {
     mJoin:'Tham gia thành viên Yuna miễn phí', mB1:'Miễn phí ship trên RM99', mB2:'Giới thiệu bạn & hưởng hoa hồng mãi mãi — mỗi đơn họ mua', mB3:'Lên hạng để hưởng từ tuyến dưới sâu hơn, tối đa 3 đời',
     tierBronze:'Thành viên Hé nở', tierSilver:'Thành viên Nở rộ', tierGold:'Mãn khai',
     mReqBronze:'Mở khóa sau lần mua đầu', mReqSilver:'Giới thiệu 5 hoặc tuyến dưới mua RM1000', mReqGold:'Giới thiệu 15 hoặc tuyến dưới mua RM3000',
-    mEarnBronze:'Hưởng hoa hồng đời 1', mEarnSilver:'Hưởng hoa hồng đời 1 & 2', mEarnGold:'Hưởng hoa hồng đời 1, 2 & 3',
+    mEarnBronze:'Đời 1', mEarnSilver:'Đời 1 & 2', mEarnGold:'Đời 1, 2 & 3',
     mHowTitle:'Kiếm hoa hồng thế nào?', mHow1:'1. Đăng ký và nhận mã giới thiệu', mHow2:'2. Gửi link cho bạn bè', mHow3:'3. Bạn bè đăng ký qua link và đặt hàng', mHow4:'4. Bạn nhận hoa hồng — rút hoặc dùng để mua hàng',
     mTabReg:'Đăng ký', mTabLogin:'Đăng nhập', mLName:'Tên', mPName:'Tên của bạn', mLPass:'Mật khẩu', mPPass:'Ít nhất 6 ký tự', mRegBtn:'Đăng ký & nhận mã', mLoginBtn:'Đăng nhập', mRefSaved:'Đã lưu mã giới thiệu: ',
+    mForgotPw:'Quên mật khẩu?', mForgotNeedEmail:'Vui lòng nhập email trước', mForgotSent:'Đã gửi email đặt lại mật khẩu — vui lòng kiểm tra hộp thư', mResetTitle:'Đặt mật khẩu mới', mResetSub:'Nhập mật khẩu mới của bạn', mResetBtn:'Xác nhận mật khẩu mới', mResetTooShort:'Mật khẩu phải có ít nhất 6 ký tự', mResetDone:'Đã cập nhật mật khẩu!',
+    mMyAddr:'Địa chỉ giao hàng của tôi', mEditAddr:'Sửa địa chỉ', mNoAddrYet:'Chưa lưu địa chỉ giao hàng',
     mYourTier:'Hạng của bạn', mYourLink:'Link giới thiệu của bạn', mCopy:'Sao chép', mRefCode:'Mã: ', mBalance:'Số dư hoa hồng', mWithdraw:'Rút tiền',
     mInvited:'Đã mời', mFirstBuy:'Đã mua đầu', mEarned:'Tổng hoa hồng', mMyFriends:'Bạn bè bạn đã mời', mNoFriends:'Chưa có ai đăng ký qua link của bạn', mLogout:'Đăng xuất', mGen1:'Đời 1', mGen2:'Đời 2', mGen3:'Đời 3', mFirstNo:'Chưa mua',
     mProgTpl:'{refs} giới thiệu hợp lệ · Giới thiệu thêm {n} hoặc tuyến dưới mua RM{amt} để lên {next}', mProgMaxTpl:'{refs} giới thiệu hợp lệ · Đã đạt hạng cao nhất 🎉',
@@ -651,7 +667,7 @@ const T = {
     aPickSize:'Vui lòng chọn size', aSoldOut:'Size này đã hết hàng', aStockShort:'Không đủ hàng', aCartEmpty:'Giỏ hàng trống', aOrderFail:'Đặt hàng thất bại, vui lòng thử lại',
     addrTitle:'Điền thông tin giao hàng, nhận RM3', addrSub:'Điền thông tin + thêm App vào màn hình chính để nhận RM3 (một lần)', addrName:'Tên', addrPhone:'Số điện thoại', addrAddr:'Địa chỉ', addrNameP:'Tên người nhận', addrPhoneP:'SĐT vd 012-3456789', addrAddrP:'Số nhà, đường, khu vực', addrCity:'Thành phố', addrCityP:'vd: Petaling Jaya', addrPostcode:'Mã bưu điện', addrPostcodeP:'vd: 47800', addrState:'Bang', addrStateP:'Chọn bang', addrBtn:'Cài App & nhận RM3', addrLater:'Để sau', addrFill:'Vui lòng điền đủ thông tin', addrPhoneInvalid:'Vui lòng nhập số điện thoại hợp lệ', addrPostcodeInvalid:'Vui lòng nhập mã bưu điện 5 chữ số', addrGot:'Bạn nhận được RM3!', installNeed:'Vui lòng thêm App vào màn hình chính để nhận RM3 — bấm Cài đặt', iosTitle:'Thêm Yuna vào màn hình chính:', iosStep1:'1. Bấm nút Chia sẻ (Share)', iosStep2:'2. Chọn "Add to Home Screen"', iosStep3:'3. Quay lại và bấm nút bên dưới', iosDone:'Tôi đã thêm — nhận RM3',
     heroTag:'Đồ ngủ êm ái · Đồ trẻ em xinh xắn', heroTitle:'Êm ái mỗi đêm,<br>ngọt ngào <em>giấc mơ</em>',
-    heroDesc:'Đồ ngủ mềm mại và đồ trẻ em đáng yêu, cho những khoảnh khắc êm dịu bên bé yêu.', shopNow:'Mua ngay', badge1:'Thân thiện da', badge2:'Cho mẹ & bé',
+    heroDesc:'Đồ ngủ mềm mại và đồ trẻ em đáng yêu, cho những khoảnh khắc êm dịu bên bé yêu.', shopNow:'Mua ngay',
     prodTitle:'Bán chạy nhất', promoSub:'Ưu đãi có hạn', promoTitle:'Giảm 20% đồ trẻ em', promoDesc:'Chỉ tuần này, mẫu chọn lọc', promoBtn:'Mua ngay',
     adminTitle:'Quản trị · Thêm sản phẩm', adminSub:'Điền thông tin → tải ảnh → lưu. Hiện ngay trong cửa hàng (lưu trong trình duyệt này).',
     fNameL:'Tên sản phẩm', fNameP:'vd: Váy ngủ lụa', fCatL:'Danh mục', catW:'Đồ ngủ nữ', catK:'Đồ trẻ em', catF:'Pyjama gia đình',
@@ -700,6 +716,17 @@ try { lang = localStorage.getItem('yuna_lang') || 'zh'; } catch(e){}
 function saveProducts(){ try{ localStorage.setItem('yuna_products', JSON.stringify(products)); }catch(e){} }
 
 /* ============ 语言 ============ */
+function updateEarnLabels(){
+  try{
+    const S=window.SBS||{};
+    const pct=n=>{ const v=Math.round((n||0)*1000)/10; return (v%1===0?v.toFixed(0):v.toFixed(1)); };
+    const l1p=pct(S.l1_rate), l2p=pct(S.l2_rate), l3p=pct(S.l3_rate);
+    const T0=T[lang];
+    const eb=document.getElementById('mEarnBronzeEl'); if(eb) eb.textContent = T0.mEarnBronze+' '+l1p+'%';
+    const es=document.getElementById('mEarnSilverEl'); if(es) es.textContent = T0.mEarnSilver+' '+l1p+'%+'+l2p+'%';
+    const eg=document.getElementById('mEarnGoldEl'); if(eg) eg.textContent = T0.mEarnGold+' '+l1p+'%+'+l2p+'%+'+l3p+'%';
+  }catch(e){}
+}
 function applyLang(){
   const t = T[lang];
   document.documentElement.lang = lang;
@@ -715,6 +742,7 @@ function applyLang(){
     const fs=document.getElementById('flowerSilver'); if(fs) fs.innerHTML=flowerSVG('#B9BFC9',50,'silver');
     const fg=document.getElementById('flowerGold'); if(fg) fg.innerHTML=flowerSVG('#E7B53C',50,'gold');
   }catch(e){}
+  updateEarnLabels();
   renderShop(); renderAdmin(); renderCart();
   if(typeof renderMember==='function'){ try{ renderMember(); }catch(e){} }
 }
@@ -810,7 +838,7 @@ function claimRM3(){
   else { switchView('member'); try{ showToast(lang==='zh'?'请先登录 / 注册会员,再领 RM3 🌸':'Please log in / register first'); }catch(e){} }
 }
 const KID_SIZE_CHART=[['4','9-10 Kg','80 cm'],['5','10-11 Kg','81-85 cm'],['6','12-13 Kg','86-90 cm'],['7','14-15 Kg','91-95 cm'],['8','16-17 Kg','96-100 cm'],['9','18-20 Kg','101-105 cm'],['10','21-23 Kg','106-110 cm'],['11','24-27 Kg','111-117 cm'],['12','28-30 Kg','118-125 cm'],['S','31-36 Kg','126-135 cm'],['M','37-42 Kg','136-142 cm']];
-const KID_SIZE_WH={}; KID_SIZE_CHART.forEach(r=>{ KID_SIZE_WH[r[0]]=r[1]+' · '+r[2]; });
+const KID_SIZE_WH={}; KID_SIZE_CHART.forEach(r=>{ KID_SIZE_WH[r[0]]=r[1].replace(/\s+/g,'').replace('Kg','kg')+'/'+r[2].replace(/\s+/g,''); });
 function renderShop(){
   const t = T[lang];
   const kg=document.getElementById('kidGenderBar'); if(kg) kg.style.display = shopFilter==='kids'?'flex':'none';
@@ -826,7 +854,7 @@ function renderShop(){
     const minP=prices.length?Math.min(...prices):0;
     const anyStock=sizes.some(s=>s.stock>0);
     const isKid=(p.category==='boy'||p.category==='girl');
-    const opts=sizes.map(s=>{ const wh=(isKid&&KID_SIZE_WH[s.size])?(' ('+KID_SIZE_WH[s.size]+')'):''; return `<option value="${s.size}" ${s.stock<=0?'disabled':''}>${s.size}${wh} · RM ${s.price}${s.stock<=0?' ('+t.pSold+')':' · '+t.pLeft.replace('{n}',s.stock)}</option>`; }).join('');
+    const opts=sizes.map(s=>{ const wh=(isKid&&KID_SIZE_WH[s.size])?('('+KID_SIZE_WH[s.size]+')'):''; return `<option value="${s.size}" ${s.stock<=0?'disabled':''}>${s.size}${wh}·RM${s.price}${s.stock<=0?'('+t.pSold+')':'·'+t.pLeft.replace('{n}',s.stock)}</option>`; }).join('');
     return `<div class="product-card">
       <div class="product-img">
         ${p.tag==='new'?`<span class="product-tag tag-new">${t.newT}</span>`:p.tag==='sale'?`<span class="product-tag tag-sale">${t.saleT}</span>`:''}
@@ -1012,6 +1040,7 @@ window.__initSB = function(){
   try { sb = window.supabase.createClient(SB_URL, SB_KEY); } catch(e){ console.warn('supabase init failed', e); return; }
   loadProducts();
   sb.auth.getSession().then(({data})=>{ const session=data&&data.session; if(session){ sbUser=session.user; loadProfile().then(()=>{ var mv=document.getElementById('viewMember'); if(mv && !mv.classList.contains('hide')) renderMember(); }); } });
+  sb.auth.onAuthStateChange((event)=>{ if(event==='PASSWORD_RECOVERY'){ var m=document.getElementById('resetPwModal'); if(m) m.classList.remove('hide'); } });
 };
 if (window.supabase && window.supabase.createClient) window.__initSB();
 
@@ -1026,6 +1055,7 @@ function memberAuthTab(m){
   document.getElementById('authTabLogin').classList.toggle('active', m==='login');
   document.getElementById('regNameField').style.display = m==='reg'?'':'none';
   document.getElementById('mAuthBtn').textContent = m==='reg'?T[lang].mRegBtn:T[lang].mLoginBtn;
+  document.getElementById('forgotPwLink').classList.toggle('hide', m!=='login');
   const ref = localStorage.getItem('yuna_ref');
   document.getElementById('refNote').textContent = (m==='reg' && ref)? (T[lang].mRefSaved+ref) : '';
 }
@@ -1052,6 +1082,35 @@ async function memberSubmit(){
   } finally { document.getElementById('mAuthBtn').disabled=false; }
 }
 
+async function forgotPassword(){
+  if(!sb) return;
+  const t=T[lang];
+  const email=document.getElementById('mEmail').value.trim();
+  const msg=document.getElementById('mAuthMsg');
+  msg.style.color='var(--rose)';
+  if(!email){ msg.textContent=t.mForgotNeedEmail; return; }
+  msg.textContent='';
+  try{
+    const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin+location.pathname });
+    if(error){ msg.textContent=error.message; return; }
+    msg.style.color='#5a9a5c'; msg.textContent=t.mForgotSent;
+  }catch(e){ msg.textContent=t.aConnecting; }
+}
+async function submitNewPassword(){
+  const t=T[lang];
+  const pw=document.getElementById('rpNewPass').value;
+  const msg=document.getElementById('rpMsg');
+  if(!pw || pw.length<6){ msg.textContent=t.mResetTooShort; return; }
+  msg.textContent='';
+  try{
+    const { error } = await sb.auth.updateUser({ password: pw });
+    if(error){ msg.textContent=error.message; return; }
+    document.getElementById('resetPwModal').classList.add('hide');
+    showToast(t.mResetDone);
+    const { data:{ user } } = await sb.auth.getUser();
+    sbUser=user; await loadProfile(); switchView('member'); renderMember();
+  }catch(e){ msg.textContent=t.aConnecting; }
+}
 async function loadProfile(){
   if(!sb||!sbUser){ sbProfile=null; return; }
   for(let i=0;i<6;i++){
@@ -1074,6 +1133,11 @@ async function renderMember(){
     document.getElementById('refLink').value = link;
     document.getElementById('refCode').textContent = sbProfile.referral_code;
     document.getElementById('balVal').textContent = 'RM ' + Number(sbProfile.balance||0).toFixed(2);
+    const myAddrEl=document.getElementById('myAddrText');
+    if(myAddrEl){
+      if(sbProfile.address){ myAddrEl.textContent = (sbProfile.full_name||'')+(sbProfile.phone?(' · '+sbProfile.phone):'')+'\n'+sbProfile.address; myAddrEl.style.whiteSpace='pre-line'; }
+      else { myAddrEl.textContent = T[lang].mNoAddrYet; myAddrEl.style.whiteSpace=''; }
+    }
     const { data:invs } = await sb.from('profiles').select('id,full_name,email,created_at').eq('referred_by', sbUser.id);
     document.getElementById('statInvited').textContent = invs? invs.length : 0;
     const level1 = invs||[];
@@ -1128,15 +1192,6 @@ async function renderMember(){
         else prog=T0.mProgMaxTpl.replace('{refs}',sum.valid_refs);
         document.getElementById('tierProgress').textContent = prog;
       }
-    }catch(e){}
-    try{
-      const S=window.SBS||{};
-      const pct=n=>{ const v=Math.round((n||0)*1000)/10; return (v%1===0?v.toFixed(0):v.toFixed(1)); };
-      const l1p=pct(S.l1_rate), l2p=pct(S.l2_rate), l3p=pct(S.l3_rate);
-      const T0=T[lang];
-      const eb=document.getElementById('mEarnBronzeEl'); if(eb) eb.textContent = T0.mEarnBronze+' '+l1p+'%';
-      const es=document.getElementById('mEarnSilverEl'); if(es) es.textContent = T0.mEarnSilver+' '+l1p+'%+'+l2p+'%';
-      const eg=document.getElementById('mEarnGoldEl'); if(eg) eg.textContent = T0.mEarnGold+' '+l1p+'%+'+l2p+'%+'+l3p+'%';
     }catch(e){}
     const adm=document.getElementById('memberAdmin');
     if(sbProfile.is_admin){ adm.classList.remove('hide'); await renderAdminPanel(); } else { adm.classList.add('hide'); }
@@ -1365,7 +1420,7 @@ async function pmDelete(pid){
 }
 async function loadProducts(){
   if(!sb) return;
-  try{ const stt=await sb.from('settings').select('*'); window.SBS={}; (stt.data||[]).forEach(r=>window.SBS[r.key]=Number(r.value)); }catch(e){}
+  try{ const stt=await sb.from('settings').select('*'); window.SBS={}; (stt.data||[]).forEach(r=>window.SBS[r.key]=Number(r.value)); updateEarnLabels(); }catch(e){}
   try{ const cfg=await sb.from('config').select('*'); window.CFG={}; (cfg.data||[]).forEach(r=>window.CFG[r.key]=r.value); wireContacts(); }catch(e){}
   try{
     const pr=await sb.from('products').select('*').eq('active',true).order('created_at',{ascending:false});
@@ -1564,6 +1619,15 @@ document.addEventListener('change', function(e){
       </div>
       <div style="text-align:center;margin-top:8px"><span style="cursor:pointer;color:var(--muted);font-size:13px" onclick="closeWithdraw()" data-i="wdLater"></span></div>
       <div id="wdMsg" class="psub" style="margin-top:8px;color:var(--rose)"></div>
+    </div>
+  </div>
+  <div id="resetPwModal" class="hide" style="position:fixed;inset:0;background:rgba(44,26,31,.5);display:flex;align-items:center;justify-content:center;z-index:600;padding:20px">
+    <div style="position:relative;background:#fff;border-radius:16px;padding:24px;max-width:380px;width:100%;box-shadow:0 12px 40px rgba(110,64,83,.3)">
+      <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--berry);margin-bottom:4px" data-i="mResetTitle"></div>
+      <div class="psub" data-i="mResetSub"></div>
+      <div class="field" style="margin-top:12px"><label data-i="mLPass"></label><input id="rpNewPass" type="password" data-iph="mPPass"/></div>
+      <button class="save-btn" type="button" onclick="submitNewPassword()" data-i="mResetBtn"></button>
+      <div id="rpMsg" class="psub" style="margin-top:8px;color:var(--rose)"></div>
     </div>
   </div>
   <div id="chatBtn" onclick="toggleChat()" style="position:fixed;right:18px;bottom:18px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--berry));box-shadow:0 6px 20px rgba(110,64,83,.4);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:550">
