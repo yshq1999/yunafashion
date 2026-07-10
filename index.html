@@ -501,6 +501,19 @@
         <div class="field"><label data-i="admWdMin">提现门槛 RM</label><input id="setWdMin" type="number"/></div>
         <div class="field"><label data-i="admWa">WhatsApp 链接</label><input id="setWa" placeholder="https://wa.me/60123456789"/></div>
         <div class="field"><label data-i="admTt">TikTok 链接</label><input id="setTt" placeholder="https://www.tiktok.com/@yourshop"/></div>
+        <div class="psub" style="margin:14px 0 10px;font-weight:500;color:var(--berry)" data-i="admPayH">收款方式 — 结算页会显示给客人</div>
+        <div class="field"><label data-i="admPayAccNo">收款账号（TNG 手机号 / 银行账号）</label><input id="setPayAccNo" placeholder="例如：012-3456789"/></div>
+        <div class="field"><label data-i="admPayAccName">收款人姓名</label><input id="setPayAccName" placeholder="例如：Yuna Fashion Shop"/></div>
+        <div class="row2">
+          <div class="field"><label data-i="admTngQr">TNG QR 收款码</label>
+            <div class="upload-zone" id="tngQrZone" onclick="document.getElementById('tngQrImg').click()"><div id="tngQrPh"><i class="ti ti-qrcode" style="font-size:22px"></i><br><span data-i="admUploadClick">点击上传图片</span></div></div>
+            <input type="file" id="tngQrImg" accept="image/*" class="hide"/>
+          </div>
+          <div class="field"><label data-i="admDuitQr">DuitNow QR 收款码</label>
+            <div class="upload-zone" id="duitQrZone" onclick="document.getElementById('duitQrImg').click()"><div id="duitQrPh"><i class="ti ti-qrcode" style="font-size:22px"></i><br><span data-i="admUploadClick">点击上传图片</span></div></div>
+            <input type="file" id="duitQrImg" accept="image/*" class="hide"/>
+          </div>
+        </div>
         <button class="save-btn" type="button" onclick="saveSettings()" data-i="admSaveSet">保存设置</button>
         <div id="setMsg" class="psub" style="margin-top:6px;color:var(--rose)"></div>
       </div>
@@ -596,12 +609,11 @@ const T = {
     cartTitle:'购物车', cartSub:'确认商品数量后点击结算', cartTotalLabel:'合计', checkoutBtn:'前往结算 →', emptyCart:'购物车还是空的 · 去商店挑选喜欢的吧',
     backCart:'返回购物车', coTitle:'结算付款', choosePay:'选择付款方式', tngAcc:'TNG 户口', useCreditL:'使用佣金抵扣（可用 RM {bal}）',
     proofL:'上传付款截图（选填）', proofP:'付款后点击上传截图', proofChatHint:'💬 也可以不上传，直接点击右下角在线客服通知我们付款啦', submitOrder:'提交订单',
-    payTng:"用 Touch 'n Go eWallet 扫码", payDuit:'用任意银行 App 扫 DuitNow QR', payAccTo:'转账到以下 TNG eWallet 户口：',
-    payee:'收款人：Yuna Fashion Shop', payAccName:'户名：Yuna Fashion Shop', replaceNote:'（上线时替换成你的真实收款码 / 号码）',
+    payTng:"用 Touch 'n Go eWallet 扫码", payDuit:'用任意银行 App 扫 DuitNow QR', payAccTo:'转账到以下 TNG eWallet 户口：', payNotSet:'店主还没设置收款方式，请点右下角在线客服联系我们付款',
     successH:'订单已提交！', orderNo:'订单编号', successMsg:'我们会核对你的付款截图，确认后尽快发货。', keepShop:'继续购物',
     footShopH:'购物指南', footShop1:'如何下单', footShop2:'尺码指南', footShop3:'配送说明', footShop4:'退换政策',
     footBrandH:'品牌故事', footBrand1:'关于我们', footBrand2:'设计理念', footBrand3:'合作联系', footContactH:'联系我们', footC1:'在线客服', rights:'版权所有', chatTitle:'在线客服', chatHi:'你好！有什么可以帮你？我们会尽快回复 🌸', chatPh:'输入消息…', chatSendBtn:'发送',
-    admMgmt:'店主管理', admOnlyYou:'只有你(店主)能看到这一区', admOrdersH:'待确认订单 — 确认收款后会给推荐人入账佣金', admSearchH:'订单查询 — 查看所有订单（含已确认）', admSearchPh:'输入客人姓名/邮箱', admStatusAll:'全部状态', admStatusPending:'待付款', admStatusPaid:'已付款', admSearchBtn:'查询', admSearchHint:'输入姓名/邮箱或选择状态后点查询', admSearchNone:'没有符合条件的订单', admSearching:'查询中…', admSearchFail:'查询失败：', admCourierH:'物流公司管理 — 设置各物流的追踪链接', admCourierHint:'网址里可以加 {code} 占位符，系统会自动替换成客人的运单号；不确定的话先只填官网追踪页链接也可以，客人自己去页面输入号码查询一样能用。', admCourierAdd:'添加', admCourierNameP:'物流公司名称，例如 J&T Express', admCourierUrlP:'追踪网址，例如 https://.../track?code={code}', admCourierNone:'还没有添加物流公司', admCourierFillBoth:'请填写名称和网址', admNoTracking:'还没有填写物流信息', admSetTracking:'设置物流', admTrackSaved:'物流信息已保存', admTrackSaveFail:'保存失败：', admWdsH:'提现申请 — 打款到会员账号后点「已打款」', admSetH:'设置 — 佣金 / 运费（改完点保存）', admL1:'L1 直接佣金 %', admL2:'L2 佣金 %', admL3:'L3 佣金 %', admBonus:'首购奖 RM', admShipMin:'免邮门槛 RM', admShipFee:'运费 RM', admWdMin:'提现门槛 RM', admWa:'WhatsApp 链接', admTt:'TikTok 链接', admSaveSet:'保存设置', admProdH:'上传 / 管理商品', admCat:'分类', admCatW:'女士睡衣', admCatB:'小孩 · 男孩', admCatG:'小孩 · 女孩', admNameZh:'商品名称（中文）', admNameEn:'英文名 (可选)', admNameMs:'马来名 (可选)', admNameVi:'越南名 (可选)', admNote:'说明（可选）', admTag:'标签', admTagNone:'无', admTagNew:'新品', admTagSale:'特惠', admImg:'商品图片', admSizes:'各尺码 · 价格(RM) / 库存', admSaveProd:'保存上架', admCurProd:'现有商品', admChatH:'客服消息 — 客户的咨询会显示在这里', admNoChat:'暂无客服消息', admReplyPh:'回复…', admNoOrders:'没有待确认订单', admConfirmPaid:'确认收款', admNoWds:'没有提现申请', admPaid:'已打款', admReject:'拒绝', admShipTo:'收货', admCopyAddr:'复制地址', admCopied:'已复制到剪贴板', admNoAddr:'（客人还没填收货资料）',
+    admMgmt:'店主管理', admOnlyYou:'只有你(店主)能看到这一区', admOrdersH:'待确认订单 — 确认收款后会给推荐人入账佣金', admSearchH:'订单查询 — 查看所有订单（含已确认）', admSearchPh:'输入客人姓名/邮箱', admStatusAll:'全部状态', admStatusPending:'待付款', admStatusPaid:'已付款', admSearchBtn:'查询', admSearchHint:'输入姓名/邮箱或选择状态后点查询', admSearchNone:'没有符合条件的订单', admSearching:'查询中…', admSearchFail:'查询失败：', admCourierH:'物流公司管理 — 设置各物流的追踪链接', admCourierHint:'网址里可以加 {code} 占位符，系统会自动替换成客人的运单号；不确定的话先只填官网追踪页链接也可以，客人自己去页面输入号码查询一样能用。', admCourierAdd:'添加', admCourierNameP:'物流公司名称，例如 J&T Express', admCourierUrlP:'追踪网址，例如 https://.../track?code={code}', admCourierNone:'还没有添加物流公司', admCourierFillBoth:'请填写名称和网址', admNoTracking:'还没有填写物流信息', admSetTracking:'设置物流', admTrackSaved:'物流信息已保存', admTrackSaveFail:'保存失败：', admWdsH:'提现申请 — 打款到会员账号后点「已打款」', admSetH:'设置 — 佣金 / 运费（改完点保存）', admL1:'L1 直接佣金 %', admL2:'L2 佣金 %', admL3:'L3 佣金 %', admBonus:'首购奖 RM', admShipMin:'免邮门槛 RM', admShipFee:'运费 RM', admWdMin:'提现门槛 RM', admWa:'WhatsApp 链接', admTt:'TikTok 链接', admPayH:'收款方式 — 结算页会显示给客人', admPayAccNo:'收款账号（TNG 手机号 / 银行账号）', admPayAccName:'收款人姓名', admTngQr:'TNG QR 收款码', admDuitQr:'DuitNow QR 收款码', admUploadClick:'点击上传图片', admSaveSet:'保存设置', admProdH:'上传 / 管理商品', admCat:'分类', admCatW:'女士睡衣', admCatB:'小孩 · 男孩', admCatG:'小孩 · 女孩', admNameZh:'商品名称（中文）', admNameEn:'英文名 (可选)', admNameMs:'马来名 (可选)', admNameVi:'越南名 (可选)', admNote:'说明（可选）', admTag:'标签', admTagNone:'无', admTagNew:'新品', admTagSale:'特惠', admImg:'商品图片', admSizes:'各尺码 · 价格(RM) / 库存', admSaveProd:'保存上架', admCurProd:'现有商品', admChatH:'客服消息 — 客户的咨询会显示在这里', admNoChat:'暂无客服消息', admReplyPh:'回复…', admNoOrders:'没有待确认订单', admConfirmPaid:'确认收款', admNoWds:'没有提现申请', admPaid:'已打款', admReject:'拒绝', admShipTo:'收货', admCopyAddr:'复制地址', admCopied:'已复制到剪贴板', admNoAddr:'（客人还没填收货资料）',
     newT:'新品', saleT:'特惠', addT:'加入购物车', pFrom:'起', pLeft:'剩{n}件', pSold:'售罄', kgBoy:'男孩', kgGirl:'女孩', kgChart:'尺码对照表', cSize:'尺码', scTitle:'小孩尺码对照表', scWeight:'体重', scHeight:'身高', noProducts:'这个分类暂时还没有商品 🌷', alertFill:'请填写商品名称和售价', alertUp:'已上架！切到「商店」即可看到' },
 
   en:{ freeShip:'Free shipping over RM 99 · 30-day returns', slogan:'Soft Comfort, Sweet Dreams', slogan2:'Soft Comfort, Sweet Dreams',
@@ -633,8 +645,7 @@ const T = {
     cartTitle:'Cart', cartSub:'Adjust quantity, then checkout', cartTotalLabel:'Total', checkoutBtn:'Checkout →', emptyCart:'Your cart is empty · go pick something you love',
     backCart:'Back to cart', coTitle:'Checkout', choosePay:'Choose payment method', tngAcc:'TNG Account', useCreditL:'Use commission credit (RM {bal} available)',
     proofL:'Upload payment screenshot (optional)', proofP:'Upload after paying', proofChatHint:"💬 Or skip this and just tap the livechat button to let us know you've paid", submitOrder:'Place order',
-    payTng:"Scan with Touch 'n Go eWallet", payDuit:'Scan DuitNow QR with any bank app', payAccTo:'Transfer to this TNG eWallet account:',
-    payee:'Payee: Yuna Fashion Shop', payAccName:'Name: Yuna Fashion Shop', replaceNote:'(Replace with your real QR / number before going live)',
+    payTng:"Scan with Touch 'n Go eWallet", payDuit:'Scan DuitNow QR with any bank app', payAccTo:'Transfer to this TNG eWallet account:', payNotSet:'Payment details not set up yet — tap livechat to arrange payment',
     successH:'Order placed!', orderNo:'Order no.', successMsg:'We will verify your payment screenshot and ship as soon as confirmed.', keepShop:'Keep shopping',
     footShopH:'Shopping', footShop1:'How to order', footShop2:'Size guide', footShop3:'Shipping', footShop4:'Returns',
     footBrandH:'Our story', footBrand1:'About us', footBrand2:'Design', footBrand3:'Partnership', footContactH:'Contact', footC1:'Live chat', rights:'All rights reserved', chatTitle:'Live chat', chatHi:'Hi! How can we help? We will reply soon 🌸', chatPh:'Type a message…', chatSendBtn:'Send',
@@ -669,8 +680,7 @@ const T = {
     cartTitle:'Troli', cartSub:'Laraskan kuantiti, kemudian bayar', cartTotalLabel:'Jumlah', checkoutBtn:'Bayar →', emptyCart:'Troli anda kosong · pergi pilih kesukaan anda',
     backCart:'Kembali ke troli', coTitle:'Pembayaran', choosePay:'Pilih kaedah pembayaran', tngAcc:'Akaun TNG', useCreditL:'Guna kredit komisen (RM {bal} tersedia)',
     proofL:'Muat naik tangkapan skrin bayaran (pilihan)', proofP:'Muat naik selepas bayar', proofChatHint:'💬 Atau tekan sahaja butang livechat untuk maklumkan kami anda sudah bayar', submitOrder:'Hantar pesanan',
-    payTng:"Imbas dengan Touch 'n Go eWallet", payDuit:'Imbas DuitNow QR dengan mana-mana app bank', payAccTo:'Pindah ke akaun TNG eWallet ini:',
-    payee:'Penerima: Yuna Fashion Shop', payAccName:'Nama: Yuna Fashion Shop', replaceNote:'(Ganti dengan QR / nombor sebenar sebelum dilancarkan)',
+    payTng:"Imbas dengan Touch 'n Go eWallet", payDuit:'Imbas DuitNow QR dengan mana-mana app bank', payAccTo:'Pindah ke akaun TNG eWallet ini:', payNotSet:'Maklumat pembayaran belum disediakan — tekan livechat untuk aturkan bayaran',
     successH:'Pesanan dihantar!', orderNo:'No. pesanan', successMsg:'Kami akan sahkan tangkapan skrin bayaran anda dan hantar sebaik disahkan.', keepShop:'Terus beli-belah',
     footShopH:'Membeli-belah', footShop1:'Cara pesanan', footShop2:'Panduan saiz', footShop3:'Penghantaran', footShop4:'Pulangan',
     footBrandH:'Kisah kami', footBrand1:'Tentang kami', footBrand2:'Reka bentuk', footBrand3:'Kerjasama', footContactH:'Hubungi', footC1:'Sembang langsung', rights:'Hak cipta terpelihara', chatTitle:'Sembang langsung', chatHi:'Hai! Boleh kami bantu? Kami akan balas segera 🌸', chatPh:'Taip mesej…', chatSendBtn:'Hantar',
@@ -705,8 +715,7 @@ const T = {
     cartTitle:'Giỏ hàng', cartSub:'Điều chỉnh số lượng rồi thanh toán', cartTotalLabel:'Tổng', checkoutBtn:'Thanh toán →', emptyCart:'Giỏ hàng trống · hãy chọn món bạn thích',
     backCart:'Về giỏ hàng', coTitle:'Thanh toán', choosePay:'Chọn phương thức thanh toán', tngAcc:'Tài khoản TNG', useCreditL:'Dùng tín dụng hoa hồng (còn RM {bal})',
     proofL:'Tải ảnh chụp thanh toán (không bắt buộc)', proofP:'Tải lên sau khi thanh toán', proofChatHint:'💬 Hoặc bấm livechat để báo cho chúng tôi là bạn đã thanh toán', submitOrder:'Đặt hàng',
-    payTng:"Quét bằng Touch 'n Go eWallet", payDuit:'Quét DuitNow QR bằng app ngân hàng', payAccTo:'Chuyển vào tài khoản TNG eWallet này:',
-    payee:'Người nhận: Yuna Fashion Shop', payAccName:'Tên: Yuna Fashion Shop', replaceNote:'(Thay bằng QR / số thật trước khi vận hành)',
+    payTng:"Quét bằng Touch 'n Go eWallet", payDuit:'Quét DuitNow QR bằng app ngân hàng', payAccTo:'Chuyển vào tài khoản TNG eWallet này:', payNotSet:'Chưa thiết lập thông tin thanh toán — bấm livechat để sắp xếp thanh toán',
     successH:'Đã đặt hàng!', orderNo:'Mã đơn', successMsg:'Chúng tôi sẽ kiểm tra ảnh thanh toán và giao hàng sớm nhất sau khi xác nhận.', keepShop:'Tiếp tục mua',
     footShopH:'Mua sắm', footShop1:'Cách đặt hàng', footShop2:'Hướng dẫn size', footShop3:'Vận chuyển', footShop4:'Đổi trả',
     footBrandH:'Câu chuyện', footBrand1:'Về chúng tôi', footBrand2:'Thiết kế', footBrand3:'Hợp tác', footContactH:'Liên hệ', footC1:'Trò chuyện', rights:'Bảo lưu mọi quyền', chatTitle:'Trò chuyện', chatHi:'Xin chào! Chúng tôi giúp gì được? Sẽ trả lời sớm 🌸', chatPh:'Nhập tin nhắn…', chatSendBtn:'Gửi',
@@ -998,18 +1007,23 @@ function selectPay(m){
   const t = T[lang]; payMethod = m;
   document.querySelectorAll('.pay-opt').forEach(o=>o.classList.toggle('sel', o.getAttribute('data-pay')===m));
   const d = document.getElementById('payDetail');
-  const qrSVG = `<div class="qr-box"><svg width="140" height="140" viewBox="0 0 140 140"><rect width="140" height="140" fill="#fff"/><g fill="#6E4053">${qrPattern()}</g></svg></div>`;
-  if(m==='tngqr') d.innerHTML = qrSVG + `<div class="pay-note">${t.payTng}<br>${t.payee}<br><span style="font-size:11px">${t.replaceNote}</span></div>`;
-  else if(m==='duitnow') d.innerHTML = qrSVG + `<div class="pay-note">${t.payDuit}<br>${t.payee}<br><span style="font-size:11px">${t.replaceNote}</span></div>`;
-  else d.innerHTML = `<div class="pay-note">${t.payAccTo}</div><div class="pay-acc">012-345 6789</div><div class="pay-note">${t.payAccName}<br><span style="font-size:11px">${t.replaceNote}</span></div>`;
-}
-function qrPattern(){
-  let s=''; const seed=[0,1,1,0,1,0,1,1,0,1,0,0,1,1,0,1,1,0,1,0,1,1,0,0,1];
-  for(let y=0;y<14;y++)for(let x=0;x<14;x++){ if((seed[(x*3+y*5)%25]+x+y)%2===0) s+=`<rect x="${10+x*8}" y="${10+y*8}" width="8" height="8"/>`; }
-  s+='<rect x="10" y="10" width="24" height="24" fill="none" stroke="#6E4053" stroke-width="4"/>';
-  s+='<rect x="106" y="10" width="24" height="24" fill="none" stroke="#6E4053" stroke-width="4"/>';
-  s+='<rect x="10" y="106" width="24" height="24" fill="none" stroke="#6E4053" stroke-width="4"/>';
-  return s;
+  const Cf = window.CFG||{};
+  const accNo = Cf.pay_account_no||'', accName = Cf.pay_account_name||'';
+  if(m==='tngqr' || m==='duitnow'){
+    const qrImg = m==='tngqr' ? Cf.tng_qr_img : Cf.duitnow_qr_img;
+    if(qrImg){
+      const label = m==='tngqr' ? t.payTng : t.payDuit;
+      d.innerHTML = `<div class="qr-box"><img src="${qrImg}" style="width:140px;height:140px;object-fit:contain"></div><div class="pay-note">${label}${accName?('<br>'+esc(accName)):''}</div>`;
+    } else {
+      d.innerHTML = `<div class="pay-note">${t.payNotSet}</div>`;
+    }
+  } else {
+    if(accNo){
+      d.innerHTML = `<div class="pay-note">${t.payAccTo}</div><div class="pay-acc">${esc(accNo)}</div>` + (accName?`<div class="pay-note">${esc(accName)}</div>`:'');
+    } else {
+      d.innerHTML = `<div class="pay-note">${t.payNotSet}</div>`;
+    }
+  }
 }
 
 document.getElementById('fProof').addEventListener('change', e=>{
@@ -1477,12 +1491,24 @@ function loadSettingsUI(){
   put('setBonus',(S.first_bonus!=null?S.first_bonus:2)); put('setShipMin',(S.free_ship_min!=null?S.free_ship_min:99));
   put('setShipFee',(S.ship_fee!=null?S.ship_fee:7)); put('setWdMin',(S.withdraw_min!=null?S.withdraw_min:50));
   const Cf=window.CFG||{}; const putc=(id,v)=>{ const e=document.getElementById(id); if(e) e.value=v||''; }; putc('setWa',Cf.whatsapp_url); putc('setTt',Cf.tiktok_url);
+  putc('setPayAccNo',Cf.pay_account_no); putc('setPayAccName',Cf.pay_account_name);
+  pendingTngQr=null; pendingDuitQr=null;
+  const tp=document.getElementById('tngQrPh'); if(tp) tp.innerHTML = Cf.tng_qr_img ? ('<img src="'+Cf.tng_qr_img+'" style="max-height:70px;border-radius:8px"><br>点击换图') : '<i class="ti ti-qrcode" style="font-size:22px"></i><br>'+aTx('admUploadClick');
+  const dp=document.getElementById('duitQrPh'); if(dp) dp.innerHTML = Cf.duitnow_qr_img ? ('<img src="'+Cf.duitnow_qr_img+'" style="max-height:70px;border-radius:8px"><br>点击换图') : '<i class="ti ti-qrcode" style="font-size:22px"></i><br>'+aTx('admUploadClick');
 }
+let pendingTngQr=null, pendingDuitQr=null;
 async function saveSettings(){
   if(!sb) return; const num=id=>parseFloat(document.getElementById(id).value);
   const pairs=[['l1_rate',num('setL1')/100],['l2_rate',num('setL2')/100],['l3_rate',num('setL3')/100],['first_bonus',num('setBonus')],['free_ship_min',num('setShipMin')],['ship_fee',num('setShipFee')],['withdraw_min',num('setWdMin')]];
   try{ for(const kv of pairs){ if(!isNaN(kv[1])) await sb.rpc('admin_set_setting',{p_key:kv[0],p_value:kv[1]}); }
-    try{ await sb.rpc('admin_set_config',{p_key:'whatsapp_url',p_value:(document.getElementById('setWa').value||'').trim()}); await sb.rpc('admin_set_config',{p_key:'tiktok_url',p_value:(document.getElementById('setTt').value||'').trim()}); }catch(e){}
+    try{
+      await sb.rpc('admin_set_config',{p_key:'whatsapp_url',p_value:(document.getElementById('setWa').value||'').trim()});
+      await sb.rpc('admin_set_config',{p_key:'tiktok_url',p_value:(document.getElementById('setTt').value||'').trim()});
+      await sb.rpc('admin_set_config',{p_key:'pay_account_no',p_value:(document.getElementById('setPayAccNo').value||'').trim()});
+      await sb.rpc('admin_set_config',{p_key:'pay_account_name',p_value:(document.getElementById('setPayAccName').value||'').trim()});
+      if(pendingTngQr) await sb.rpc('admin_set_config',{p_key:'tng_qr_img',p_value:pendingTngQr});
+      if(pendingDuitQr) await sb.rpc('admin_set_config',{p_key:'duitnow_qr_img',p_value:pendingDuitQr});
+    }catch(e){}
     await loadProducts(); document.getElementById('setMsg').textContent='已保存 ✅'; }
   catch(e){ document.getElementById('setMsg').textContent='保存失败'; }
 }
@@ -1751,6 +1777,8 @@ async function adminReply(){
 }
 document.addEventListener('change', function(e){
   if(e.target && e.target.id==='pmImg'){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ pendingPmImg=ev.target.result; const ph=document.getElementById('pmImgPh'); if(ph) ph.innerHTML='<img src="'+pendingPmImg+'" style="max-height:70px;border-radius:8px"><br>点击换图'; }; r.readAsDataURL(f); }
+  if(e.target && e.target.id==='tngQrImg'){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ pendingTngQr=ev.target.result; const ph=document.getElementById('tngQrPh'); if(ph) ph.innerHTML='<img src="'+pendingTngQr+'" style="max-height:70px;border-radius:8px"><br>点击换图'; }; r.readAsDataURL(f); }
+  if(e.target && e.target.id==='duitQrImg'){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ pendingDuitQr=ev.target.result; const ph=document.getElementById('duitQrPh'); if(ph) ph.innerHTML='<img src="'+pendingDuitQr+'" style="max-height:70px;border-radius:8px"><br>点击换图'; }; r.readAsDataURL(f); }
 });
 
 </script>
