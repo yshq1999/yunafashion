@@ -51,6 +51,8 @@
   .lang-opt.active { background:var(--rose-light); color:var(--berry); font-weight:500; }
   .vtab-flash { border-color:var(--rose); animation:memberFlash 1.3s ease-in-out infinite; }
   @keyframes memberFlash { 0%,100%{ background:var(--rose-light); color:var(--berry); box-shadow:0 0 0 0 rgba(201,118,122,.0);} 50%{ background:var(--rose); color:#fff; box-shadow:0 0 12px 2px rgba(201,118,122,.55);} }
+  #chatBtn { animation: chatGlow 2.4s ease-in-out infinite; }
+  @keyframes chatGlow { 0%,100%{ box-shadow:0 6px 20px rgba(110,64,83,.4), 0 0 0 0 rgba(201,118,122,.5);} 50%{ box-shadow:0 6px 20px rgba(110,64,83,.4), 0 0 16px 6px rgba(201,118,122,.65);} }
   .vtab-flash.active { animation:none; background:var(--berry); color:#fff; border-color:var(--berry); }
   .cart-icon { padding:8px 12px; position:relative; }
   .cart-icon .vcart-count { position:absolute; top:-5px; right:-5px; }
@@ -328,6 +330,12 @@
     <div class="back-link" onclick="switchView('cart')"><i class="ti ti-arrow-left"></i> <span data-i="backCart"></span></div>
     <div class="ph" data-i="coTitle"></div>
     <div class="psub" id="coTotal"></div>
+    <div id="creditBox" class="hide" style="margin-top:10px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:10px 12px">
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
+        <input type="checkbox" id="useCreditChk" onchange="renderCheckout()"/>
+        <span id="creditLabel"></span>
+      </label>
+    </div>
     <div style="font-size:13px;font-weight:500;color:var(--berry);margin-top:16px;" data-i="choosePay"></div>
     <div class="pay-options">
       <div class="pay-opt sel" data-pay="tngqr" onclick="selectPay('tngqr')"><i class="ti ti-qrcode"></i><div class="pn">TNG QR</div></div>
@@ -341,8 +349,9 @@
         <div id="proofPlaceholder"><i class="ti ti-upload" style="font-size:22px"></i><br><span data-i="proofP"></span></div>
       </div>
       <input type="file" id="fProof" accept="image/*" class="hide" />
+      <div class="psub" style="margin-top:6px;font-size:12px;cursor:pointer" onclick="toggleChat()" data-i="proofChatHint"></div>
     </div>
-    <button class="submit-order" id="submitBtn" disabled onclick="submitOrder()" data-i="submitOrder"></button>
+    <button class="submit-order" id="submitBtn" onclick="submitOrder()" data-i="submitOrder"></button>
   </div>
 
   <!-- SUCCESS -->
@@ -370,9 +379,9 @@
         </div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px">
-        <div class="form-card" style="text-align:center"><div id="flowerBronze" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierBronze"></div><div class="psub" style="min-height:32px" data-i="mReqBronze"></div><div style="font-size:18px;font-weight:600;color:var(--rose)" data-i="mEarnBronze"></div></div>
-        <div class="form-card" style="text-align:center"><div id="flowerSilver" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierSilver"></div><div class="psub" style="min-height:32px" data-i="mReqSilver"></div><div style="font-size:18px;font-weight:600;color:var(--rose)" data-i="mEarnSilver"></div></div>
-        <div class="form-card" style="text-align:center"><div id="flowerGold" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierGold"></div><div class="psub" style="min-height:32px" data-i="mReqGold"></div><div style="font-size:18px;font-weight:600;color:var(--rose)" data-i="mEarnGold"></div></div>
+        <div class="form-card" style="text-align:center"><div id="flowerBronze" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierBronze"></div><div class="psub" style="min-height:32px" data-i="mReqBronze"></div><div id="mEarnBronzeEl" style="font-size:15px;font-weight:600;color:var(--rose)" data-i="mEarnBronze"></div></div>
+        <div class="form-card" style="text-align:center"><div id="flowerSilver" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierSilver"></div><div class="psub" style="min-height:32px" data-i="mReqSilver"></div><div id="mEarnSilverEl" style="font-size:15px;font-weight:600;color:var(--rose)" data-i="mEarnSilver"></div></div>
+        <div class="form-card" style="text-align:center"><div id="flowerGold" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierGold"></div><div class="psub" style="min-height:32px" data-i="mReqGold"></div><div id="mEarnGoldEl" style="font-size:15px;font-weight:600;color:var(--rose)" data-i="mEarnGold"></div></div>
       </div>
       <div class="admin-wrap">
         <div class="form-card">
@@ -532,7 +541,7 @@ const T = {
     mJoin:'免费加入 Yuna 会员', mB1:'满 RM99 免邮费', mB2:'推荐朋友永久赚佣金，朋友每下一单你都有分', mB3:'升级解锁更深下线收益，最多赚 3 代',
     tierBronze:'初绽会员', tierSilver:'绽放会员', tierGold:'盛放会员',
     mReqBronze:'完成首购即得', mReqSilver:'推荐 5 人 或 下级消费 RM1000', mReqGold:'推荐 15 人 或 下级消费 RM3000',
-    mEarnBronze:'赚 1 代 · 3%', mEarnSilver:'赚 2 代 · 3%+1%', mEarnGold:'赚 3 代 · +0.5%',
+    mEarnBronze:'赚第一代佣金', mEarnSilver:'赚第一、二代佣金', mEarnGold:'赚第一、二、三代佣金',
     mHowTitle:'怎么赚佣金?', mHow1:'1. 注册成会员，系统给你专属推荐码', mHow2:'2. 把分享链接发给朋友', mHow3:'3. 朋友凭链接注册并下单', mHow4:'4. 你按比例获得佣金，满额可提现或购物抵扣',
     mTabReg:'注册', mTabLogin:'登录', mLName:'姓名', mPName:'你的名字', mLPass:'密码', mPPass:'至少 6 位', mRegBtn:'注册并获取推荐码', mLoginBtn:'登录', mRefSaved:'推荐码已记录：',
     mYourTier:'你的会员等级', mYourLink:'你的专属推荐链接', mCopy:'复制', mRefCode:'推荐码：', mBalance:'当前佣金余额', mWithdraw:'申请提现',
@@ -549,15 +558,15 @@ const T = {
     fForL:'尺码 / 说明', fForP:'例如：女士 / S-XL', fPriceL:'售价 (RM)', fOldL:'原价 (可留空)',
     fImgL:'商品图片', uploadImg:'点击上传图片', saveBtn:'保存并上架', curProd:'当前商品',
     cartTitle:'购物车', cartSub:'确认商品数量后点击结算', cartTotalLabel:'合计', checkoutBtn:'前往结算 →', emptyCart:'购物车还是空的 · 去商店挑选喜欢的吧',
-    backCart:'返回购物车', coTitle:'结算付款', choosePay:'选择付款方式', tngAcc:'TNG 户口',
-    proofL:'上传付款截图 *', proofP:'付款后点击上传截图', submitOrder:'提交订单',
+    backCart:'返回购物车', coTitle:'结算付款', choosePay:'选择付款方式', tngAcc:'TNG 户口', useCreditL:'使用佣金抵扣（可用 RM {bal}）',
+    proofL:'上传付款截图（选填）', proofP:'付款后点击上传截图', proofChatHint:'💬 也可以不上传，直接点击右下角在线客服通知我们付款啦', submitOrder:'提交订单',
     payTng:"用 Touch 'n Go eWallet 扫码", payDuit:'用任意银行 App 扫 DuitNow QR', payAccTo:'转账到以下 TNG eWallet 户口：',
     payee:'收款人：Yuna Fashion Shop', payAccName:'户名：Yuna Fashion Shop', replaceNote:'（上线时替换成你的真实收款码 / 号码）',
     successH:'订单已提交！', orderNo:'订单编号', successMsg:'我们会核对你的付款截图，确认后尽快发货。', keepShop:'继续购物',
     footTag:'为你和宝贝，<br>带来柔软温暖的睡眠时光。', footShopH:'购物指南', footShop1:'如何下单', footShop2:'尺码指南', footShop3:'配送说明', footShop4:'退换政策',
     footBrandH:'品牌故事', footBrand1:'关于我们', footBrand2:'设计理念', footBrand3:'合作联系', footContactH:'联系我们', footC1:'在线客服', rights:'版权所有', chatTitle:'在线客服', chatHi:'你好！有什么可以帮你？我们会尽快回复 🌸', chatPh:'输入消息…', chatSendBtn:'发送',
     admMgmt:'店主管理', admOnlyYou:'只有你(店主)能看到这一区', admOrdersH:'待确认订单 — 确认收款后会给推荐人入账佣金', admWdsH:'提现申请 — 打款到会员账号后点「已打款」', admSetH:'设置 — 佣金 / 运费（改完点保存）', admL1:'L1 直接佣金 %', admL2:'L2 佣金 %', admL3:'L3 佣金 %', admBonus:'首购奖 RM', admShipMin:'免邮门槛 RM', admShipFee:'运费 RM', admWdMin:'提现门槛 RM', admWa:'WhatsApp 链接', admTt:'TikTok 链接', admSaveSet:'保存设置', admProdH:'上传 / 管理商品', admCat:'分类', admCatW:'女士睡衣', admCatB:'小孩 · 男孩', admCatG:'小孩 · 女孩', admNameZh:'商品名称（中文）', admNameEn:'英文名 (可选)', admNameMs:'马来名 (可选)', admNameVi:'越南名 (可选)', admNote:'说明（可选）', admTag:'标签', admTagNone:'无', admTagNew:'新品', admTagSale:'特惠', admImg:'商品图片', admSizes:'各尺码 · 价格(RM) / 库存', admSaveProd:'保存上架', admCurProd:'现有商品', admChatH:'客服消息 — 客户的咨询会显示在这里', admNoChat:'暂无客服消息', admReplyPh:'回复…', admNoOrders:'没有待确认订单', admConfirmPaid:'确认收款', admNoWds:'没有提现申请', admPaid:'已打款', admReject:'拒绝', admShipTo:'收货', admCopyAddr:'复制地址', admCopied:'已复制到剪贴板', admNoAddr:'（客人还没填收货资料）',
-    newT:'新品', saleT:'特惠', addT:'加入购物车', pFrom:'起', pLeft:'剩{n}件', pSold:'售罄', kgBoy:'男孩', kgGirl:'女孩', kgChart:'尺码对照表', cSize:'尺码', scTitle:'小孩尺码对照表', scWeight:'体重', scHeight:'身高', noProducts:'这个分类暂时还没有商品 🌷', alertFill:'请填写商品名称和售价', alertUp:'已上架！切到「商店」即可看到', alertProof:'请先上传付款截图' },
+    newT:'新品', saleT:'特惠', addT:'加入购物车', pFrom:'起', pLeft:'剩{n}件', pSold:'售罄', kgBoy:'男孩', kgGirl:'女孩', kgChart:'尺码对照表', cSize:'尺码', scTitle:'小孩尺码对照表', scWeight:'体重', scHeight:'身高', noProducts:'这个分类暂时还没有商品 🌷', alertFill:'请填写商品名称和售价', alertUp:'已上架！切到「商店」即可看到' },
 
   en:{ freeShip:'Free shipping over RM 99 · 30-day returns', slogan:'Soft Comfort, Sweet Dreams', slogan2:'Soft Comfort, Sweet Dreams',
     navShop:'Shop', navAdmin:'Admin', navCart:'Cart', navMember:'Member',
@@ -566,7 +575,7 @@ const T = {
     mJoin:'Join Yuna membership free', mB1:'Free shipping over RM99', mB2:'Refer friends and earn commission forever — on every order they make', mB3:'Level up to earn from deeper downlines, up to 3 generations',
     tierBronze:'Bud Member', tierSilver:'Bloom Member', tierGold:'Full Bloom',
     mReqBronze:'Unlocked after first purchase', mReqSilver:'Refer 5 or downline spend RM1000', mReqGold:'Refer 15 or downline spend RM3000',
-    mEarnBronze:'1 gen · 3%', mEarnSilver:'2 gen · 3%+1%', mEarnGold:'3 gen · +0.5%',
+    mEarnBronze:'Earn Gen-1 commission', mEarnSilver:'Earn Gen-1 & 2 commission', mEarnGold:'Earn Gen-1, 2 & 3 commission',
     mHowTitle:'How to earn?', mHow1:'1. Register and get your referral code', mHow2:'2. Send your link to friends', mHow3:'3. Friends register via your link and order', mHow4:'4. You earn commission — withdraw or use as store credit',
     mTabReg:'Register', mTabLogin:'Login', mLName:'Name', mPName:'Your name', mLPass:'Password', mPPass:'At least 6 characters', mRegBtn:'Register & get code', mLoginBtn:'Login', mRefSaved:'Referral code saved: ',
     mYourTier:'Your tier', mYourLink:'Your referral link', mCopy:'Copy', mRefCode:'Code: ', mBalance:'Commission balance', mWithdraw:'Withdraw',
@@ -583,14 +592,14 @@ const T = {
     fForL:'Size / note', fForP:'e.g. Women / S-XL', fPriceL:'Price (RM)', fOldL:'Was (optional)',
     fImgL:'Product image', uploadImg:'Click to upload', saveBtn:'Save & publish', curProd:'Current products',
     cartTitle:'Cart', cartSub:'Adjust quantity, then checkout', cartTotalLabel:'Total', checkoutBtn:'Checkout →', emptyCart:'Your cart is empty · go pick something you love',
-    backCart:'Back to cart', coTitle:'Checkout', choosePay:'Choose payment method', tngAcc:'TNG Account',
-    proofL:'Upload payment screenshot *', proofP:'Upload after paying', submitOrder:'Place order',
+    backCart:'Back to cart', coTitle:'Checkout', choosePay:'Choose payment method', tngAcc:'TNG Account', useCreditL:'Use commission credit (RM {bal} available)',
+    proofL:'Upload payment screenshot (optional)', proofP:'Upload after paying', proofChatHint:"💬 Or skip this and just tap the livechat button to let us know you've paid", submitOrder:'Place order',
     payTng:"Scan with Touch 'n Go eWallet", payDuit:'Scan DuitNow QR with any bank app', payAccTo:'Transfer to this TNG eWallet account:',
     payee:'Payee: Yuna Fashion Shop', payAccName:'Name: Yuna Fashion Shop', replaceNote:'(Replace with your real QR / number before going live)',
     successH:'Order placed!', orderNo:'Order no.', successMsg:'We will verify your payment screenshot and ship as soon as confirmed.', keepShop:'Keep shopping',
     footTag:'Soft, warm sleep moments<br>for you and your little one.', footShopH:'Shopping', footShop1:'How to order', footShop2:'Size guide', footShop3:'Shipping', footShop4:'Returns',
     footBrandH:'Our story', footBrand1:'About us', footBrand2:'Design', footBrand3:'Partnership', footContactH:'Contact', footC1:'Live chat', rights:'All rights reserved', chatTitle:'Live chat', chatHi:'Hi! How can we help? We will reply soon 🌸', chatPh:'Type a message…', chatSendBtn:'Send',
-    newT:'New', saleT:'Sale', addT:'Add to cart', pFrom:'+', pLeft:'{n} left', pSold:'Sold out', kgBoy:'Boy', kgGirl:'Girl', kgChart:'Size chart', cSize:'Size', scTitle:'Kids size chart', scWeight:'Weight', scHeight:'Height', noProducts:'No products in this category yet 🌷', alertFill:'Please enter name and price', alertUp:'Published! Switch to Shop to see it', alertProof:'Please upload payment screenshot first' },
+    newT:'New', saleT:'Sale', addT:'Add to cart', pFrom:'+', pLeft:'{n} left', pSold:'Sold out', kgBoy:'Boy', kgGirl:'Girl', kgChart:'Size chart', cSize:'Size', scTitle:'Kids size chart', scWeight:'Weight', scHeight:'Height', noProducts:'No products in this category yet 🌷', alertFill:'Please enter name and price', alertUp:'Published! Switch to Shop to see it' },
 
   ms:{ freeShip:'Penghantaran percuma melebihi RM 99 · Pulangan 30 hari', slogan:'Lembut Selesa, Tidur Lena', slogan2:'Lembut Selesa, Tidur Lena',
     navShop:'Kedai', navAdmin:'Pentadbir', navCart:'Troli', navMember:'Ahli',
@@ -599,7 +608,7 @@ const T = {
     mJoin:'Sertai keahlian Yuna percuma', mB1:'Penghantaran percuma melebihi RM99', mB2:'Ajak kawan & dapat komisen selamanya — setiap pesanan mereka', mB3:'Naik taraf untuk dapat dari downline lebih dalam, sehingga 3 generasi',
     tierBronze:'Ahli Kuncup', tierSilver:'Ahli Mekar', tierGold:'Mekar Penuh',
     mReqBronze:'Dibuka selepas pembelian pertama', mReqSilver:'Ajak 5 atau downline belanja RM1000', mReqGold:'Ajak 15 atau downline belanja RM3000',
-    mEarnBronze:'1 gen · 3%', mEarnSilver:'2 gen · 3%+1%', mEarnGold:'3 gen · +0.5%',
+    mEarnBronze:'Dapat komisen Gen-1', mEarnSilver:'Dapat komisen Gen-1 & 2', mEarnGold:'Dapat komisen Gen-1, 2 & 3',
     mHowTitle:'Cara dapat komisen?', mHow1:'1. Daftar dan dapat kod rujukan', mHow2:'2. Hantar pautan kepada kawan', mHow3:'3. Kawan daftar guna pautan & buat pesanan', mHow4:'4. Anda dapat komisen — keluarkan atau guna untuk beli',
     mTabReg:'Daftar', mTabLogin:'Log masuk', mLName:'Nama', mPName:'Nama anda', mLPass:'Kata laluan', mPPass:'Sekurangnya 6 aksara', mRegBtn:'Daftar & dapat kod', mLoginBtn:'Log masuk', mRefSaved:'Kod rujukan disimpan: ',
     mYourTier:'Tahap anda', mYourLink:'Pautan rujukan anda', mCopy:'Salin', mRefCode:'Kod: ', mBalance:'Baki komisen', mWithdraw:'Keluarkan',
@@ -616,14 +625,14 @@ const T = {
     fForL:'Saiz / nota', fForP:'cth: Wanita / S-XL', fPriceL:'Harga (RM)', fOldL:'Harga asal (pilihan)',
     fImgL:'Gambar produk', uploadImg:'Klik untuk muat naik', saveBtn:'Simpan & terbit', curProd:'Produk semasa',
     cartTitle:'Troli', cartSub:'Laraskan kuantiti, kemudian bayar', cartTotalLabel:'Jumlah', checkoutBtn:'Bayar →', emptyCart:'Troli anda kosong · pergi pilih kesukaan anda',
-    backCart:'Kembali ke troli', coTitle:'Pembayaran', choosePay:'Pilih kaedah pembayaran', tngAcc:'Akaun TNG',
-    proofL:'Muat naik tangkapan skrin bayaran *', proofP:'Muat naik selepas bayar', submitOrder:'Hantar pesanan',
+    backCart:'Kembali ke troli', coTitle:'Pembayaran', choosePay:'Pilih kaedah pembayaran', tngAcc:'Akaun TNG', useCreditL:'Guna kredit komisen (RM {bal} tersedia)',
+    proofL:'Muat naik tangkapan skrin bayaran (pilihan)', proofP:'Muat naik selepas bayar', proofChatHint:'💬 Atau tekan sahaja butang livechat untuk maklumkan kami anda sudah bayar', submitOrder:'Hantar pesanan',
     payTng:"Imbas dengan Touch 'n Go eWallet", payDuit:'Imbas DuitNow QR dengan mana-mana app bank', payAccTo:'Pindah ke akaun TNG eWallet ini:',
     payee:'Penerima: Yuna Fashion Shop', payAccName:'Nama: Yuna Fashion Shop', replaceNote:'(Ganti dengan QR / nombor sebenar sebelum dilancarkan)',
     successH:'Pesanan dihantar!', orderNo:'No. pesanan', successMsg:'Kami akan sahkan tangkapan skrin bayaran anda dan hantar sebaik disahkan.', keepShop:'Terus beli-belah',
     footTag:'Saat tidur lembut dan hangat<br>untuk anda dan si kecil.', footShopH:'Membeli-belah', footShop1:'Cara pesanan', footShop2:'Panduan saiz', footShop3:'Penghantaran', footShop4:'Pulangan',
     footBrandH:'Kisah kami', footBrand1:'Tentang kami', footBrand2:'Reka bentuk', footBrand3:'Kerjasama', footContactH:'Hubungi', footC1:'Sembang langsung', rights:'Hak cipta terpelihara', chatTitle:'Sembang langsung', chatHi:'Hai! Boleh kami bantu? Kami akan balas segera 🌸', chatPh:'Taip mesej…', chatSendBtn:'Hantar',
-    newT:'Baharu', saleT:'Jualan', addT:'Tambah ke troli', pFrom:'+', pLeft:'tinggal {n}', pSold:'Habis', kgBoy:'Lelaki', kgGirl:'Perempuan', kgChart:'Carta saiz', cSize:'Saiz', scTitle:'Carta saiz kanak-kanak', scWeight:'Berat', scHeight:'Tinggi', noProducts:'Belum ada produk dalam kategori ini 🌷', alertFill:'Sila isi nama dan harga', alertUp:'Diterbitkan! Tukar ke Kedai untuk lihat', alertProof:'Sila muat naik tangkapan skrin bayaran dahulu' },
+    newT:'Baharu', saleT:'Jualan', addT:'Tambah ke troli', pFrom:'+', pLeft:'tinggal {n}', pSold:'Habis', kgBoy:'Lelaki', kgGirl:'Perempuan', kgChart:'Carta saiz', cSize:'Saiz', scTitle:'Carta saiz kanak-kanak', scWeight:'Berat', scHeight:'Tinggi', noProducts:'Belum ada produk dalam kategori ini 🌷', alertFill:'Sila isi nama dan harga', alertUp:'Diterbitkan! Tukar ke Kedai untuk lihat' },
 
   vi:{ freeShip:'Miễn phí vận chuyển trên RM 99 · Đổi trả 30 ngày', slogan:'Êm ái mỗi đêm, ngọt ngào giấc mơ', slogan2:'Êm ái mỗi đêm, ngọt ngào giấc mơ',
     navShop:'Cửa hàng', navAdmin:'Quản trị', navCart:'Giỏ hàng', navMember:'Thành viên',
@@ -632,7 +641,7 @@ const T = {
     mJoin:'Tham gia thành viên Yuna miễn phí', mB1:'Miễn phí ship trên RM99', mB2:'Giới thiệu bạn & hưởng hoa hồng mãi mãi — mỗi đơn họ mua', mB3:'Lên hạng để hưởng từ tuyến dưới sâu hơn, tối đa 3 đời',
     tierBronze:'Thành viên Hé nở', tierSilver:'Thành viên Nở rộ', tierGold:'Mãn khai',
     mReqBronze:'Mở khóa sau lần mua đầu', mReqSilver:'Giới thiệu 5 hoặc tuyến dưới mua RM1000', mReqGold:'Giới thiệu 15 hoặc tuyến dưới mua RM3000',
-    mEarnBronze:'1 đời · 3%', mEarnSilver:'2 đời · 3%+1%', mEarnGold:'3 đời · +0.5%',
+    mEarnBronze:'Hưởng hoa hồng đời 1', mEarnSilver:'Hưởng hoa hồng đời 1 & 2', mEarnGold:'Hưởng hoa hồng đời 1, 2 & 3',
     mHowTitle:'Kiếm hoa hồng thế nào?', mHow1:'1. Đăng ký và nhận mã giới thiệu', mHow2:'2. Gửi link cho bạn bè', mHow3:'3. Bạn bè đăng ký qua link và đặt hàng', mHow4:'4. Bạn nhận hoa hồng — rút hoặc dùng để mua hàng',
     mTabReg:'Đăng ký', mTabLogin:'Đăng nhập', mLName:'Tên', mPName:'Tên của bạn', mLPass:'Mật khẩu', mPPass:'Ít nhất 6 ký tự', mRegBtn:'Đăng ký & nhận mã', mLoginBtn:'Đăng nhập', mRefSaved:'Đã lưu mã giới thiệu: ',
     mYourTier:'Hạng của bạn', mYourLink:'Link giới thiệu của bạn', mCopy:'Sao chép', mRefCode:'Mã: ', mBalance:'Số dư hoa hồng', mWithdraw:'Rút tiền',
@@ -649,15 +658,15 @@ const T = {
     fForL:'Size / ghi chú', fForP:'vd: Nữ / S-XL', fPriceL:'Giá (RM)', fOldL:'Giá gốc (tùy chọn)',
     fImgL:'Ảnh sản phẩm', uploadImg:'Nhấn để tải lên', saveBtn:'Lưu & đăng bán', curProd:'Sản phẩm hiện có',
     cartTitle:'Giỏ hàng', cartSub:'Điều chỉnh số lượng rồi thanh toán', cartTotalLabel:'Tổng', checkoutBtn:'Thanh toán →', emptyCart:'Giỏ hàng trống · hãy chọn món bạn thích',
-    backCart:'Về giỏ hàng', coTitle:'Thanh toán', choosePay:'Chọn phương thức thanh toán', tngAcc:'Tài khoản TNG',
-    proofL:'Tải ảnh chụp thanh toán *', proofP:'Tải lên sau khi thanh toán', submitOrder:'Đặt hàng',
+    backCart:'Về giỏ hàng', coTitle:'Thanh toán', choosePay:'Chọn phương thức thanh toán', tngAcc:'Tài khoản TNG', useCreditL:'Dùng tín dụng hoa hồng (còn RM {bal})',
+    proofL:'Tải ảnh chụp thanh toán (không bắt buộc)', proofP:'Tải lên sau khi thanh toán', proofChatHint:'💬 Hoặc bấm livechat để báo cho chúng tôi là bạn đã thanh toán', submitOrder:'Đặt hàng',
     payTng:"Quét bằng Touch 'n Go eWallet", payDuit:'Quét DuitNow QR bằng app ngân hàng', payAccTo:'Chuyển vào tài khoản TNG eWallet này:',
     payee:'Người nhận: Yuna Fashion Shop', payAccName:'Tên: Yuna Fashion Shop', replaceNote:'(Thay bằng QR / số thật trước khi vận hành)',
     successH:'Đã đặt hàng!', orderNo:'Mã đơn', successMsg:'Chúng tôi sẽ kiểm tra ảnh thanh toán và giao hàng sớm nhất sau khi xác nhận.', keepShop:'Tiếp tục mua',
     footTag:'Khoảnh khắc ngủ êm ấm<br>cho bạn và bé yêu.', footShopH:'Mua sắm', footShop1:'Cách đặt hàng', footShop2:'Hướng dẫn size', footShop3:'Vận chuyển', footShop4:'Đổi trả',
     footBrandH:'Câu chuyện', footBrand1:'Về chúng tôi', footBrand2:'Thiết kế', footBrand3:'Hợp tác', footContactH:'Liên hệ', footC1:'Trò chuyện', rights:'Bảo lưu mọi quyền', chatTitle:'Trò chuyện', chatHi:'Xin chào! Chúng tôi giúp gì được? Sẽ trả lời sớm 🌸', chatPh:'Nhập tin nhắn…', chatSendBtn:'Gửi',
     admMgmt:'Quản lý cửa hàng', admOnlyYou:'Chỉ chủ shop thấy khu vực này', admOrdersH:'Đơn chờ xác nhận — xác nhận thanh toán sẽ ghi hoa hồng cho người giới thiệu', admWdsH:'Yêu cầu rút tiền — chuyển cho hội viên xong bấm「Đã trả」', admSetH:'Cài đặt — hoa hồng / phí ship (sửa xong bấm lưu)', admL1:'Hoa hồng L1 %', admL2:'Hoa hồng L2 %', admL3:'Hoa hồng L3 %', admBonus:'Thưởng mua đầu RM', admShipMin:'Mức miễn ship RM', admShipFee:'Phí ship RM', admWdMin:'Mức rút tối thiểu RM', admWa:'Liên kết WhatsApp', admTt:'Liên kết TikTok', admSaveSet:'Lưu cài đặt', admProdH:'Tải lên / quản lý sản phẩm', admCat:'Phân loại', admCatW:'Đồ ngủ nữ', admCatB:'Trẻ em · Bé trai', admCatG:'Trẻ em · Bé gái', admNameZh:'Tên sản phẩm (tiếng Trung)', admNameEn:'Tên tiếng Anh (tùy chọn)', admNameMs:'Tên tiếng Mã Lai (tùy chọn)', admNameVi:'Tên tiếng Việt (tùy chọn)', admNote:'Mô tả (tùy chọn)', admTag:'Nhãn', admTagNone:'Không', admTagNew:'Mới', admTagSale:'Ưu đãi', admImg:'Hình sản phẩm', admSizes:'Từng size · Giá(RM) / Tồn kho', admSaveProd:'Lưu & đăng bán', admCurProd:'Sản phẩm hiện có', admChatH:'Tin nhắn CSKH — câu hỏi của khách hiện ở đây', admNoChat:'Chưa có tin nhắn', admReplyPh:'Trả lời…', admNoOrders:'Không có đơn chờ', admConfirmPaid:'Xác nhận đã nhận tiền', admNoWds:'Không có yêu cầu rút', admPaid:'Đã trả', admReject:'Từ chối', admShipTo:'Giao đến', admCopyAddr:'Sao chép địa chỉ', admCopied:'Đã sao chép', admNoAddr:'(Khách chưa điền thông tin giao hàng)',
-    newT:'Mới', saleT:'Sale', addT:'Thêm vào giỏ', pFrom:'+', pLeft:'còn {n}', pSold:'Hết hàng', kgBoy:'Bé trai', kgGirl:'Bé gái', kgChart:'Bảng size', cSize:'Size', scTitle:'Bảng size trẻ em', scWeight:'Cân nặng', scHeight:'Chiều cao', noProducts:'Chưa có sản phẩm trong mục này 🌷', alertFill:'Vui lòng nhập tên và giá', alertUp:'Đã đăng! Chuyển sang Cửa hàng để xem', alertProof:'Vui lòng tải ảnh thanh toán trước' }
+    newT:'Mới', saleT:'Sale', addT:'Thêm vào giỏ', pFrom:'+', pLeft:'còn {n}', pSold:'Hết hàng', kgBoy:'Bé trai', kgGirl:'Bé gái', kgChart:'Bảng size', cSize:'Size', scTitle:'Bảng size trẻ em', scWeight:'Cân nặng', scHeight:'Chiều cao', noProducts:'Chưa có sản phẩm trong mục này 🌷', alertFill:'Vui lòng nhập tên và giá', alertUp:'Đã đăng! Chuyển sang Cửa hàng để xem' }
 };
 
 /* ============ 默认商品 ============ */
@@ -800,6 +809,8 @@ function claimRM3(){
   if(typeof sbUser!=='undefined' && sbUser){ if(typeof openAddr==='function') openAddr(); }
   else { switchView('member'); try{ showToast(lang==='zh'?'请先登录 / 注册会员,再领 RM3 🌸':'Please log in / register first'); }catch(e){} }
 }
+const KID_SIZE_CHART=[['4','9-10 Kg','80 cm'],['5','10-11 Kg','81-85 cm'],['6','12-13 Kg','86-90 cm'],['7','14-15 Kg','91-95 cm'],['8','16-17 Kg','96-100 cm'],['9','18-20 Kg','101-105 cm'],['10','21-23 Kg','106-110 cm'],['11','24-27 Kg','111-117 cm'],['12','28-30 Kg','118-125 cm'],['S','31-36 Kg','126-135 cm'],['M','37-42 Kg','136-142 cm']];
+const KID_SIZE_WH={}; KID_SIZE_CHART.forEach(r=>{ KID_SIZE_WH[r[0]]=r[1]+' · '+r[2]; });
 function renderShop(){
   const t = T[lang];
   const kg=document.getElementById('kidGenderBar'); if(kg) kg.style.display = shopFilter==='kids'?'flex':'none';
@@ -814,7 +825,8 @@ function renderShop(){
     const prices=sizes.map(s=>Number(s.price)).filter(x=>x>0);
     const minP=prices.length?Math.min(...prices):0;
     const anyStock=sizes.some(s=>s.stock>0);
-    const opts=sizes.map(s=>`<option value="${s.size}" ${s.stock<=0?'disabled':''}>${s.size} · RM ${s.price}${s.stock<=0?' ('+t.pSold+')':' · '+t.pLeft.replace('{n}',s.stock)}</option>`).join('');
+    const isKid=(p.category==='boy'||p.category==='girl');
+    const opts=sizes.map(s=>{ const wh=(isKid&&KID_SIZE_WH[s.size])?(' ('+KID_SIZE_WH[s.size]+')'):''; return `<option value="${s.size}" ${s.stock<=0?'disabled':''}>${s.size}${wh} · RM ${s.price}${s.stock<=0?' ('+t.pSold+')':' · '+t.pLeft.replace('{n}',s.stock)}</option>`; }).join('');
     return `<div class="product-card">
       <div class="product-img">
         ${p.tag==='new'?`<span class="product-tag tag-new">${t.newT}</span>`:p.tag==='sale'?`<span class="product-tag tag-sale">${t.saleT}</span>`:''}
@@ -903,10 +915,24 @@ function renderCart(){
 }
 
 /* ============ 结算 ============ */
+function creditAvailable(){ return Number((sbProfile&&sbProfile.balance)||0); }
+function creditToApply(){
+  const bal=creditAvailable(); const chk=document.getElementById('useCreditChk');
+  if(bal<=0 || !chk || !chk.checked) return 0;
+  return Math.min(bal, cartTotal()+shipFee());
+}
 function renderCheckout(){
   const t = T[lang];
   const sub=cartTotal(), ship=shipFee();
-  document.getElementById('coTotal').innerHTML = '商品 RM '+sub+' · 运费 '+(ship===0?'<span style="color:#5a9a5c">免费</span>':'RM '+ship)+' · <span style="color:var(--rose);font-weight:600">应付 RM '+(sub+ship)+'</span>';
+  const bal=creditAvailable();
+  const box=document.getElementById('creditBox');
+  if(bal>0){
+    box.classList.remove('hide');
+    document.getElementById('creditLabel').textContent = t.useCreditL.replace('{bal}', bal.toFixed(2));
+  } else { box.classList.add('hide'); }
+  const applied=creditToApply();
+  const payable=Math.max(0, sub+ship-applied);
+  document.getElementById('coTotal').innerHTML = '商品 RM '+sub+' · 运费 '+(ship===0?'<span style="color:#5a9a5c">免费</span>':'RM '+ship)+(applied>0?' · 佣金抵扣 -RM '+applied.toFixed(2):'')+' · <span style="color:var(--rose);font-weight:600">应付 RM '+(applied>0?payable.toFixed(2):payable)+'</span>';
   selectPay(payMethod);
 }
 function selectPay(m){
@@ -941,20 +967,20 @@ function shipFee(){ const total=cartTotal(); const S=window.SBS||{}; const minv=
 function setKid(g){ kidGender=g; const b=document.getElementById('kg_boy'),gi=document.getElementById('kg_girl'); if(b)b.classList.toggle('active',g==='boy'); if(gi)gi.classList.toggle('active',g==='girl'); renderShop(); }
 function sizeChartHTML(){
   const t=T[lang];
-  const rows=[['4','9-10 Kg','80 cm'],['5','10-11 Kg','81-85 cm'],['6','12-13 Kg','86-90 cm'],['7','14-15 Kg','91-95 cm'],['8','16-17 Kg','96-100 cm'],['9','18-20 Kg','101-105 cm'],['10','21-23 Kg','106-110 cm'],['11','24-27 Kg','111-117 cm'],['12','28-30 Kg','118-125 cm'],['S','31-36 Kg','126-135 cm'],['M','37-42 Kg','136-142 cm']];
-  return '<div class="form-card" style="padding:14px"><div style="font-weight:600;color:var(--berry);margin-bottom:8px">'+t.scTitle+'</div><table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="color:var(--berry);font-weight:600"><td style="padding:6px;border-bottom:1px solid var(--line)">'+t.cSize+'</td><td style="padding:6px;border-bottom:1px solid var(--line)">'+t.scWeight+'</td><td style="padding:6px;border-bottom:1px solid var(--line)">'+t.scHeight+'</td></tr>'+rows.map(r=>'<tr><td style="padding:6px;border-bottom:1px solid var(--line)">'+r[0]+'</td><td style="padding:6px;border-bottom:1px solid var(--line)">'+r[1]+'</td><td style="padding:6px;border-bottom:1px solid var(--line)">'+r[2]+'</td></tr>').join('')+'</table></div>';
+  return '<div class="form-card" style="padding:14px"><div style="font-weight:600;color:var(--berry);margin-bottom:8px">'+t.scTitle+'</div><table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="color:var(--berry);font-weight:600"><td style="padding:6px;border-bottom:1px solid var(--line)">'+t.cSize+'</td><td style="padding:6px;border-bottom:1px solid var(--line)">'+t.scWeight+'</td><td style="padding:6px;border-bottom:1px solid var(--line)">'+t.scHeight+'</td></tr>'+KID_SIZE_CHART.map(r=>'<tr><td style="padding:6px;border-bottom:1px solid var(--line)">'+r[0]+'</td><td style="padding:6px;border-bottom:1px solid var(--line)">'+r[1]+'</td><td style="padding:6px;border-bottom:1px solid var(--line)">'+r[2]+'</td></tr>').join('')+'</table></div>';
 }
 function toggleSizeChart(){ const el=document.getElementById('sizeChart'); if(!el) return; if(el.classList.contains('hide')){ el.innerHTML=sizeChartHTML(); el.classList.remove('hide'); } else el.classList.add('hide'); }
 async function submitOrder(){
   const t = T[lang];
-  if(!proofUploaded){ alert(t.alertProof); return; }
   if(!cart.length){ alert(T[lang].aCartEmpty); return; }
   const btn=document.getElementById('submitBtn'); btn.disabled=true;
+  const usedCredit = creditToApply();
   try{
     if(typeof sb!=='undefined' && sb){
       const items=cart.map(c=>({product_id:c.product_id,name:(c.baseName||c.name),size:c.size,qty:c.qty}));
-      const { error } = await sb.rpc('place_order_items',{ p_items: items, p_use_credit: 0 });
+      const { error } = await sb.rpc('place_order_items',{ p_items: items, p_use_credit: usedCredit });
       if(error){ alert('下单失败：'+error.message); btn.disabled=false; return; }
+      if(usedCredit>0){ await loadProfile(); }
     }
   }catch(e){ alert(T[lang].aOrderFail); btn.disabled=false; return; }
   document.getElementById('orderId').textContent = '#YN' + Date.now().toString().slice(-6);
@@ -1102,6 +1128,15 @@ async function renderMember(){
         else prog=T0.mProgMaxTpl.replace('{refs}',sum.valid_refs);
         document.getElementById('tierProgress').textContent = prog;
       }
+    }catch(e){}
+    try{
+      const S=window.SBS||{};
+      const pct=n=>{ const v=Math.round((n||0)*1000)/10; return (v%1===0?v.toFixed(0):v.toFixed(1)); };
+      const l1p=pct(S.l1_rate), l2p=pct(S.l2_rate), l3p=pct(S.l3_rate);
+      const T0=T[lang];
+      const eb=document.getElementById('mEarnBronzeEl'); if(eb) eb.textContent = T0.mEarnBronze+' '+l1p+'%';
+      const es=document.getElementById('mEarnSilverEl'); if(es) es.textContent = T0.mEarnSilver+' '+l1p+'%+'+l2p+'%';
+      const eg=document.getElementById('mEarnGoldEl'); if(eg) eg.textContent = T0.mEarnGold+' '+l1p+'%+'+l2p+'%+'+l3p+'%';
     }catch(e){}
     const adm=document.getElementById('memberAdmin');
     if(sbProfile.is_admin){ adm.classList.remove('hide'); await renderAdminPanel(); } else { adm.classList.add('hide'); }
