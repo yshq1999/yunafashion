@@ -868,6 +868,7 @@ function claimRM3(){
 }
 const KID_SIZE_CHART=[['4','9-10 Kg','80 cm'],['5','10-11 Kg','81-85 cm'],['6','12-13 Kg','86-90 cm'],['7','14-15 Kg','91-95 cm'],['8','16-17 Kg','96-100 cm'],['9','18-20 Kg','101-105 cm'],['10','21-23 Kg','106-110 cm'],['11','24-27 Kg','111-117 cm'],['12','28-30 Kg','118-125 cm'],['S','31-36 Kg','126-135 cm'],['M','37-42 Kg','136-142 cm']];
 const KID_SIZE_WH={}; KID_SIZE_CHART.forEach(r=>{ KID_SIZE_WH[r[0]]=r[1].replace(/\s+/g,'').replace('Kg','kg')+'/'+r[2].replace(/\s+/g,''); });
+const WOMEN_SIZE_WH={'M':'37-49kg','L':'50-56kg','XL':'55-66kg'};
 function renderShop(){
   const t = T[lang];
   const kg=document.getElementById('kidGenderBar'); if(kg) kg.style.display = shopFilter==='kids'?'flex':'none';
@@ -883,7 +884,8 @@ function renderShop(){
     const minP=prices.length?Math.min(...prices):0;
     const anyStock=sizes.some(s=>s.stock>0);
     const isKid=(p.category==='boy'||p.category==='girl');
-    const opts=sizes.map(s=>{ const wh=(isKid&&KID_SIZE_WH[s.size])?('('+KID_SIZE_WH[s.size]+')'):''; return `<option value="${s.size}" ${s.stock<=0?'disabled':''}>${s.size}${wh}·RM${s.price}${s.stock<=0?'('+t.pSold+')':'·'+t.pLeft.replace('{n}',s.stock)}</option>`; }).join('');
+    const sizeWH = isKid ? KID_SIZE_WH : (p.category==='women' ? WOMEN_SIZE_WH : {});
+    const opts=sizes.map(s=>{ const wh=sizeWH[s.size]?('('+sizeWH[s.size]+')'):''; return `<option value="${s.size}" ${s.stock<=0?'disabled':''}>${s.size}${wh}·RM${s.price}${s.stock<=0?'('+t.pSold+')':'·'+t.pLeft.replace('{n}',s.stock)}</option>`; }).join('');
     return `<div class="product-card">
       <div class="product-img">
         ${p.tag==='new'?`<span class="product-tag tag-new">${t.newT}</span>`:p.tag==='sale'?`<span class="product-tag tag-sale">${t.saleT}</span>`:''}
