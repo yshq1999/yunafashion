@@ -448,6 +448,10 @@
         <div class="form-card" style="text-align:center"><div class="psub" data-i="mInvited"></div><div class="cart-total-val" id="statInvited">0</div></div>
         <div class="form-card" style="text-align:center"><div class="psub" data-i="mFirstBuy"></div><div class="cart-total-val" id="statFirst">0</div></div>
       </div>
+      <div class="form-card" style="margin-bottom:20px">
+        <div class="psub" style="margin-bottom:10px" data-i="mMyOrders"></div>
+        <div id="myOrdersList" class="psub" data-i="mNoOrders">还没有订单记录</div>
+      </div>
       <div class="form-card">
         <div class="psub" style="margin-bottom:10px" data-i="mMyFriends"></div>
         <div id="inviteList" class="psub">还没有人通过你的链接注册</div>
@@ -474,6 +478,16 @@
           <button class="add-btn" style="width:auto;margin:0;padding:8px 16px" type="button" onclick="searchOrders()" data-i="admSearchBtn">查询</button>
         </div>
         <div id="admOrderResults" class="psub" data-i="admSearchHint">输入姓名/邮箱或选择状态后点查询</div>
+      </div>
+      <div class="form-card" style="margin:14px 0">
+        <div class="psub" style="margin-bottom:6px;font-weight:500;color:var(--berry)" data-i="admCourierH">物流公司管理 — 设置各物流的追踪链接</div>
+        <div class="psub" style="margin-bottom:10px;font-size:12px" data-i="admCourierHint">网址里可以加 {code} 占位符，系统会自动替换成客人的运单号；不确定的话先只填官网追踪页链接也可以，客人自己去页面输入号码查询一样能用。</div>
+        <div id="courierList" style="margin-bottom:10px"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input id="courierNameInput" data-iph="admCourierNameP" style="flex:1;min-width:120px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text);font-size:13px"/>
+          <input id="courierUrlInput" data-iph="admCourierUrlP" style="flex:2;min-width:180px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text);font-size:13px"/>
+          <button class="add-btn" style="width:auto;margin:0;padding:8px 16px" type="button" onclick="addCourier()" data-i="admCourierAdd">添加</button>
+        </div>
       </div>
       <div class="form-card">
         <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admWdsH">提现申请 — 打款到会员账号后点「已打款」</div>
@@ -567,6 +581,7 @@ const T = {
     mMyAddr:'我的收货地址', mEditAddr:'编辑地址', mNoAddrYet:'还没有填写收货地址',
     mYourTier:'你的会员等级', mYourLink:'你的专属推荐链接', mCopy:'复制', mRefCode:'推荐码：', mBalance:'当前佣金余额', mWithdraw:'申请提现',
     mInvited:'已邀请', mFirstBuy:'已首购', mMyFriends:'我邀请的朋友', mNoFriends:'还没有人通过你的链接注册', mLogout:'退出登录', mGen1:'第一代', mGen2:'第二代', mGen3:'第三代', mFirstNo:'未首购',
+    mMyOrders:'我的订单', mNoOrders:'还没有订单记录', mOrdPending:'待付款', mOrdPaid:'已确认', mTrackLink:'查看物流 →',
     mProgTpl:'已有效推荐 {refs} 人 · 再推荐 {n} 人 或 自己再消费 RM{amt} 升「{next}」', mProgMaxTpl:'已有效推荐 {refs} 人 · 已是最高等级 🎉',
     aConnecting:'系统连接中，请稍后再试', aFillLogin:'请填写邮箱和密码', aCopied:'链接已复制 🌸 快分享给朋友吧！', aCartAdded:'已加入购物车 🛒', mWelcome:'欢迎回来，{name} 🌸', mGuideTitle:'新手 3 步,轻松上手：', mGuide1:'① 填好收货资料，立领 RM3', mGuide2:'② 复制你的专属链接,分享给朋友赚佣金', mGuide3:'③ 逛逛商店,挑几件喜欢的 🌸', aBadAmt:'请输入有效金额', aWdOk:'提现申请已提交，店主审核后会打款。', wdTitle:'申请提现', wdBalTpl:'当前佣金余额 RM {bal}', wdLowMsg:'佣金余额未满 RM {min}，暂时无法提现（最低提现额为 RM {min}）。不过不用担心，这笔余额可以在结算时直接抵扣购物金额 🌸', wdAmtL:'提现金额 (RM)', wdMethodL:'收款方式', wdMethodTng:'TNG 电子钱包', wdMethodBank:'银行转账', wdNameL:'户口名字', wdNameP:'与银行/TNG 户口一致的姓名', wdPhoneL:'TNG 手机号码', wdPhoneP:'例如 012-3456789', wdBankL:'银行名称', wdAccNoL:'银行账号', wdAccNoP:'请填写完整账号', wdBtn:'提交提现申请', wdLater:'稍后再说', wdMinErr:'提现金额不能低于 RM {min}', wdMaxErr:'提现金额不能超过佣金余额',
     aPickSize:'请选择尺码', aSoldOut:'该尺码已售罄', aStockShort:'库存不够了', aCartEmpty:'购物车是空的', aOrderFail:'下单失败，请重试',
@@ -586,7 +601,7 @@ const T = {
     successH:'订单已提交！', orderNo:'订单编号', successMsg:'我们会核对你的付款截图，确认后尽快发货。', keepShop:'继续购物',
     footShopH:'购物指南', footShop1:'如何下单', footShop2:'尺码指南', footShop3:'配送说明', footShop4:'退换政策',
     footBrandH:'品牌故事', footBrand1:'关于我们', footBrand2:'设计理念', footBrand3:'合作联系', footContactH:'联系我们', footC1:'在线客服', rights:'版权所有', chatTitle:'在线客服', chatHi:'你好！有什么可以帮你？我们会尽快回复 🌸', chatPh:'输入消息…', chatSendBtn:'发送',
-    admMgmt:'店主管理', admOnlyYou:'只有你(店主)能看到这一区', admOrdersH:'待确认订单 — 确认收款后会给推荐人入账佣金', admSearchH:'订单查询 — 查看所有订单（含已确认）', admSearchPh:'输入客人姓名/邮箱', admStatusAll:'全部状态', admStatusPending:'待付款', admStatusPaid:'已付款', admSearchBtn:'查询', admSearchHint:'输入姓名/邮箱或选择状态后点查询', admSearchNone:'没有符合条件的订单', admSearching:'查询中…', admSearchFail:'查询失败：', admWdsH:'提现申请 — 打款到会员账号后点「已打款」', admSetH:'设置 — 佣金 / 运费（改完点保存）', admL1:'L1 直接佣金 %', admL2:'L2 佣金 %', admL3:'L3 佣金 %', admBonus:'首购奖 RM', admShipMin:'免邮门槛 RM', admShipFee:'运费 RM', admWdMin:'提现门槛 RM', admWa:'WhatsApp 链接', admTt:'TikTok 链接', admSaveSet:'保存设置', admProdH:'上传 / 管理商品', admCat:'分类', admCatW:'女士睡衣', admCatB:'小孩 · 男孩', admCatG:'小孩 · 女孩', admNameZh:'商品名称（中文）', admNameEn:'英文名 (可选)', admNameMs:'马来名 (可选)', admNameVi:'越南名 (可选)', admNote:'说明（可选）', admTag:'标签', admTagNone:'无', admTagNew:'新品', admTagSale:'特惠', admImg:'商品图片', admSizes:'各尺码 · 价格(RM) / 库存', admSaveProd:'保存上架', admCurProd:'现有商品', admChatH:'客服消息 — 客户的咨询会显示在这里', admNoChat:'暂无客服消息', admReplyPh:'回复…', admNoOrders:'没有待确认订单', admConfirmPaid:'确认收款', admNoWds:'没有提现申请', admPaid:'已打款', admReject:'拒绝', admShipTo:'收货', admCopyAddr:'复制地址', admCopied:'已复制到剪贴板', admNoAddr:'（客人还没填收货资料）',
+    admMgmt:'店主管理', admOnlyYou:'只有你(店主)能看到这一区', admOrdersH:'待确认订单 — 确认收款后会给推荐人入账佣金', admSearchH:'订单查询 — 查看所有订单（含已确认）', admSearchPh:'输入客人姓名/邮箱', admStatusAll:'全部状态', admStatusPending:'待付款', admStatusPaid:'已付款', admSearchBtn:'查询', admSearchHint:'输入姓名/邮箱或选择状态后点查询', admSearchNone:'没有符合条件的订单', admSearching:'查询中…', admSearchFail:'查询失败：', admCourierH:'物流公司管理 — 设置各物流的追踪链接', admCourierHint:'网址里可以加 {code} 占位符，系统会自动替换成客人的运单号；不确定的话先只填官网追踪页链接也可以，客人自己去页面输入号码查询一样能用。', admCourierAdd:'添加', admCourierNameP:'物流公司名称，例如 J&T Express', admCourierUrlP:'追踪网址，例如 https://.../track?code={code}', admCourierNone:'还没有添加物流公司', admCourierFillBoth:'请填写名称和网址', admNoTracking:'还没有填写物流信息', admSetTracking:'设置物流', admTrackSaved:'物流信息已保存', admTrackSaveFail:'保存失败：', admWdsH:'提现申请 — 打款到会员账号后点「已打款」', admSetH:'设置 — 佣金 / 运费（改完点保存）', admL1:'L1 直接佣金 %', admL2:'L2 佣金 %', admL3:'L3 佣金 %', admBonus:'首购奖 RM', admShipMin:'免邮门槛 RM', admShipFee:'运费 RM', admWdMin:'提现门槛 RM', admWa:'WhatsApp 链接', admTt:'TikTok 链接', admSaveSet:'保存设置', admProdH:'上传 / 管理商品', admCat:'分类', admCatW:'女士睡衣', admCatB:'小孩 · 男孩', admCatG:'小孩 · 女孩', admNameZh:'商品名称（中文）', admNameEn:'英文名 (可选)', admNameMs:'马来名 (可选)', admNameVi:'越南名 (可选)', admNote:'说明（可选）', admTag:'标签', admTagNone:'无', admTagNew:'新品', admTagSale:'特惠', admImg:'商品图片', admSizes:'各尺码 · 价格(RM) / 库存', admSaveProd:'保存上架', admCurProd:'现有商品', admChatH:'客服消息 — 客户的咨询会显示在这里', admNoChat:'暂无客服消息', admReplyPh:'回复…', admNoOrders:'没有待确认订单', admConfirmPaid:'确认收款', admNoWds:'没有提现申请', admPaid:'已打款', admReject:'拒绝', admShipTo:'收货', admCopyAddr:'复制地址', admCopied:'已复制到剪贴板', admNoAddr:'（客人还没填收货资料）',
     newT:'新品', saleT:'特惠', addT:'加入购物车', pFrom:'起', pLeft:'剩{n}件', pSold:'售罄', kgBoy:'男孩', kgGirl:'女孩', kgChart:'尺码对照表', cSize:'尺码', scTitle:'小孩尺码对照表', scWeight:'体重', scHeight:'身高', noProducts:'这个分类暂时还没有商品 🌷', alertFill:'请填写商品名称和售价', alertUp:'已上架！切到「商店」即可看到' },
 
   en:{ freeShip:'Free shipping over RM 99 · 30-day returns', slogan:'Soft Comfort, Sweet Dreams', slogan2:'Soft Comfort, Sweet Dreams',
@@ -603,6 +618,7 @@ const T = {
     mMyAddr:'My delivery address', mEditAddr:'Edit address', mNoAddrYet:'No delivery address saved yet',
     mYourTier:'Your tier', mYourLink:'Your referral link', mCopy:'Copy', mRefCode:'Code: ', mBalance:'Commission balance', mWithdraw:'Withdraw',
     mInvited:'Invited', mFirstBuy:'First buy', mMyFriends:'Friends you invited', mNoFriends:'No one has registered via your link yet', mLogout:'Log out', mGen1:'Gen 1', mGen2:'Gen 2', mGen3:'Gen 3', mFirstNo:'No purchase yet',
+    mMyOrders:'My orders', mNoOrders:'No orders yet', mOrdPending:'Awaiting payment', mOrdPaid:'Confirmed', mTrackLink:'Track shipment →',
     mProgTpl:'{refs} valid referrals · Refer {n} more or spend RM{amt} yourself to reach {next}', mProgMaxTpl:'{refs} valid referrals · Top tier reached 🎉',
     aConnecting:'Connecting, please try again', aFillLogin:'Please enter email and password', aCopied:'Link copied 🌸 share it with friends!', aCartAdded:'Added to cart 🛒', mWelcome:'Welcome back, {name} 🌸', mGuideTitle:'3 easy steps to start:', mGuide1:'1. Fill delivery info — get RM3', mGuide2:'2. Copy your link & share to earn', mGuide3:'3. Browse the shop & pick some favourites 🌸', aBadAmt:'Please enter a valid amount', aWdOk:'Withdrawal request submitted. Owner will pay after review.', wdTitle:'Withdraw commission', wdBalTpl:'Current balance RM {bal}', wdLowMsg:"Your balance is below RM {min}, so it can't be withdrawn yet (minimum withdrawal is RM {min}). No worries — you can still use this balance as store credit at checkout 🌸", wdAmtL:'Withdrawal amount (RM)', wdMethodL:'Payment method', wdMethodTng:'TNG e-wallet', wdMethodBank:'Bank transfer', wdNameL:'Account holder name', wdNameP:'Name matching your bank/TNG account', wdPhoneL:'TNG phone number', wdPhoneP:'e.g. 012-3456789', wdBankL:'Bank name', wdAccNoL:'Bank account number', wdAccNoP:'Enter full account number', wdBtn:'Submit withdrawal request', wdLater:'Maybe later', wdMinErr:'Withdrawal amount cannot be below RM {min}', wdMaxErr:'Withdrawal amount cannot exceed your balance',
     aPickSize:'Please select a size', aSoldOut:'This size is sold out', aStockShort:'Not enough stock', aCartEmpty:'Your cart is empty', aOrderFail:'Order failed, please retry',
@@ -638,6 +654,7 @@ const T = {
     mMyAddr:'Alamat penghantaran saya', mEditAddr:'Edit alamat', mNoAddrYet:'Belum ada alamat penghantaran disimpan',
     mYourTier:'Tahap anda', mYourLink:'Pautan rujukan anda', mCopy:'Salin', mRefCode:'Kod: ', mBalance:'Baki komisen', mWithdraw:'Keluarkan',
     mInvited:'Diajak', mFirstBuy:'Beli pertama', mMyFriends:'Kawan yang anda ajak', mNoFriends:'Belum ada sesiapa daftar melalui pautan anda', mLogout:'Log keluar', mGen1:'Gen 1', mGen2:'Gen 2', mGen3:'Gen 3', mFirstNo:'Belum beli',
+    mMyOrders:'Pesanan saya', mNoOrders:'Belum ada pesanan', mOrdPending:'Menunggu bayaran', mOrdPaid:'Disahkan', mTrackLink:'Jejak penghantaran →',
     mProgTpl:'{refs} rujukan sah · Ajak {n} lagi atau belanja RM{amt} sendiri untuk {next}', mProgMaxTpl:'{refs} rujukan sah · Tahap tertinggi dicapai 🎉',
     aConnecting:'Menyambung, sila cuba lagi', aFillLogin:'Sila isi emel dan kata laluan', aCopied:'Pautan disalin 🌸 kongsi dengan kawan!', aCartAdded:'Ditambah ke troli 🛒', mWelcome:'Selamat kembali, {name} 🌸', mGuideTitle:'3 langkah mudah untuk mula:', mGuide1:'1. Isi maklumat penghantaran — dapat RM3', mGuide2:'2. Salin pautan anda & kongsi untuk komisen', mGuide3:'3. Layari kedai & pilih kesukaan anda 🌸', aBadAmt:'Sila masukkan jumlah yang sah', aWdOk:'Permohonan keluar dihantar. Pemilik akan bayar selepas semakan.', wdTitle:'Keluarkan komisen', wdBalTpl:'Baki semasa RM {bal}', wdLowMsg:'Baki anda kurang daripada RM {min}, jadi belum boleh dikeluarkan (minimum RM {min}). Jangan risau — baki ini masih boleh digunakan sebagai kredit semasa bayaran 🌸', wdAmtL:'Jumlah pengeluaran (RM)', wdMethodL:'Kaedah pembayaran', wdMethodTng:'TNG e-wallet', wdMethodBank:'Pindahan bank', wdNameL:'Nama pemegang akaun', wdNameP:'Nama sama seperti akaun bank/TNG', wdPhoneL:'No. telefon TNG', wdPhoneP:'cth 012-3456789', wdBankL:'Nama bank', wdAccNoL:'Nombor akaun bank', wdAccNoP:'Masukkan nombor akaun penuh', wdBtn:'Hantar permohonan keluar', wdLater:'Kemudian', wdMinErr:'Jumlah pengeluaran tidak boleh kurang daripada RM {min}', wdMaxErr:'Jumlah pengeluaran tidak boleh melebihi baki anda',
     aPickSize:'Sila pilih saiz', aSoldOut:'Saiz ini habis dijual', aStockShort:'Stok tidak cukup', aCartEmpty:'Troli anda kosong', aOrderFail:'Pesanan gagal, sila cuba lagi',
@@ -673,6 +690,7 @@ const T = {
     mMyAddr:'Địa chỉ giao hàng của tôi', mEditAddr:'Sửa địa chỉ', mNoAddrYet:'Chưa lưu địa chỉ giao hàng',
     mYourTier:'Hạng của bạn', mYourLink:'Link giới thiệu của bạn', mCopy:'Sao chép', mRefCode:'Mã: ', mBalance:'Số dư hoa hồng', mWithdraw:'Rút tiền',
     mInvited:'Đã mời', mFirstBuy:'Đã mua đầu', mMyFriends:'Bạn bè bạn đã mời', mNoFriends:'Chưa có ai đăng ký qua link của bạn', mLogout:'Đăng xuất', mGen1:'Đời 1', mGen2:'Đời 2', mGen3:'Đời 3', mFirstNo:'Chưa mua',
+    mMyOrders:'Đơn hàng của tôi', mNoOrders:'Chưa có đơn hàng', mOrdPending:'Chờ thanh toán', mOrdPaid:'Đã xác nhận', mTrackLink:'Theo dõi vận chuyển →',
     mProgTpl:'{refs} giới thiệu hợp lệ · Giới thiệu thêm {n} hoặc tự mua thêm RM{amt} để lên {next}', mProgMaxTpl:'{refs} giới thiệu hợp lệ · Đã đạt hạng cao nhất 🎉',
     aConnecting:'Đang kết nối, vui lòng thử lại', aFillLogin:'Vui lòng nhập email và mật khẩu', aCopied:'Đã sao chép link 🌸 chia sẻ với bạn bè nhé!', aCartAdded:'Đã thêm vào giỏ 🛒', mWelcome:'Chào mừng trở lại, {name} 🌸', mGuideTitle:'3 bước dễ để bắt đầu:', mGuide1:'1. Điền thông tin giao hàng — nhận RM3', mGuide2:'2. Sao chép link & chia sẻ để kiếm hoa hồng', mGuide3:'3. Dạo cửa hàng & chọn vài món yêu thích 🌸', aBadAmt:'Vui lòng nhập số tiền hợp lệ', aWdOk:'Đã gửi yêu cầu rút. Chủ shop sẽ thanh toán sau khi duyệt.', wdTitle:'Rút hoa hồng', wdBalTpl:'Số dư hiện tại RM {bal}', wdLowMsg:'Số dư của bạn dưới RM {min} nên chưa thể rút (mức rút tối thiểu là RM {min}). Đừng lo — số dư này vẫn có thể dùng làm tín dụng khi thanh toán 🌸', wdAmtL:'Số tiền rút (RM)', wdMethodL:'Phương thức nhận tiền', wdMethodTng:'Ví TNG', wdMethodBank:'Chuyển khoản ngân hàng', wdNameL:'Tên chủ tài khoản', wdNameP:'Tên khớp với tài khoản ngân hàng/TNG', wdPhoneL:'Số điện thoại TNG', wdPhoneP:'vd 012-3456789', wdBankL:'Tên ngân hàng', wdAccNoL:'Số tài khoản ngân hàng', wdAccNoP:'Nhập đầy đủ số tài khoản', wdBtn:'Gửi yêu cầu rút tiền', wdLater:'Để sau', wdMinErr:'Số tiền rút không được thấp hơn RM {min}', wdMaxErr:'Số tiền rút không được vượt quá số dư của bạn',
     aPickSize:'Vui lòng chọn size', aSoldOut:'Size này đã hết hàng', aStockShort:'Không đủ hàng', aCartEmpty:'Giỏ hàng trống', aOrderFail:'Đặt hàng thất bại, vui lòng thử lại',
@@ -1149,6 +1167,37 @@ async function renderMember(){
       if(sbProfile.address){ myAddrEl.textContent = (sbProfile.full_name||'')+(sbProfile.phone?(' · '+sbProfile.phone):'')+'\n'+sbProfile.address; myAddrEl.style.whiteSpace='pre-line'; }
       else { myAddrEl.textContent = T[lang].mNoAddrYet; myAddrEl.style.whiteSpace=''; }
     }
+    try{
+      const T0=T[lang];
+      const { data:myOrders } = await sb.rpc('my_orders');
+      const moEl=document.getElementById('myOrdersList');
+      const list=myOrders||[];
+      if(moEl){
+        if(list.length){
+          const couriers=getCouriers();
+          const statusLabel={pending:T0.mOrdPending, paid:T0.mOrdPaid};
+          moEl.innerHTML=list.map(o=>{
+            const items=(o.items||[]).map(it=>it.name+' x'+it.qty).join('，');
+            let trackHTML='';
+            if(o.courier){
+              const c=couriers.find(c=>c.name===o.courier);
+              const url = (c && c.url && o.tracking_no) ? c.url.replace('{code}', encodeURIComponent(o.tracking_no)) : '';
+              trackHTML = `<div style="margin-top:4px;font-size:12px;color:var(--berry)">🚚 ${esc(o.courier)}${o.tracking_no?(' · '+esc(o.tracking_no)):''}`
+                + (url?` · <a href="${esc(url)}" target="_blank" rel="noopener" style="color:var(--rose);text-decoration:underline">${T0.mTrackLink}</a>`:'')
+                + `</div>`;
+            }
+            return `<div style="padding:8px 0;border-bottom:1px solid var(--line)">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                <span style="font-size:13px">${esc(items)||'—'}</span>
+                <span style="font-size:12px;white-space:nowrap;color:${o.status==='paid'?'#5a9a5c':'var(--rose)'}">${statusLabel[o.status]||o.status}</span>
+              </div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px">RM ${Number(o.amount).toFixed(2)} · ${new Date(o.created_at).toLocaleDateString()}</div>
+              ${trackHTML}
+            </div>`;
+          }).join('');
+        } else { moEl.textContent=T0.mNoOrders; }
+      }
+    }catch(e){}
     const { data:invs } = await sb.from('profiles').select('id,full_name,email,created_at').eq('referred_by', sbUser.id);
     document.getElementById('statInvited').textContent = invs? invs.length : 0;
     const level1 = invs||[];
@@ -1319,13 +1368,56 @@ async function renderAdminPanel(){
     </div>`).join('');
   } else { wEl.textContent=aTx('admNoWds'); }
   try{ pmRenderSizes(); pmRenderList(); }catch(e){}
+  try{ renderCourierList(); }catch(e){}
+}
+function getCouriers(){
+  try{ return JSON.parse((window.CFG&&window.CFG.couriers_json)||'[]'); }catch(e){ return []; }
+}
+function courierOptionsHTML(selected){
+  const list=getCouriers();
+  return '<option value="">--</option>' + list.map(c=>`<option value="${esc(c.name)}" ${c.name===selected?'selected':''}>${esc(c.name)}</option>`).join('');
+}
+function renderCourierList(){
+  const list=getCouriers();
+  const el=document.getElementById('courierList'); if(!el) return;
+  if(!list.length){ el.innerHTML='<div class="psub" style="font-size:12px">'+aTx('admCourierNone')+'</div>'; return; }
+  el.innerHTML=list.map((c,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)">
+    <span style="font-size:13px">${esc(c.name)} <span style="color:var(--muted);font-size:11px">${esc(c.url)}</span></span>
+    <button class="del-btn" type="button" onclick="removeCourier(${i})"><i class="ti ti-trash"></i></button>
+  </div>`).join('');
+}
+async function saveCouriers(list){
+  window.CFG=window.CFG||{}; window.CFG.couriers_json=JSON.stringify(list);
+  renderCourierList();
+  try{ await sb.rpc('admin_set_config',{p_key:'couriers_json',p_value:JSON.stringify(list)}); }catch(e){ alert('保存失败'); }
+}
+async function addCourier(){
+  const name=document.getElementById('courierNameInput').value.trim();
+  const url=document.getElementById('courierUrlInput').value.trim();
+  if(!name||!url){ alert(aTx('admCourierFillBoth')); return; }
+  const list=getCouriers(); list.push({name,url});
+  await saveCouriers(list);
+  document.getElementById('courierNameInput').value=''; document.getElementById('courierUrlInput').value='';
+}
+async function removeCourier(i){
+  const list=getCouriers(); list.splice(i,1);
+  await saveCouriers(list);
+}
+function toggleTrackingEdit(id){ const el=document.getElementById('trackEdit_'+id); if(el) el.classList.toggle('hide'); }
+async function saveTracking(id){
+  const courier=document.getElementById('trackCourier_'+id).value;
+  const code=document.getElementById('trackCode_'+id).value.trim();
+  const { error } = await sb.rpc('admin_set_tracking',{p_order:id,p_courier:courier,p_tracking_no:code});
+  if(error){ alert(aTx('admTrackSaveFail')+error.message); return; }
+  showToast(aTx('admTrackSaved'));
+  searchOrders();
 }
 async function searchOrders(){
   const q=document.getElementById('admOrderSearch').value.trim().toLowerCase();
   const status=document.getElementById('admOrderStatusFilter').value;
   const resEl=document.getElementById('admOrderResults');
   resEl.textContent=aTx('admSearching');
-  let query=sb.from('orders').select('id,amount,status,created_at,member:member_id(full_name,email,phone,address)').order('created_at',{ascending:false}).limit(200);
+  let query=sb.from('orders').select('id,amount,status,courier,tracking_no,created_at,member:member_id(full_name,email,phone,address)').order('created_at',{ascending:false}).limit(200);
   if(status) query=query.eq('status',status);
   const { data:orders, error } = await query;
   if(error){ resEl.textContent=aTx('admSearchFail')+error.message; return; }
@@ -1340,9 +1432,21 @@ async function searchOrders(){
   const statusLabel={pending:aTx('admStatusPending'),paid:aTx('admStatusPaid')};
   resEl.innerHTML = list.map(o=>{
     const m=o.member||{}; const nm=(m.full_name||m.email||'会员');
-    return `<div style="padding:8px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px">
-      <span style="font-size:13px">${esc(nm)} · RM ${Number(o.amount).toFixed(2)} · ${new Date(o.created_at).toLocaleDateString()}</span>
-      <span style="font-size:12px;white-space:nowrap;color:${o.status==='paid'?'#5a9a5c':'var(--rose)'}">${statusLabel[o.status]||o.status}</span>
+    const trackRow = o.status==='paid' ? `
+      <div style="margin-top:6px;font-size:12px;color:var(--muted)">
+        ${o.courier?('🚚 '+esc(o.courier)+(o.tracking_no?(' · '+esc(o.tracking_no)):'')):aTx('admNoTracking')}
+        <span onclick="toggleTrackingEdit('${o.id}')" style="cursor:pointer;color:var(--rose);margin-left:8px">${aTx('admSetTracking')}</span>
+      </div>
+      <div id="trackEdit_${o.id}" class="hide" style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+        <select id="trackCourier_${o.id}" style="padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--cream);color:var(--text);font-size:12px">${courierOptionsHTML(o.courier)}</select>
+        <input id="trackCode_${o.id}" value="${esc(o.tracking_no||'')}" placeholder="运单号" style="flex:1;min-width:100px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--cream);color:var(--text);font-size:12px"/>
+        <button class="add-btn" style="width:auto;margin:0;padding:6px 12px;font-size:12px" type="button" onclick="saveTracking('${o.id}')">保存</button>
+      </div>` : '';
+    return `<div style="padding:8px 0;border-bottom:1px solid var(--line)">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <span style="font-size:13px">${esc(nm)} · RM ${Number(o.amount).toFixed(2)} · ${new Date(o.created_at).toLocaleDateString()}</span>
+        <span style="font-size:12px;white-space:nowrap;color:${o.status==='paid'?'#5a9a5c':'var(--rose)'}">${statusLabel[o.status]||o.status}</span>
+      </div>${trackRow}
     </div>`;
   }).join('');
 }
