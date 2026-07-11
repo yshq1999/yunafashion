@@ -161,7 +161,7 @@
   .pay-opt i { font-size:24px; color:var(--berry); display:block; margin-bottom:6px; }
   .pay-opt .pn { font-size:12px; font-weight:500; }
   .pay-detail { background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px; text-align:center; margin-bottom:14px; }
-  .qr-box { width:160px; height:160px; margin:0 auto 12px; border-radius:12px; background:var(--cream); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .qr-box { width:240px; height:240px; margin:0 auto 12px; border-radius:12px; background:var(--cream); display:flex; align-items:center; justify-content:center; overflow:hidden; max-width:100%; }
   .qr-box img { width:100%; height:100%; object-fit:contain; }
   .pay-note { font-size:13px; color:var(--muted); line-height:1.6; }
   .pay-acc { font-size:18px; font-weight:600; color:var(--berry); letter-spacing:.5px; margin:8px 0; }
@@ -601,7 +601,7 @@ const T = {
     addrTitle:'填写收货资料，领 RM3', addrSub:'填好资料 + 把 App 加到手机主屏幕，即领 RM3（一次性）', addrName:'姓名', addrPhone:'手机号码', addrAddr:'详细地址', addrNameP:'收货人姓名', addrPhoneP:'手机号,例如 012-3456789', addrAddrP:'门牌号、街道、花园/区', addrCity:'城市', addrCityP:'例如：八打灵再也', addrPostcode:'邮政编码', addrPostcodeP:'例如：47800', addrState:'州属', addrStateP:'请选择州属', addrBtn:'安装 App 并领 RM3', addrLater:'稍后再说', addrFill:'请填写完整资料', addrPhoneInvalid:'请输入有效的手机号码', addrPostcodeInvalid:'请输入 5 位邮政编码', addrGot:'已获得 RM3 佣金！', addrEditTitle:'编辑收货地址', addrEditSub:'更新你的收货资料，方便下次购买', addrSaveBtn:'保存地址', addrSaved:'地址已更新', installNeed:'需要把 App 加到主屏幕才能领 RM3，请点「安装」并选择添加', iosTitle:'把 Yuna 加到主屏幕：', iosStep1:'① 点手机底部/顶部的「分享」按钮', iosStep2:'② 选「加入主画面 / Add to Home Screen」', iosStep3:'③ 完成后回来点下面按钮领 RM3', iosDone:'我已添加，领取 RM3',
     heroTag:'舒适睡衣 · 萌趣童装', heroTitle:'柔软相伴，<br><em>安睡</em>每一夜',
     heroDesc:'为你和宝贝，<br>带来柔软温暖的睡眠时光。', shopNow:'立即选购',
-    prodTitle:'热销商品', promoSub:'限时特惠', promoTitle:'儿童系列全场 8 折', promoDesc:'仅限本周，精选童装优惠中', promoBtn:'立即抢购',
+    prodTitle:'热销商品', viewMore:'查看更多', promoSub:'限时特惠', promoTitle:'儿童系列全场 8 折', promoDesc:'仅限本周，精选童装优惠中', promoBtn:'立即抢购',
     adminTitle:'商家后台 · 上传商品', adminSub:'填写商品资料 → 上传图片 → 保存，立即出现在商店里（数据保存在本浏览器）',
     fNameL:'商品名称', fNameP:'例如：冰丝吊带睡裙', fCatL:'分类', catW:'女士睡衣', catK:'儿童服装', catF:'亲子睡衣',
     fForL:'尺码 / 说明', fForP:'例如：女士 / S-XL', fPriceL:'售价 (RM)', fOldL:'原价 (可留空)',
@@ -637,7 +637,7 @@ const T = {
     addrTitle:'Fill delivery info, get RM3', addrSub:'Fill info + add the App to your home screen to get RM3 (one-time)', addrName:'Name', addrPhone:'Phone', addrAddr:'Address', addrNameP:'Recipient name', addrPhoneP:'Phone e.g. 012-3456789', addrAddrP:'Unit no, street, taman/area', addrCity:'City', addrCityP:'e.g. Petaling Jaya', addrPostcode:'Postcode', addrPostcodeP:'e.g. 47800', addrState:'State', addrStateP:'Select state', addrBtn:'Install App & get RM3', addrLater:'Maybe later', addrFill:'Please fill all fields', addrPhoneInvalid:'Please enter a valid phone number', addrPostcodeInvalid:'Please enter a 5-digit postcode', addrGot:'You earned RM3!', addrEditTitle:'Edit delivery address', addrEditSub:'Update your delivery details for next time', addrSaveBtn:'Save address', addrSaved:'Address updated', installNeed:'Please add the App to your home screen to get RM3 — tap Install and confirm', iosTitle:'Add Yuna to your home screen:', iosStep1:'1. Tap the Share button', iosStep2:'2. Choose "Add to Home Screen"', iosStep3:'3. Come back and tap the button below', iosDone:'I have added it — get RM3',
     heroTag:'Cozy Sleepwear · Sweet Kids', heroTitle:'Soft Comfort,<br><em>Sweet</em> Dreams',
     heroDesc:'Soft, warm sleep moments<br>for you and your little one.', shopNow:'Shop now',
-    prodTitle:'Best sellers', promoSub:'Limited offer', promoTitle:'20% off all kids wear', promoDesc:'This week only, selected styles', promoBtn:'Shop sale',
+    prodTitle:'Best sellers', viewMore:'View more', promoSub:'Limited offer', promoTitle:'20% off all kids wear', promoDesc:'This week only, selected styles', promoBtn:'Shop sale',
     adminTitle:'Admin · Add products', adminSub:'Fill in details → upload image → save. Appears in shop instantly (saved in this browser).',
     fNameL:'Product name', fNameP:'e.g. Silky Slip Nightgown', fCatL:'Category', catW:'Women Sleepwear', catK:'Kids Wear', catF:'Family Pajamas',
     fForL:'Size / note', fForP:'e.g. Women / S-XL', fPriceL:'Price (RM)', fOldL:'Was (optional)',
@@ -672,7 +672,7 @@ const T = {
     addrTitle:'Isi maklumat penghantaran, dapat RM3', addrSub:'Isi maklumat + tambah App ke skrin utama untuk dapat RM3 (sekali)', addrName:'Nama', addrPhone:'No. telefon', addrAddr:'Alamat', addrNameP:'Nama penerima', addrPhoneP:'No. telefon cth 012-3456789', addrAddrP:'No. unit, jalan, taman/kawasan', addrCity:'Bandar', addrCityP:'cth. Petaling Jaya', addrPostcode:'Poskod', addrPostcodeP:'cth. 47800', addrState:'Negeri', addrStateP:'Pilih negeri', addrBtn:'Pasang App & dapat RM3', addrLater:'Kemudian', addrFill:'Sila isi semua maklumat', addrPhoneInvalid:'Sila masukkan nombor telefon yang sah', addrPostcodeInvalid:'Sila masukkan poskod 5 digit', addrGot:'Anda dapat RM3!', addrEditTitle:'Edit alamat penghantaran', addrEditSub:'Kemas kini maklumat penghantaran anda untuk kali seterusnya', addrSaveBtn:'Simpan alamat', addrSaved:'Alamat dikemaskini', installNeed:'Sila tambah App ke skrin utama untuk dapat RM3 — tekan Pasang', iosTitle:'Tambah Yuna ke skrin utama:', iosStep1:'1. Tekan butang Kongsi (Share)', iosStep2:'2. Pilih "Add to Home Screen"', iosStep3:'3. Kembali dan tekan butang di bawah', iosDone:'Saya sudah tambah — dapat RM3',
     heroTag:'Baju Tidur Selesa · Comel untuk Anak', heroTitle:'Lembut Selesa,<br><em>Tidur</em> Lena',
     heroDesc:'Saat tidur lembut dan hangat<br>untuk anda dan si kecil.', shopNow:'Beli sekarang',
-    prodTitle:'Paling laris', promoSub:'Tawaran terhad', promoTitle:'20% diskaun pakaian kanak', promoDesc:'Minggu ini sahaja, gaya terpilih', promoBtn:'Beli jualan',
+    prodTitle:'Paling laris', viewMore:'Lihat lagi', promoSub:'Tawaran terhad', promoTitle:'20% diskaun pakaian kanak', promoDesc:'Minggu ini sahaja, gaya terpilih', promoBtn:'Beli jualan',
     adminTitle:'Pentadbir · Tambah produk', adminSub:'Isi maklumat → muat naik gambar → simpan. Terus muncul di kedai (disimpan dalam pelayar ini).',
     fNameL:'Nama produk', fNameP:'cth: Gaun Tidur Sutera', fCatL:'Kategori', catW:'Baju Tidur Wanita', catK:'Pakaian Kanak', catF:'Piyama Keluarga',
     fForL:'Saiz / nota', fForP:'cth: Wanita / S-XL', fPriceL:'Harga (RM)', fOldL:'Harga asal (pilihan)',
@@ -707,7 +707,7 @@ const T = {
     addrTitle:'Điền thông tin giao hàng, nhận RM3', addrSub:'Điền thông tin + thêm App vào màn hình chính để nhận RM3 (một lần)', addrName:'Tên', addrPhone:'Số điện thoại', addrAddr:'Địa chỉ', addrNameP:'Tên người nhận', addrPhoneP:'SĐT vd 012-3456789', addrAddrP:'Số nhà, đường, khu vực', addrCity:'Thành phố', addrCityP:'vd: Petaling Jaya', addrPostcode:'Mã bưu điện', addrPostcodeP:'vd: 47800', addrState:'Bang', addrStateP:'Chọn bang', addrBtn:'Cài App & nhận RM3', addrLater:'Để sau', addrFill:'Vui lòng điền đủ thông tin', addrPhoneInvalid:'Vui lòng nhập số điện thoại hợp lệ', addrPostcodeInvalid:'Vui lòng nhập mã bưu điện 5 chữ số', addrGot:'Bạn nhận được RM3!', addrEditTitle:'Sửa địa chỉ giao hàng', addrEditSub:'Cập nhật thông tin giao hàng cho lần sau', addrSaveBtn:'Lưu địa chỉ', addrSaved:'Đã cập nhật địa chỉ', installNeed:'Vui lòng thêm App vào màn hình chính để nhận RM3 — bấm Cài đặt', iosTitle:'Thêm Yuna vào màn hình chính:', iosStep1:'1. Bấm nút Chia sẻ (Share)', iosStep2:'2. Chọn "Add to Home Screen"', iosStep3:'3. Quay lại và bấm nút bên dưới', iosDone:'Tôi đã thêm — nhận RM3',
     heroTag:'Đồ ngủ êm ái · Đồ trẻ em xinh xắn', heroTitle:'Êm ái mỗi đêm,<br>ngọt ngào <em>giấc mơ</em>',
     heroDesc:'Khoảnh khắc ngủ êm ấm<br>cho bạn và bé yêu.', shopNow:'Mua ngay',
-    prodTitle:'Bán chạy nhất', promoSub:'Ưu đãi có hạn', promoTitle:'Giảm 20% đồ trẻ em', promoDesc:'Chỉ tuần này, mẫu chọn lọc', promoBtn:'Mua ngay',
+    prodTitle:'Bán chạy nhất', viewMore:'Xem thêm', promoSub:'Ưu đãi có hạn', promoTitle:'Giảm 20% đồ trẻ em', promoDesc:'Chỉ tuần này, mẫu chọn lọc', promoBtn:'Mua ngay',
     adminTitle:'Quản trị · Thêm sản phẩm', adminSub:'Điền thông tin → tải ảnh → lưu. Hiện ngay trong cửa hàng (lưu trong trình duyệt này).',
     fNameL:'Tên sản phẩm', fNameP:'vd: Váy ngủ lụa', fCatL:'Danh mục', catW:'Đồ ngủ nữ', catK:'Đồ trẻ em', catF:'Pyjama gia đình',
     fForL:'Size / ghi chú', fForP:'vd: Nữ / S-XL', fPriceL:'Giá (RM)', fOldL:'Giá gốc (tùy chọn)',
@@ -878,24 +878,15 @@ function claimRM3(){
 const KID_SIZE_CHART=[['4','9-10 Kg','80 cm'],['5','10-11 Kg','81-85 cm'],['6','12-13 Kg','86-90 cm'],['7','14-15 Kg','91-95 cm'],['8','16-17 Kg','96-100 cm'],['9','18-20 Kg','101-105 cm'],['10','21-23 Kg','106-110 cm'],['11','24-27 Kg','111-117 cm'],['12','28-30 Kg','118-125 cm'],['S','31-36 Kg','126-135 cm'],['M','37-42 Kg','136-142 cm']];
 const KID_SIZE_WH={}; KID_SIZE_CHART.forEach(r=>{ KID_SIZE_WH[r[0]]=r[1].replace(/\s+/g,'').replace('Kg','kg')+'/'+r[2].replace(/\s+/g,''); });
 const WOMEN_SIZE_WH={'M':'37-49kg','L':'50-56kg','XL':'55-66kg'};
-function renderShop(){
-  const t = T[lang];
-  const kg=document.getElementById('kidGenderBar'); if(kg) kg.style.display = shopFilter==='kids'?'flex':'none';
-  const _sc=document.getElementById('sizeChart'); if(_sc && shopFilter!=='kids'){ _sc.classList.add('hide'); _sc.innerHTML=''; }
-  const items = dbProducts.filter(p=>{ if(p.active===false) return false; if(shopFilter==='all') return true; if(shopFilter==='sale') return p.tag==='sale'; if(shopFilter==='women') return p.category==='women'; if(shopFilter==='kids') return p.category===kidGender; return true; });
-  const grid = document.getElementById('productGrid');
-  const ct = document.getElementById('catTitle'); if(ct) ct.textContent = {all:t.prodTitle,women:t.navWomen,kids:t.navKids,sale:t.navSale}[shopFilter]||t.prodTitle;
-  var _ob=document.getElementById('offersBox'); if(_ob){ if(shopFilter==='sale'){ _ob.classList.remove('hide'); _ob.innerHTML=offersHTML(); } else { _ob.classList.add('hide'); _ob.innerHTML=''; } }
-  if(!items.length){ grid.innerHTML = shopFilter==='sale' ? '' : '<div class="psub" style="padding:24px 0">'+t.noProducts+'</div>'; return; }
-  grid.innerHTML = items.map(p=>{
-    const sizes=p.sizes||[];
-    const prices=sizes.map(s=>Number(s.price)).filter(x=>x>0);
-    const minP=prices.length?Math.min(...prices):0;
-    const anyStock=sizes.some(s=>s.stock>0);
-    const isKid=(p.category==='boy'||p.category==='girl');
-    const sizeWH = isKid ? KID_SIZE_WH : (p.category==='women' ? WOMEN_SIZE_WH : {});
-    const opts=sizes.map(s=>{ const wh=sizeWH[s.size]?('('+sizeWH[s.size]+')'):''; return `<option value="${s.size}" ${s.stock<=0?'disabled':''}>${s.size}${wh}·RM${s.price}${s.stock<=0?'('+t.pSold+')':'·'+t.pLeft.replace('{n}',s.stock)}</option>`; }).join('');
-    return `<div class="product-card">
+function productCardHTML(p,t){
+  const sizes=p.sizes||[];
+  const prices=sizes.map(s=>Number(s.price)).filter(x=>x>0);
+  const minP=prices.length?Math.min(...prices):0;
+  const anyStock=sizes.some(s=>s.stock>0);
+  const isKid=(p.category==='boy'||p.category==='girl');
+  const sizeWH = isKid ? KID_SIZE_WH : (p.category==='women' ? WOMEN_SIZE_WH : {});
+  const opts=sizes.map(s=>{ const wh=sizeWH[s.size]?('('+sizeWH[s.size]+')'):''; return `<option value="${s.size}" ${s.stock<=0?'disabled':''}>${s.size}${wh}·RM${s.price}${s.stock<=0?'('+t.pSold+')':'·'+t.pLeft.replace('{n}',s.stock)}</option>`; }).join('');
+  return `<div class="product-card">
       <div class="product-img">
         ${p.tag==='new'?`<span class="product-tag tag-new">${t.newT}</span>`:p.tag==='sale'?`<span class="product-tag tag-sale">${t.saleT}</span>`:''}
         ${p.image?`<img src="${p.image}" alt="">`:`<span style="font-size:50px">🛍️</span>`}
@@ -908,7 +899,37 @@ function renderShop(){
         <button class="add-btn" ${anyStock?'':'disabled'} onclick="addToCartDB('${p.id}')">${anyStock?t.addT:t.pSold}</button>
       </div>
     </div>`;
-  }).join('');
+}
+const HOME_PREVIEW_N=4;
+function homeSectionHTML(title,list,filterKey,t){
+  if(!list.length) return '';
+  const shown=list.slice(0,HOME_PREVIEW_N);
+  const cardsHtml=shown.map(p=>productCardHTML(p,t)).join('');
+  return `<div style="margin-bottom:32px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px">
+      <h3 style="font-family:'Playfair Display',serif;font-size:19px;color:var(--berry);margin:0">${title}</h3>
+      <span style="font-size:13px;color:var(--rose);cursor:pointer;white-space:nowrap" onclick="showShop('${filterKey}')">${t.viewMore} →</span>
+    </div>
+    <div class="product-grid">${cardsHtml}</div>
+  </div>`;
+}
+function renderShop(){
+  const t = T[lang];
+  const kg=document.getElementById('kidGenderBar'); if(kg) kg.style.display = shopFilter==='kids'?'flex':'none';
+  const _sc=document.getElementById('sizeChart'); if(_sc && shopFilter!=='kids'){ _sc.classList.add('hide'); _sc.innerHTML=''; }
+  const grid = document.getElementById('productGrid');
+  const ct = document.getElementById('catTitle'); if(ct) ct.textContent = {all:t.prodTitle,women:t.navWomen,kids:t.navKids,sale:t.navSale}[shopFilter]||t.prodTitle;
+  var _ob=document.getElementById('offersBox'); if(_ob){ if(shopFilter==='sale'){ _ob.classList.remove('hide'); _ob.innerHTML=offersHTML(); } else { _ob.classList.add('hide'); _ob.innerHTML=''; } }
+  if(shopFilter==='all'){
+    const women = dbProducts.filter(p=>p.active!==false && p.category==='women');
+    const kids = dbProducts.filter(p=>p.active!==false && (p.category==='boy'||p.category==='girl'));
+    const html = homeSectionHTML(t.navWomen, women, 'women', t) + homeSectionHTML(t.navKids, kids, 'kids', t);
+    grid.innerHTML = html || '<div class="psub" style="padding:24px 0">'+t.noProducts+'</div>';
+    return;
+  }
+  const items = dbProducts.filter(p=>{ if(p.active===false) return false; if(shopFilter==='sale') return p.tag==='sale'; if(shopFilter==='women') return p.category==='women'; if(shopFilter==='kids') return p.category===kidGender; return true; });
+  if(!items.length){ grid.innerHTML = shopFilter==='sale' ? '' : '<div class="psub" style="padding:24px 0">'+t.noProducts+'</div>'; return; }
+  grid.innerHTML = items.map(p=>productCardHTML(p,t)).join('');
 }
 
 /* ============ 后台 ============ */
@@ -1013,7 +1034,7 @@ function selectPay(m){
     const qrImg = m==='tngqr' ? Cf.tng_qr_img : Cf.duitnow_qr_img;
     if(qrImg){
       const label = m==='tngqr' ? t.payTng : t.payDuit;
-      d.innerHTML = `<div class="qr-box"><img src="${qrImg}" style="width:140px;height:140px;object-fit:contain"></div><div class="pay-note">${label}${accName?('<br>'+esc(accName)):''}</div>`;
+      d.innerHTML = `<div class="qr-box"><img src="${qrImg}" alt=""></div><div class="pay-note">${label}${accName?('<br>'+esc(accName)):''}</div>`;
     } else {
       d.innerHTML = `<div class="pay-note">${t.payNotSet}</div>`;
     }
