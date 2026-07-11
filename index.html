@@ -53,8 +53,15 @@
   @keyframes memberFlash { 0%,100%{ background:var(--rose-light); color:var(--berry); box-shadow:0 0 0 0 rgba(201,118,122,.0);} 50%{ background:var(--rose); color:#fff; box-shadow:0 0 12px 2px rgba(201,118,122,.55);} }
   #chatBtn { animation: chatGlow 2.4s ease-in-out infinite; }
   @keyframes chatGlow { 0%,100%{ box-shadow:0 6px 20px rgba(110,64,83,.4), 0 0 0 0 rgba(201,118,122,.5);} 50%{ box-shadow:0 6px 20px rgba(110,64,83,.4), 0 0 16px 6px rgba(201,118,122,.65);} }
-  .tier-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:18px; }
-  .tier-earn { font-size:15px; font-weight:600; color:var(--rose); line-height:1.3; }
+  .tier-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:18px; align-items:stretch; }
+  .tier-detail-card { text-align:left; display:flex; flex-direction:column; }
+  .tier-icon { font-size:30px; text-align:center; margin-bottom:6px; }
+  .tier-name { text-align:center; font-family:'Playfair Display',serif; font-weight:600; color:var(--berry); font-size:17px; margin-bottom:10px; }
+  .tier-req { margin-bottom:14px; line-height:1.6; }
+  .tier-req b { color:var(--berry); }
+  .tier-comm-h { font-size:12px; font-weight:600; letter-spacing:.03em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+  .tier-comm-list { margin:0; padding-left:18px; font-size:13.5px; color:var(--text); line-height:1.9; }
+  .tier-comm-list li b { color:var(--rose); }
   .vtab-flash.active { animation:none; background:var(--berry); color:#fff; border-color:var(--berry); }
   .cart-icon { padding:8px 12px; position:relative; }
   .cart-icon .vcart-count { position:absolute; top:1px; right:1px; }
@@ -214,7 +221,6 @@
     .footer-col li { font-size:11px; margin-bottom:7px; }
     .section-header { flex-direction:column; align-items:flex-start; gap:4px; }
     .tier-grid { grid-template-columns:1fr; gap:8px; }
-    .tier-earn { font-size:13px; }
   }
 </style>
 </head>
@@ -379,9 +385,27 @@
         </div>
       </div>
       <div class="tier-grid">
-        <div class="form-card" style="text-align:center"><div id="flowerBronze" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierBronze"></div><div class="psub" style="min-height:32px" data-i="mReqBronze"></div><div id="mEarnBronzeEl" class="tier-earn" data-i="mEarnBronze"></div></div>
-        <div class="form-card" style="text-align:center"><div id="flowerSilver" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierSilver"></div><div class="psub" style="min-height:32px" data-i="mReqSilver"></div><div id="mEarnSilverEl" class="tier-earn" data-i="mEarnSilver"></div></div>
-        <div class="form-card" style="text-align:center"><div id="flowerGold" style="height:54px;display:flex;align-items:center;justify-content:center"></div><div style="font-weight:600;color:var(--berry);margin:4px 0" data-i="tierGold"></div><div class="psub" style="min-height:32px" data-i="mReqGold"></div><div id="mEarnGoldEl" class="tier-earn" data-i="mEarnGold"></div></div>
+        <div class="form-card tier-detail-card">
+          <div class="tier-icon">🌱</div>
+          <div class="tier-name" data-i="tierBronze"></div>
+          <div class="psub tier-req"><b data-i="tierReqLabel"></b><span data-i="mReqBronze"></span></div>
+          <div class="tier-comm-h" data-i="tierCommLabel"></div>
+          <ul id="tierCommBronze" class="tier-comm-list"></ul>
+        </div>
+        <div class="form-card tier-detail-card">
+          <div class="tier-icon">🌸</div>
+          <div class="tier-name" data-i="tierSilver"></div>
+          <div class="psub tier-req"><b data-i="tierReqLabel"></b><span data-i="mReqSilver"></span></div>
+          <div class="tier-comm-h" data-i="tierCommLabel"></div>
+          <ul id="tierCommSilver" class="tier-comm-list"></ul>
+        </div>
+        <div class="form-card tier-detail-card">
+          <div class="tier-icon">👑</div>
+          <div class="tier-name" data-i="tierGold"></div>
+          <div class="psub tier-req"><b data-i="tierReqLabel"></b><span data-i="mReqGold"></span></div>
+          <div class="tier-comm-h" data-i="tierCommLabel"></div>
+          <ul id="tierCommGold" class="tier-comm-list"></ul>
+        </div>
       </div>
       <div class="admin-wrap">
         <div class="form-card">
@@ -593,9 +617,9 @@ const T = {
     navHome:'主页', navWomen:'女士睡衣', navKids:'小孩服装', navSale:'优惠',
     mTitle:'会员推荐计划', mSub:'注册成会员，分享你的专属链接，朋友下单你就能赚佣金。', mNormalMember:'普通会员',
     mJoin:'免费加入 Yuna 会员', mB1:'满 RM99 免邮费', mB2:'推荐朋友永久赚佣金，朋友每下一单你都有分', mB3:'升级解锁更深下线收益，最多赚 3 代',
-    tierBronze:'初绽会员', tierSilver:'绽放会员', tierGold:'盛放会员',
-    mReqBronze:'完成首购即得', mReqSilver:'推荐 5 人 或 自己消费 RM1000', mReqGold:'推荐 15 人 或 自己消费 RM3000',
-    mEarnBronze:'第一代', mEarnSilver:'第一、二代', mEarnGold:'第一、二、三代',
+    tierBronze:'Yuna Basic', tierSilver:'Yuna Plus', tierGold:'Yuna Elite',
+    mReqBronze:'完成首笔订单后解锁。', mReqSilver:'推荐 5 人，或累计消费达 RM1,000。', mReqGold:'推荐 15 人，或累计消费达 RM3,000。',
+    tierReqLabel:'条件：', tierCommLabel:'推荐佣金', tierLevelLabel:'第{n}代：',
     mHowTitle:'怎么赚佣金?', mHow1:'1. 注册成会员，系统给你专属推荐码', mHow2:'2. 把分享链接发给朋友', mHow3:'3. 朋友凭链接注册并下单', mHow4:'4. 你按比例获得佣金，满额可提现或购物抵扣',
     mTabReg:'注册', mTabLogin:'登录', mLName:'姓名', mPName:'你的名字', mLPass:'密码', mPPass:'至少 6 位', mRegBtn:'注册并获取推荐码', mLoginBtn:'登录', mRefSaved:'推荐码已记录：',
     mForgotPw:'忘记密码？', mForgotNeedEmail:'请先填写邮箱地址', mForgotSent:'重置密码邮件已发送，请查收邮箱', mResetTitle:'设置新密码', mResetSub:'请输入你的新密码', mResetBtn:'确认修改密码', mResetTooShort:'密码至少需要 6 位', mResetDone:'密码已更新！',
@@ -629,9 +653,9 @@ const T = {
     navHome:'Home', navWomen:'Women', navKids:'Kids', navSale:'Sale',
     mTitle:'Member Referral Program', mSub:'Become a member, share your link — earn commission when friends order.', mNormalMember:'Member',
     mJoin:'Join Yuna membership free', mB1:'Free shipping over RM99', mB2:'Refer friends and earn commission forever — on every order they make', mB3:'Level up to earn from deeper downlines, up to 3 generations',
-    tierBronze:'Bud Member', tierSilver:'Bloom Member', tierGold:'Full Bloom',
-    mReqBronze:'Unlocked after first purchase', mReqSilver:'Refer 5 or spend RM1000 yourself', mReqGold:'Refer 15 or spend RM3000 yourself',
-    mEarnBronze:'Gen-1', mEarnSilver:'Gen-1 & 2', mEarnGold:'Gen-1, 2 & 3',
+    tierBronze:'Yuna Basic', tierSilver:'Yuna Plus', tierGold:'Yuna Elite',
+    mReqBronze:'Unlocked after your first order.', mReqSilver:'Refer 5 people, or reach RM1,000 in total spend.', mReqGold:'Refer 15 people, or reach RM3,000 in total spend.',
+    tierReqLabel:'Requirement: ', tierCommLabel:'Referral commission', tierLevelLabel:'Level {n}: ',
     mHowTitle:'How to earn?', mHow1:'1. Register and get your referral code', mHow2:'2. Send your link to friends', mHow3:'3. Friends register via your link and order', mHow4:'4. You earn commission — withdraw or use as store credit',
     mTabReg:'Register', mTabLogin:'Login', mLName:'Name', mPName:'Your name', mLPass:'Password', mPPass:'At least 6 characters', mRegBtn:'Register & get code', mLoginBtn:'Login', mRefSaved:'Referral code saved: ',
     mForgotPw:'Forgot password?', mForgotNeedEmail:'Please enter your email first', mForgotSent:'Password reset email sent — please check your inbox', mResetTitle:'Set a new password', mResetSub:'Enter your new password', mResetBtn:'Confirm new password', mResetTooShort:'Password must be at least 6 characters', mResetDone:'Password updated!',
@@ -664,9 +688,9 @@ const T = {
     navHome:'Utama', navWomen:'Wanita', navKids:'Kanak', navSale:'Promosi',
     mTitle:'Program Rujukan Ahli', mSub:'Daftar jadi ahli, kongsi pautan anda — dapat komisen bila kawan beli.', mNormalMember:'Ahli',
     mJoin:'Sertai keahlian Yuna percuma', mB1:'Penghantaran percuma melebihi RM99', mB2:'Ajak kawan & dapat komisen selamanya — setiap pesanan mereka', mB3:'Naik taraf untuk dapat dari downline lebih dalam, sehingga 3 generasi',
-    tierBronze:'Ahli Kuncup', tierSilver:'Ahli Mekar', tierGold:'Mekar Penuh',
-    mReqBronze:'Dibuka selepas pembelian pertama', mReqSilver:'Ajak 5 atau belanja RM1000 sendiri', mReqGold:'Ajak 15 atau belanja RM3000 sendiri',
-    mEarnBronze:'Gen-1', mEarnSilver:'Gen-1 & 2', mEarnGold:'Gen-1, 2 & 3',
+    tierBronze:'Yuna Basic', tierSilver:'Yuna Plus', tierGold:'Yuna Elite',
+    mReqBronze:'Dibuka selepas pesanan pertama anda.', mReqSilver:'Ajak 5 orang, atau capai jumlah belanja RM1,000.', mReqGold:'Ajak 15 orang, atau capai jumlah belanja RM3,000.',
+    tierReqLabel:'Syarat: ', tierCommLabel:'Komisen rujukan', tierLevelLabel:'Tahap {n}: ',
     mHowTitle:'Cara dapat komisen?', mHow1:'1. Daftar dan dapat kod rujukan', mHow2:'2. Hantar pautan kepada kawan', mHow3:'3. Kawan daftar guna pautan & buat pesanan', mHow4:'4. Anda dapat komisen — keluarkan atau guna untuk beli',
     mTabReg:'Daftar', mTabLogin:'Log masuk', mLName:'Nama', mPName:'Nama anda', mLPass:'Kata laluan', mPPass:'Sekurangnya 6 aksara', mRegBtn:'Daftar & dapat kod', mLoginBtn:'Log masuk', mRefSaved:'Kod rujukan disimpan: ',
     mForgotPw:'Lupa kata laluan?', mForgotNeedEmail:'Sila isi emel dahulu', mForgotSent:'E-mel set semula kata laluan dihantar — sila semak emel anda', mResetTitle:'Tetapkan kata laluan baharu', mResetSub:'Masukkan kata laluan baharu anda', mResetBtn:'Sahkan kata laluan baharu', mResetTooShort:'Kata laluan mestilah sekurang-kurangnya 6 aksara', mResetDone:'Kata laluan dikemaskini!',
@@ -699,9 +723,9 @@ const T = {
     navHome:'Trang chủ', navWomen:'Đồ nữ', navKids:'Trẻ em', navSale:'Ưu đãi',
     mTitle:'Chương trình giới thiệu', mSub:'Đăng ký thành viên, chia sẻ link — nhận hoa hồng khi bạn bè đặt hàng.', mNormalMember:'Thành viên',
     mJoin:'Tham gia thành viên Yuna miễn phí', mB1:'Miễn phí ship trên RM99', mB2:'Giới thiệu bạn & hưởng hoa hồng mãi mãi — mỗi đơn họ mua', mB3:'Lên hạng để hưởng từ tuyến dưới sâu hơn, tối đa 3 đời',
-    tierBronze:'Thành viên Hé nở', tierSilver:'Thành viên Nở rộ', tierGold:'Mãn khai',
-    mReqBronze:'Mở khóa sau lần mua đầu', mReqSilver:'Giới thiệu 5 hoặc tự mua RM1000', mReqGold:'Giới thiệu 15 hoặc tự mua RM3000',
-    mEarnBronze:'Đời 1', mEarnSilver:'Đời 1 & 2', mEarnGold:'Đời 1, 2 & 3',
+    tierBronze:'Yuna Basic', tierSilver:'Yuna Plus', tierGold:'Yuna Elite',
+    mReqBronze:'Mở khóa sau đơn hàng đầu tiên.', mReqSilver:'Giới thiệu 5 người hoặc tổng mua đạt RM1,000.', mReqGold:'Giới thiệu 15 người hoặc tổng mua đạt RM3,000.',
+    tierReqLabel:'Điều kiện: ', tierCommLabel:'Hoa hồng giới thiệu', tierLevelLabel:'Cấp {n}: ',
     mHowTitle:'Kiếm hoa hồng thế nào?', mHow1:'1. Đăng ký và nhận mã giới thiệu', mHow2:'2. Gửi link cho bạn bè', mHow3:'3. Bạn bè đăng ký qua link và đặt hàng', mHow4:'4. Bạn nhận hoa hồng — rút hoặc dùng để mua hàng',
     mTabReg:'Đăng ký', mTabLogin:'Đăng nhập', mLName:'Tên', mPName:'Tên của bạn', mLPass:'Mật khẩu', mPPass:'Ít nhất 6 ký tự', mRegBtn:'Đăng ký & nhận mã', mLoginBtn:'Đăng nhập', mRefSaved:'Đã lưu mã giới thiệu: ',
     mForgotPw:'Quên mật khẩu?', mForgotNeedEmail:'Vui lòng nhập email trước', mForgotSent:'Đã gửi email đặt lại mật khẩu — vui lòng kiểm tra hộp thư', mResetTitle:'Đặt mật khẩu mới', mResetSub:'Nhập mật khẩu mới của bạn', mResetBtn:'Xác nhận mật khẩu mới', mResetTooShort:'Mật khẩu phải có ít nhất 6 ký tự', mResetDone:'Đã cập nhật mật khẩu!',
@@ -766,11 +790,18 @@ function updateEarnLabels(){
   try{
     const S=window.SBS||{};
     const pct=n=>{ const v=Math.round((n||0)*1000)/10; return (v%1===0?v.toFixed(0):v.toFixed(1)); };
-    const l1p=pct(S.l1_rate), l2p=pct(S.l2_rate), l3p=pct(S.l3_rate);
+    const rates=[pct(S.l1_rate), pct(S.l2_rate), pct(S.l3_rate)];
     const T0=T[lang];
-    const eb=document.getElementById('mEarnBronzeEl'); if(eb) eb.textContent = T0.mEarnBronze+' '+l1p+'%';
-    const es=document.getElementById('mEarnSilverEl'); if(es) es.textContent = T0.mEarnSilver+' '+l1p+'%+'+l2p+'%';
-    const eg=document.getElementById('mEarnGoldEl'); if(eg) eg.textContent = T0.mEarnGold+' '+l1p+'%+'+l2p+'%+'+l3p+'%';
+    const levelLabel=n=>(T0.tierLevelLabel||'Level {n}').replace('{n}',n);
+    const buildList=(id,count)=>{
+      const el=document.getElementById(id); if(!el) return;
+      let html='';
+      for(let i=0;i<count;i++){ html+='<li>'+levelLabel(i+1)+'<b>'+rates[i]+'%</b></li>'; }
+      el.innerHTML=html;
+    };
+    buildList('tierCommBronze',1);
+    buildList('tierCommSilver',2);
+    buildList('tierCommGold',3);
   }catch(e){}
 }
 function applyLang(){
@@ -783,11 +814,6 @@ function applyLang(){
     const k = el.getAttribute('data-iph'); if(t[k]!==undefined) el.placeholder = t[k];
   });
   document.getElementById('heroTitle').innerHTML = t.heroTitle;
-  try{
-    const fb=document.getElementById('flowerBronze'); if(fb) fb.innerHTML=flowerSVG('#C9824A',50,'bronze');
-    const fs=document.getElementById('flowerSilver'); if(fs) fs.innerHTML=flowerSVG('#B9BFC9',50,'silver');
-    const fg=document.getElementById('flowerGold'); if(fg) fg.innerHTML=flowerSVG('#E7B53C',50,'gold');
-  }catch(e){}
   updateEarnLabels();
   renderShop(); renderAdmin(); renderCart();
   if(typeof renderMember==='function'){ try{ renderMember(); }catch(e){} }
