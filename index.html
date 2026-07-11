@@ -575,6 +575,8 @@
         <div class="field"><label data-i="admSizes">各尺码 · 价格(RM) / 库存</label><div id="pmSizes"></div></div>
         <button class="save-btn" type="button" onclick="pmSave()" data-i="admSaveProd">保存上架</button>
         <div id="pmMsg" class="psub" style="margin-top:8px;color:var(--rose)"></div>
+        <button class="add-btn" style="width:auto;margin:10px 0 0;padding:8px 14px" type="button" onclick="pmOptimizeAllImages()">一键压缩已上传图片（加快首页加载）</button>
+        <div id="pmOptMsg" class="psub" style="margin-top:6px"></div>
         <div style="font-size:13px;font-weight:500;color:var(--berry);margin:16px 0 8px" data-i="admCurProd">现有商品</div>
         <div id="pmList" class="psub">—</div>
       </div>
@@ -950,7 +952,7 @@ function productCardHTML(p,t){
   return `<div class="product-card">
       <div class="product-img">
         ${p.tag==='new'?`<span class="product-tag tag-new">${t.newT}</span>`:p.tag==='sale'?`<span class="product-tag tag-sale">${t.saleT}</span>`:''}
-        ${p.image?`<img src="${p.image}" alt="">`:`<span style="font-size:50px">🛍️</span>`}
+        ${p.image?`<img src="${p.image}" alt="" loading="lazy" decoding="async">`:`<span style="font-size:50px">🛍️</span>`}
       </div>
       <div class="product-info">
         <div class="product-name">${prodName(p)}</div>
@@ -1701,15 +1703,54 @@ async function pmDelete(pid){
 }
 async function loadProducts(){
   if(!sb) return;
-  try{ const stt=await sb.from('settings').select('*'); window.SBS={}; (stt.data||[]).forEach(r=>window.SBS[r.key]=Number(r.value)); updateEarnLabels(); }catch(e){}
-  try{ const cfg=await sb.from('config').select('*'); window.CFG={}; (cfg.data||[]).forEach(r=>window.CFG[r.key]=r.value); wireContacts(); }catch(e){}
+  const [sttR,cfgR,prR,szR]=await Promise.allSettled([
+    sb.from('settings').select('*'),
+    sb.from('config').select('*'),
+    sb.from('products').select('*').eq('active',true).order('created_at',{ascending:false}),
+    sb.from('product_sizes').select('*').order('sort',{ascending:true})
+  ]);
+  try{ if(sttR.status==='fulfilled'){ window.SBS={}; (sttR.value.data||[]).forEach(r=>window.SBS[r.key]=Number(r.value)); updateEarnLabels(); } }catch(e){}
+  try{ if(cfgR.status==='fulfilled'){ window.CFG={}; (cfgR.value.data||[]).forEach(r=>window.CFG[r.key]=r.value); wireContacts(); } }catch(e){}
   try{
-    const pr=await sb.from('products').select('*').eq('active',true).order('created_at',{ascending:false});
-    const sz=await sb.from('product_sizes').select('*').order('sort',{ascending:true});
-    const by={}; (sz.data||[]).forEach(x=>{ (by[x.product_id]=by[x.product_id]||[]).push(x); });
-    dbProducts = (pr.data||[]).map(p=>Object.assign({}, p, {sizes: by[p.id]||[]}));
-    if(typeof renderShop==='function') renderShop();
+    if(prR.status==='fulfilled' && szR.status==='fulfilled'){
+      const by={}; (szR.value.data||[]).forEach(x=>{ (by[x.product_id]=by[x.product_id]||[]).push(x); });
+      dbProducts = (prR.value.data||[]).map(p=>Object.assign({}, p, {sizes: by[p.id]||[]}));
+      if(typeof renderShop==='function') renderShop();
+    }
   }catch(e){ console.warn('loadProducts',e); }
+}
+function compressImage(dataUrl,maxDim,quality){
+  return new Promise(function(resolve){
+    var img=new Image();
+    img.onload=function(){
+      var w=img.width,h=img.height;
+      if(w>maxDim||h>maxDim){ if(w>h){ h=Math.round(h*maxDim/w); w=maxDim; } else { w=Math.round(w*maxDim/h); h=maxDim; } }
+      var c=document.createElement('canvas'); c.width=w; c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      var out=c.toDataURL('image/jpeg',quality||0.8);
+      resolve(out.length<dataUrl.length?out:dataUrl);
+    };
+    img.onerror=function(){ resolve(dataUrl); };
+    img.src=dataUrl;
+  });
+}
+async function pmOptimizeAllImages(){
+  if(!sb) return;
+  var box=document.getElementById('pmOptMsg'); if(box) box.textContent='压缩中，请稍候…';
+  var list=dbProducts.filter(function(p){ return p.image && p.image.length>150000; });
+  if(!list.length){ if(box) box.textContent='没有需要压缩的图片，已经很小了 ✅'; return; }
+  var done=0;
+  for(var i=0;i<list.length;i++){
+    var p=list[i];
+    try{
+      var small=await compressImage(p.image,1000,0.8);
+      if(small.length<p.image.length){ await sb.from('products').update({image:small}).eq('id',p.id); }
+      done++;
+      if(box) box.textContent='压缩中… ('+done+'/'+list.length+')';
+    }catch(e){}
+  }
+  if(box) box.textContent='完成！已压缩 '+done+' 张图片 ✅';
+  await loadProducts(); pmRenderList();
 }
 function wireContacts(){
   const C=window.CFG||{};
@@ -1915,7 +1956,7 @@ async function adminReplyImage(dataUri){
   try{ var r=await sb.rpc('admin_chat_reply',{p_thread:__admTid,p_body:dataUri}); if(r.error) return; openAdminThread(__admTid); }catch(e){}
 }
 document.addEventListener('change', function(e){
-  if(e.target && e.target.id==='pmImg'){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ pendingPmImg=ev.target.result; const ph=document.getElementById('pmImgPh'); if(ph) ph.innerHTML='<img src="'+pendingPmImg+'" style="max-height:70px;border-radius:8px"><br>点击换图'; }; r.readAsDataURL(f); }
+  if(e.target && e.target.id==='pmImg'){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ compressImage(ev.target.result,1000,0.8).then(small=>{ pendingPmImg=small; const ph=document.getElementById('pmImgPh'); if(ph) ph.innerHTML='<img src="'+pendingPmImg+'" style="max-height:70px;border-radius:8px"><br>点击换图'; }); }; r.readAsDataURL(f); }
   if(e.target && e.target.id==='tngQrImg'){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ pendingTngQr=ev.target.result; const ph=document.getElementById('tngQrPh'); if(ph) ph.innerHTML='<img src="'+pendingTngQr+'" style="max-height:70px;border-radius:8px"><br>点击换图'; }; r.readAsDataURL(f); }
   if(e.target && e.target.id==='duitQrImg'){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ pendingDuitQr=ev.target.result; const ph=document.getElementById('duitQrPh'); if(ph) ph.innerHTML='<img src="'+pendingDuitQr+'" style="max-height:70px;border-radius:8px"><br>点击换图'; }; r.readAsDataURL(f); }
   if(e.target && e.target.id==='chatImgInput'){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ chatSendImage(ev.target.result); e.target.value=''; }; r.readAsDataURL(f); }
