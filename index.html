@@ -921,12 +921,14 @@ function renderShop(){
   const ct = document.getElementById('catTitle'); if(ct) ct.textContent = {all:t.prodTitle,women:t.navWomen,kids:t.navKids,sale:t.navSale}[shopFilter]||t.prodTitle;
   var _ob=document.getElementById('offersBox'); if(_ob){ if(shopFilter==='sale'){ _ob.classList.remove('hide'); _ob.innerHTML=offersHTML(); } else { _ob.classList.add('hide'); _ob.innerHTML=''; } }
   if(shopFilter==='all'){
+    grid.classList.remove('product-grid');
     const women = dbProducts.filter(p=>p.active!==false && p.category==='women');
     const kids = dbProducts.filter(p=>p.active!==false && (p.category==='boy'||p.category==='girl'));
     const html = homeSectionHTML(t.navWomen, women, 'women', t) + homeSectionHTML(t.navKids, kids, 'kids', t);
     grid.innerHTML = html || '<div class="psub" style="padding:24px 0">'+t.noProducts+'</div>';
     return;
   }
+  grid.classList.add('product-grid');
   const items = dbProducts.filter(p=>{ if(p.active===false) return false; if(shopFilter==='sale') return p.tag==='sale'; if(shopFilter==='women') return p.category==='women'; if(shopFilter==='kids') return p.category===kidGender; return true; });
   if(!items.length){ grid.innerHTML = shopFilter==='sale' ? '' : '<div class="psub" style="padding:24px 0">'+t.noProducts+'</div>'; return; }
   grid.innerHTML = items.map(p=>productCardHTML(p,t)).join('');
