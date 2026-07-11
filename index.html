@@ -849,12 +849,15 @@ function flowerSVG(metal,size,tier){
 const TIER_METAL={bronze:'#C9824A',silver:'#B9BFC9',gold:'#E7B53C'};
 function prodName(p){ if(!p) return ''; if(lang==='zh') return p.name||''; return (p['name_'+lang]||p.name||''); }
 const OFFERS={
-  memberT:{zh:'一觉醒来,也有收入 🌙',en:'Wake up to income 🌙'},
-  memberD:{zh:'把你喜欢的睡衣分享给朋友,朋友下单你就有佣金 —— 躺着也有回馈。等级越高,赚得越多。',en:'Share the sleepwear you love; when friends order, you earn commission — even while you rest. The higher your tier, the more you earn.'},
-  memberBtn:{zh:'免费加入会员',en:'Join free'},
-  rm3T:{zh:'免费领 RM3 🎁',en:'Get RM3 free 🎁'},
-  rm3D:{zh:'填写收货资料(姓名 · 电话 · 地址),立即领取 RM3 佣金(一次性)。以后下单还能直接抵扣。',en:'Fill in your delivery details (name · phone · address) and instantly get RM3 credit (one-time). Use it on future orders.'},
-  rm3Btn:{zh:'填资料领 RM3',en:'Claim RM3'}
+  memberT:{zh:'一觉醒来,也有收入 🌙',en:'Wake up to income 🌙',ms:'Bangun tidur, ada pendapatan 🌙',vi:'Ngủ dậy đã có thu nhập 🌙'},
+  memberD:{zh:'把你喜欢的睡衣分享给朋友,朋友下单你就有佣金 —— 躺着也有回馈。等级越高,赚得越多。',en:'Share the sleepwear you love; when friends order, you earn commission — even while you rest. The higher your tier, the more you earn.',ms:'Kongsi baju tidur kegemaran anda dengan kawan; apabila mereka buat pesanan, anda dapat komisen — walaupun sedang berehat. Semakin tinggi tahap anda, semakin banyak anda dapat.',vi:'Chia sẻ đồ ngủ bạn yêu thích cho bạn bè; khi họ đặt hàng, bạn có hoa hồng — kể cả khi đang nghỉ ngơi. Hạng càng cao, kiếm càng nhiều.'},
+  memberBtn:{zh:'免费加入会员',en:'Join free',ms:'Sertai percuma',vi:'Tham gia miễn phí'},
+  rm3T:{zh:'免费领 RM3 🎁',en:'Get RM3 free 🎁',ms:'Dapat RM3 percuma 🎁',vi:'Nhận miễn phí RM3 🎁'},
+  rm3D:{zh:'填写收货资料(姓名 · 电话 · 地址),立即领取 RM3 佣金(一次性)。以后下单还能直接抵扣。',en:'Fill in your delivery details (name · phone · address) and instantly get RM3 credit (one-time). Use it on future orders.',ms:'Isi maklumat penghantaran (nama · telefon · alamat), terus dapat kredit RM3 (sekali sahaja). Boleh guna untuk pesanan akan datang.',vi:'Điền thông tin giao hàng (tên · điện thoại · địa chỉ), nhận ngay RM3 (một lần). Dùng được cho đơn hàng sau này.'},
+  rm3Btn:{zh:'填资料领 RM3',en:'Claim RM3',ms:'Dapatkan RM3',vi:'Nhận RM3'},
+  firstBuyT:{zh:'好友首购，你得 RM2 🎉',en:"Friend's first order, RM2 for you 🎉",ms:'Pesanan pertama kawan, RM2 untuk anda 🎉',vi:'Bạn mua đơn đầu, bạn được RM2 🎉'},
+  firstBuyD:{zh:'你直接邀请的好友完成第一笔订单,你就立即获得 RM2 佣金 —— 不限等级,每位好友首购都有。',en:'The moment a friend you directly invited completes their first order, you instantly earn RM2 — no tier requirement, every friend\'s first purchase counts.',ms:'Sebaik kawan yang anda ajak terus membuat pesanan pertama, anda terus dapat RM2 — tiada syarat tahap, setiap pembelian pertama kawan dikira.',vi:'Ngay khi bạn bè bạn trực tiếp mời hoàn tất đơn hàng đầu tiên, bạn nhận ngay RM2 — không yêu cầu hạng, mỗi lần bạn bè mua lần đầu đều được tính.'},
+  firstBuyBtn:{zh:'立即邀请好友',en:'Invite friends now',ms:'Ajak kawan sekarang',vi:'Mời bạn bè ngay'}
 };
 function offG(k){ var o=OFFERS[k]; return (o&&(o[lang]||o.en||o.zh))||''; }
 function offersHTML(){
@@ -868,6 +871,11 @@ function offersHTML(){
      +'<div style="font-family:\'Playfair Display\',serif;font-size:20px;margin-bottom:8px">'+offG('rm3T')+'</div>'
      +'<div style="font-size:13px;line-height:1.7;opacity:.95;flex:1">'+offG('rm3D')+'</div>'
      +'<button class="promo-btn" style="margin-top:16px;align-self:flex-start" onclick="claimRM3()">'+offG('rm3Btn')+'</button>'
+   +'</div>'
+   +'<div style="background:linear-gradient(135deg,#8a9e6f,#c9a86a);color:#fff;border-radius:16px;padding:22px 20px;display:flex;flex-direction:column">'
+     +'<div style="font-family:\'Playfair Display\',serif;font-size:20px;margin-bottom:8px">'+offG('firstBuyT')+'</div>'
+     +'<div style="font-size:13px;line-height:1.7;opacity:.95;flex:1">'+offG('firstBuyD')+'</div>'
+     +'<button class="promo-btn" style="margin-top:16px;align-self:flex-start" onclick="switchView(\'member\')">'+offG('firstBuyBtn')+'</button>'
    +'</div>'
   +'</div>';
 }
