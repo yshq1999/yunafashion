@@ -55,7 +55,7 @@
   @keyframes chatGlow { 0%,100%{ box-shadow:0 6px 20px rgba(110,64,83,.4), 0 0 0 0 rgba(201,118,122,.5);} 50%{ box-shadow:0 6px 20px rgba(110,64,83,.4), 0 0 16px 6px rgba(201,118,122,.65);} }
   .tier-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:18px; align-items:stretch; }
   .tier-detail-card { text-align:left; display:flex; flex-direction:column; }
-  .tier-icon { font-size:30px; text-align:center; margin-bottom:6px; }
+  .tier-icon { height:54px; display:flex; align-items:center; justify-content:center; margin-bottom:6px; }
   .tier-name { text-align:center; font-family:'Playfair Display',serif; font-weight:600; color:var(--berry); font-size:17px; margin-bottom:10px; }
   .tier-req { margin-bottom:14px; line-height:1.6; }
   .tier-req b { color:var(--berry); }
@@ -196,6 +196,7 @@
 
   .hide { display:none !important; }
   @media (max-width:760px){
+    .tier-grid { grid-template-columns:1fr; gap:12px; }
     .topbar { padding:6px 16px; }
     nav { padding:12px 16px; gap:10px; }
     .nav-tabs { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:2px; scrollbar-width:none; }
@@ -220,7 +221,6 @@
     .footer-col h4 { font-size:10px; margin-bottom:10px; }
     .footer-col li { font-size:11px; margin-bottom:7px; }
     .section-header { flex-direction:column; align-items:flex-start; gap:4px; }
-    .tier-grid { grid-template-columns:1fr; gap:8px; }
   }
 </style>
 </head>
@@ -386,21 +386,21 @@
       </div>
       <div class="tier-grid">
         <div class="form-card tier-detail-card">
-          <div class="tier-icon">🌱</div>
+          <div id="flowerBronze" class="tier-icon"></div>
           <div class="tier-name" data-i="tierBronze"></div>
           <div class="psub tier-req"><b data-i="tierReqLabel"></b><span data-i="mReqBronze"></span></div>
           <div class="tier-comm-h" data-i="tierCommLabel"></div>
           <ul id="tierCommBronze" class="tier-comm-list"></ul>
         </div>
         <div class="form-card tier-detail-card">
-          <div class="tier-icon">🌸</div>
+          <div id="flowerSilver" class="tier-icon"></div>
           <div class="tier-name" data-i="tierSilver"></div>
           <div class="psub tier-req"><b data-i="tierReqLabel"></b><span data-i="mReqSilver"></span></div>
           <div class="tier-comm-h" data-i="tierCommLabel"></div>
           <ul id="tierCommSilver" class="tier-comm-list"></ul>
         </div>
         <div class="form-card tier-detail-card">
-          <div class="tier-icon">👑</div>
+          <div id="flowerGold" class="tier-icon"></div>
           <div class="tier-name" data-i="tierGold"></div>
           <div class="psub tier-req"><b data-i="tierReqLabel"></b><span data-i="mReqGold"></span></div>
           <div class="tier-comm-h" data-i="tierCommLabel"></div>
@@ -814,6 +814,11 @@ function applyLang(){
     const k = el.getAttribute('data-iph'); if(t[k]!==undefined) el.placeholder = t[k];
   });
   document.getElementById('heroTitle').innerHTML = t.heroTitle;
+  try{
+    const fb=document.getElementById('flowerBronze'); if(fb) fb.innerHTML=flowerSVG('#C9824A',50,'bronze');
+    const fs=document.getElementById('flowerSilver'); if(fs) fs.innerHTML=flowerSVG('#B9BFC9',50,'silver');
+    const fg=document.getElementById('flowerGold'); if(fg) fg.innerHTML=flowerSVG('#E7B53C',50,'gold');
+  }catch(e){}
   updateEarnLabels();
   renderShop(); renderAdmin(); renderCart();
   if(typeof renderMember==='function'){ try{ renderMember(); }catch(e){} }
