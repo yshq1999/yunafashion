@@ -1648,10 +1648,24 @@ function postcodeToState(pc){
   if(n>=93&&n<=98) return 'Sarawak';
   return '';
 }
-function autoFillState(){
+let __postcodeCityMap=null, __postcodeCityLoading=null;
+function loadPostcodeCityMap(){
+  if(__postcodeCityMap) return Promise.resolve(__postcodeCityMap);
+  if(__postcodeCityLoading) return __postcodeCityLoading;
+  __postcodeCityLoading = fetch('postcodes.json').then(r=>r.json()).then(d=>{ __postcodeCityMap=d; return d; }).catch(()=>({}));
+  return __postcodeCityLoading;
+}
+loadPostcodeCityMap();
+function autoFillFromPostcode(){
   const pc=document.getElementById('adPostcode').value.trim();
   const st=postcodeToState(pc);
   if(st){ document.getElementById('adState').value=st; }
+  if(/^\d{5}$/.test(pc)){
+    loadPostcodeCityMap().then(map=>{
+      const city=map[pc];
+      if(city){ document.getElementById('adCity').value=city; }
+    });
+  }
 }
 function fullAddrText(p){
   if(!p) return '';
@@ -1814,7 +1828,7 @@ document.addEventListener('change', function(e){
       <div class="field"><label data-i="addrPhone"></label><input id="adPhone" type="tel" data-iph="addrPhoneP"/></div>
       <div class="field"><label data-i="addrAddr"></label><input id="adAddr" data-iph="addrAddrP"/></div>
       <div class="row2">
-        <div class="field"><label data-i="addrPostcode"></label><input id="adPostcode" type="tel" inputmode="numeric" maxlength="5" data-iph="addrPostcodeP" oninput="autoFillState()"/></div>
+        <div class="field"><label data-i="addrPostcode"></label><input id="adPostcode" type="tel" inputmode="numeric" maxlength="5" data-iph="addrPostcodeP" oninput="autoFillFromPostcode()"/></div>
         <div class="field"><label data-i="addrCity"></label><input id="adCity" data-iph="addrCityP"/></div>
       </div>
       <div class="field">
