@@ -489,6 +489,14 @@
           <button class="add-btn" style="width:auto;margin:0;padding:8px 16px" type="button" onclick="addCourier()" data-i="admCourierAdd">添加</button>
         </div>
       </div>
+      <div class="form-card" style="margin:14px 0">
+        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admMemberH">会员查找 — 核实 TikTok 关注截图后发放 RM2</div>
+        <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+          <input id="admMemberSearch" data-iph="admSearchPh" style="flex:1;min-width:140px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text);font-size:13px" onkeydown="if(event.key==='Enter')searchMembers()"/>
+          <button class="add-btn" style="width:auto;margin:0;padding:8px 16px" type="button" onclick="searchMembers()" data-i="admSearchBtn">查询</button>
+        </div>
+        <div id="admMemberResults" class="psub" data-i="admMemberHint">输入姓名/邮箱后点查询</div>
+      </div>
       <div class="form-card">
         <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admWdsH">提现申请 — 打款到会员账号后点「已打款」</div>
         <div id="adminWds" class="psub">没有提现申请</div>
@@ -613,7 +621,7 @@ const T = {
     successH:'订单已提交！', orderNo:'订单编号', successMsg:'我们会核对你的付款截图，确认后尽快发货。', keepShop:'继续购物',
     footShopH:'购物指南', footShop1:'如何下单', footShop2:'尺码指南', footShop3:'配送说明', footShop4:'退换政策',
     footBrandH:'品牌故事', footBrand1:'关于我们', footBrand2:'设计理念', footBrand3:'合作联系', footContactH:'联系我们', footC1:'在线客服', rights:'版权所有', chatTitle:'在线客服', chatHi:'你好！有什么可以帮你？我们会尽快回复 🌸', chatPh:'输入消息…', chatSendBtn:'发送',
-    admMgmt:'店主管理', admOnlyYou:'只有你(店主)能看到这一区', admOrdersH:'待确认订单 — 确认收款后会给推荐人入账佣金', admSearchH:'订单查询 — 查看所有订单（含已确认）', admSearchPh:'输入客人姓名/邮箱', admStatusAll:'全部状态', admStatusPending:'待付款', admStatusPaid:'已付款', admSearchBtn:'查询', admSearchHint:'输入姓名/邮箱或选择状态后点查询', admSearchNone:'没有符合条件的订单', admSearching:'查询中…', admSearchFail:'查询失败：', admCourierH:'物流公司管理 — 设置各物流的追踪链接', admCourierHint:'网址里可以加 {code} 占位符，系统会自动替换成客人的运单号；不确定的话先只填官网追踪页链接也可以，客人自己去页面输入号码查询一样能用。', admCourierAdd:'添加', admCourierNameP:'物流公司名称，例如 J&T Express', admCourierUrlP:'追踪网址，例如 https://.../track?code={code}', admCourierNone:'还没有添加物流公司', admCourierFillBoth:'请填写名称和网址', admNoTracking:'还没有填写物流信息', admSetTracking:'设置物流', admTrackSaved:'物流信息已保存', admTrackSaveFail:'保存失败：', admWdsH:'提现申请 — 打款到会员账号后点「已打款」', admSetH:'设置 — 佣金 / 运费（改完点保存）', admL1:'L1 直接佣金 %', admL2:'L2 佣金 %', admL3:'L3 佣金 %', admBonus:'首购奖 RM', admShipMin:'免邮门槛 RM', admShipFee:'运费 RM', admWdMin:'提现门槛 RM', admWa:'WhatsApp 链接', admTt:'TikTok 链接', admPayH:'收款方式 — 结算页会显示给客人', admPayAccNo:'收款账号（TNG 手机号 / 银行账号）', admPayAccName:'收款人姓名', admTngQr:'TNG QR 收款码', admDuitQr:'DuitNow QR 收款码', admUploadClick:'点击上传图片', admSaveSet:'保存设置', admProdH:'上传 / 管理商品', admCat:'分类', admCatW:'女士睡衣', admCatB:'小孩 · 男孩', admCatG:'小孩 · 女孩', admNameZh:'商品名称（中文）', admNameEn:'英文名 (可选)', admNameMs:'马来名 (可选)', admNameVi:'越南名 (可选)', admNote:'说明（可选）', admTag:'标签', admTagNone:'无', admTagNew:'新品', admTagSale:'特惠', admImg:'商品图片', admSizes:'各尺码 · 价格(RM) / 库存', admSaveProd:'保存上架', admCurProd:'现有商品', admChatH:'客服消息 — 客户的咨询会显示在这里', admNoChat:'暂无客服消息', admReplyPh:'回复…', admNoOrders:'没有待确认订单', admConfirmPaid:'确认收款', admNoWds:'没有提现申请', admPaid:'已打款', admReject:'拒绝', admShipTo:'收货', admCopyAddr:'复制地址', admCopied:'已复制到剪贴板', admNoAddr:'（客人还没填收货资料）',
+    admMgmt:'店主管理', admOnlyYou:'只有你(店主)能看到这一区', admOrdersH:'待确认订单 — 确认收款后会给推荐人入账佣金', admSearchH:'订单查询 — 查看所有订单（含已确认）', admSearchPh:'输入客人姓名/邮箱', admStatusAll:'全部状态', admStatusPending:'待付款', admStatusPaid:'已付款', admSearchBtn:'查询', admSearchHint:'输入姓名/邮箱或选择状态后点查询', admSearchNone:'没有符合条件的订单', admSearching:'查询中…', admSearchFail:'查询失败：', admCourierH:'物流公司管理 — 设置各物流的追踪链接', admCourierHint:'网址里可以加 {code} 占位符，系统会自动替换成客人的运单号；不确定的话先只填官网追踪页链接也可以，客人自己去页面输入号码查询一样能用。', admCourierAdd:'添加', admCourierNameP:'物流公司名称，例如 J&T Express', admCourierUrlP:'追踪网址，例如 https://.../track?code={code}', admCourierNone:'还没有添加物流公司', admCourierFillBoth:'请填写名称和网址', admNoTracking:'还没有填写物流信息', admSetTracking:'设置物流', admTrackSaved:'物流信息已保存', admTrackSaveFail:'保存失败：', admMemberH:'会员查找 — 核实 TikTok 关注截图后发放 RM2', admMemberHint:'输入姓名/邮箱后点查询', admMemberNone:'没有符合条件的会员', admGrantTiktok:'发放 RM2', admTiktokGranted:'已发放', admTiktokGrantOk:'已发放 RM2', admTiktokGrantFail:'发放失败：', admWdsH:'提现申请 — 打款到会员账号后点「已打款」', admSetH:'设置 — 佣金 / 运费（改完点保存）', admL1:'L1 直接佣金 %', admL2:'L2 佣金 %', admL3:'L3 佣金 %', admBonus:'首购奖 RM', admShipMin:'免邮门槛 RM', admShipFee:'运费 RM', admWdMin:'提现门槛 RM', admWa:'WhatsApp 链接', admTt:'TikTok 链接', admPayH:'收款方式 — 结算页会显示给客人', admPayAccNo:'收款账号（TNG 手机号 / 银行账号）', admPayAccName:'收款人姓名', admTngQr:'TNG QR 收款码', admDuitQr:'DuitNow QR 收款码', admUploadClick:'点击上传图片', admSaveSet:'保存设置', admProdH:'上传 / 管理商品', admCat:'分类', admCatW:'女士睡衣', admCatB:'小孩 · 男孩', admCatG:'小孩 · 女孩', admNameZh:'商品名称（中文）', admNameEn:'英文名 (可选)', admNameMs:'马来名 (可选)', admNameVi:'越南名 (可选)', admNote:'说明（可选）', admTag:'标签', admTagNone:'无', admTagNew:'新品', admTagSale:'特惠', admImg:'商品图片', admSizes:'各尺码 · 价格(RM) / 库存', admSaveProd:'保存上架', admCurProd:'现有商品', admChatH:'客服消息 — 客户的咨询会显示在这里', admNoChat:'暂无客服消息', admReplyPh:'回复…', admNoOrders:'没有待确认订单', admConfirmPaid:'确认收款', admNoWds:'没有提现申请', admPaid:'已打款', admReject:'拒绝', admShipTo:'收货', admCopyAddr:'复制地址', admCopied:'已复制到剪贴板', admNoAddr:'（客人还没填收货资料）',
     newT:'新品', saleT:'特惠', addT:'加入购物车', pFrom:'起', pLeft:'剩{n}件', pSold:'售罄', kgBoy:'男孩', kgGirl:'女孩', kgChart:'尺码对照表', cSize:'尺码', scTitle:'小孩尺码对照表', scWeight:'体重', scHeight:'身高', noProducts:'这个分类暂时还没有商品 🌷', alertFill:'请填写商品名称和售价', alertUp:'已上架！切到「商店」即可看到' },
 
   en:{ freeShip:'Free shipping over RM 99 · 30-day returns', slogan:'Soft Comfort, Sweet Dreams', slogan2:'Soft Comfort, Sweet Dreams',
@@ -857,7 +865,10 @@ const OFFERS={
   rm3Btn:{zh:'填资料领 RM3',en:'Claim RM3',ms:'Dapatkan RM3',vi:'Nhận RM3'},
   firstBuyT:{zh:'好友首购，你得 RM2 🎉',en:"Friend's first order, RM2 for you 🎉",ms:'Pesanan pertama kawan, RM2 untuk anda 🎉',vi:'Bạn mua đơn đầu, bạn được RM2 🎉'},
   firstBuyD:{zh:'你直接邀请的好友完成第一笔订单,你就立即获得 RM2 佣金 —— 不限等级,每位好友首购都有。',en:'The moment a friend you directly invited completes their first order, you instantly earn RM2 — no tier requirement, every friend\'s first purchase counts.',ms:'Sebaik kawan yang anda ajak terus membuat pesanan pertama, anda terus dapat RM2 — tiada syarat tahap, setiap pembelian pertama kawan dikira.',vi:'Ngay khi bạn bè bạn trực tiếp mời hoàn tất đơn hàng đầu tiên, bạn nhận ngay RM2 — không yêu cầu hạng, mỗi lần bạn bè mua lần đầu đều được tính.'},
-  firstBuyBtn:{zh:'立即邀请好友',en:'Invite friends now',ms:'Ajak kawan sekarang',vi:'Mời bạn bè ngay'}
+  firstBuyBtn:{zh:'立即邀请好友',en:'Invite friends now',ms:'Ajak kawan sekarang',vi:'Mời bạn bè ngay'},
+  tiktokT:{zh:'关注 TikTok 领 RM2 🎬',en:'Follow us on TikTok, get RM2 🎬',ms:'Ikuti TikTok kami, dapat RM2 🎬',vi:'Theo dõi TikTok, nhận RM2 🎬'},
+  tiktokD:{zh:'关注我们的 TikTok 后截图,通过 WhatsApp 发给我们核实,核实后立即入账 RM2 佣金(一次性)。',en:'Follow our TikTok, screenshot it, and send via WhatsApp for verification — RM2 credit (one-time) as soon as it\'s confirmed.',ms:'Ikuti TikTok kami, tangkap skrin dan hantar melalui WhatsApp untuk pengesahan — kredit RM2 (sekali sahaja) sebaik disahkan.',vi:'Theo dõi TikTok của chúng tôi, chụp màn hình và gửi qua WhatsApp để xác nhận — nhận RM2 (một lần) ngay khi được xác nhận.'},
+  tiktokBtn:{zh:'去关注 + 发截图',en:'Follow & send screenshot',ms:'Ikuti & hantar tangkapan skrin',vi:'Theo dõi & gửi ảnh chụp'}
 };
 function offG(k){ var o=OFFERS[k]; return (o&&(o[lang]||o.en||o.zh))||''; }
 function offersHTML(){
@@ -877,7 +888,18 @@ function offersHTML(){
      +'<div style="font-size:13px;line-height:1.7;opacity:.95;flex:1">'+offG('firstBuyD')+'</div>'
      +'<button class="promo-btn" style="margin-top:16px;align-self:flex-start" onclick="switchView(\'member\')">'+offG('firstBuyBtn')+'</button>'
    +'</div>'
+   +'<div style="background:linear-gradient(135deg,#2c2c34,#6E4053);color:#fff;border-radius:16px;padding:22px 20px;display:flex;flex-direction:column">'
+     +'<div style="font-family:\'Playfair Display\',serif;font-size:20px;margin-bottom:8px">'+offG('tiktokT')+'</div>'
+     +'<div style="font-size:13px;line-height:1.7;opacity:.95;flex:1">'+offG('tiktokD')+'</div>'
+     +'<button class="promo-btn" style="margin-top:16px;align-self:flex-start" onclick="followTiktokFlow()">'+offG('tiktokBtn')+'</button>'
+   +'</div>'
   +'</div>';
+}
+function followTiktokFlow(){
+  const C=window.CFG||{};
+  if(C.tiktok_url) window.open(C.tiktok_url,'_blank');
+  if(C.whatsapp_url) window.open(C.whatsapp_url,'_blank');
+  else if(typeof toggleChat==='function') toggleChat();
 }
 function claimRM3(){
   if(typeof sbUser!=='undefined' && sbUser){ if(typeof openAddr==='function') openAddr(); }
@@ -1459,6 +1481,35 @@ async function saveTracking(id){
   if(error){ alert(aTx('admTrackSaveFail')+error.message); return; }
   showToast(aTx('admTrackSaved'));
   searchOrders();
+}
+async function searchMembers(){
+  const q=document.getElementById('admMemberSearch').value.trim().toLowerCase();
+  const resEl=document.getElementById('admMemberResults');
+  resEl.textContent=aTx('admSearching');
+  const { data:members, error } = await sb.from('profiles').select('id,full_name,email,tiktok_bonus_claimed').order('created_at',{ascending:false}).limit(200);
+  if(error){ resEl.textContent=aTx('admSearchFail')+error.message; return; }
+  let list=members||[];
+  if(q){
+    list=list.filter(m=>(m.full_name||'').toLowerCase().includes(q) || (m.email||'').toLowerCase().includes(q));
+  }
+  if(!list.length){ resEl.textContent=aTx('admMemberNone'); return; }
+  resEl.innerHTML = list.map(m=>{
+    const nm=m.full_name||m.email||'会员';
+    const action = m.tiktok_bonus_claimed
+      ? `<span class="psub" style="font-size:12px">✅ ${aTx('admTiktokGranted')}</span>`
+      : `<button class="add-btn" style="width:auto;margin:0;padding:6px 12px;font-size:12px" type="button" onclick="grantTiktokBonus('${m.id}',this)">${aTx('admGrantTiktok')}</button>`;
+    return `<div style="padding:8px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px">
+      <span style="font-size:13px">${esc(nm)}${m.email?(' · '+esc(m.email)):''}</span>
+      ${action}
+    </div>`;
+  }).join('');
+}
+async function grantTiktokBonus(memberId,btn){
+  if(btn) btn.disabled=true;
+  const { error } = await sb.rpc('admin_grant_tiktok_bonus',{p_member:memberId});
+  if(error){ alert(aTx('admTiktokGrantFail')+error.message); if(btn) btn.disabled=false; return; }
+  showToast(aTx('admTiktokGrantOk'));
+  searchMembers();
 }
 async function searchOrders(){
   const q=document.getElementById('admOrderSearch').value.trim().toLowerCase();
