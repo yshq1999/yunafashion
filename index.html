@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yuna Fashion Shop</title>
+<meta name="description" id="metaDesc" content="YUNA Fashion — Wear Your Story. Comfortable, thoughtful women's clothing for real days and meaningful moments.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -83,6 +84,8 @@
   .hero-desc { font-size:15px; color:var(--muted); line-height:1.7; margin-bottom:24px; max-width:340px; }
   .hero-btn { display:inline-flex; align-items:center; gap:8px; background:var(--berry); color:#fff; padding:12px 26px; border-radius:24px; font-size:14px; font-weight:500; border:none; cursor:pointer; width:fit-content; transition:background .2s; }
   .hero-btn:hover { background:var(--rose); }
+  .hero-btn-secondary { background:transparent; color:var(--berry); border:1.5px solid var(--berry); }
+  .hero-btn-secondary:hover { background:var(--berry); color:#fff; }
   .hero-visual { background:linear-gradient(135deg,#e8dcf0,#f3e2e8); display:flex; align-items:center; justify-content:center; position:relative; }
 
   /* PANELS */
@@ -262,9 +265,14 @@
         <div class="hero-tag" data-i="heroTag"></div>
         <h1 class="hero-title" id="heroTitle"></h1>
         <p class="hero-desc" data-i="heroDesc"></p>
-        <button class="hero-btn" onclick="switchView('shop');document.getElementById('prodSection').scrollIntoView({behavior:'smooth'})">
-          <span data-i="shopNow"></span> <i class="ti ti-arrow-right"></i>
-        </button>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="hero-btn" onclick="switchView('shop');document.getElementById('prodSection').scrollIntoView({behavior:'smooth'})">
+            <span data-i="shopNow"></span> <i class="ti ti-arrow-right"></i>
+          </button>
+          <button class="hero-btn hero-btn-secondary" onclick="openInfo('about')">
+            <span data-i="ourStoryBtn"></span>
+          </button>
+        </div>
       </div>
       <div class="hero-visual">
         <svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
@@ -276,6 +284,11 @@
           <text x="340" y="235" font-size="50" text-anchor="middle">⭐</text>
         </svg>
       </div>
+    </section>
+
+    <section id="homeStorySection" style="text-align:center;max-width:640px;margin:36px auto;padding:0 28px">
+      <h2 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--berry);margin-bottom:10px" data-i="homeStoryHeading"></h2>
+      <p style="font-size:14px;color:var(--muted);line-height:1.8" data-i="homeStoryBody"></p>
     </section>
 
     <div class="panel" id="prodSection">
@@ -614,7 +627,7 @@ function showToast(msg){ var w=document.getElementById('toastWrap'); if(!w){ w=d
 function copyShipBtn(btn){ try{ var txt=decodeURIComponent(btn.getAttribute('data-ship')); navigator.clipboard.writeText(txt); }catch(e){} showToast(aTx('admCopied')); }
 function dismissGuide(){ try{ localStorage.setItem('yuna_guide_hide','1'); }catch(e){} var g=document.getElementById('memberGuide'); if(g) g.classList.add('hide'); }
 const T = {
-  zh:{ freeShip:'免费配送满 RM 99 · 30 天退换', slogan:'柔软相伴，安睡每一夜', slogan2:'柔软相伴，安睡每一夜',
+  zh:{ freeShip:'免费配送满 RM 99 · 30 天退换', slogan:'Wear Your Story.', slogan2:'Wear Your Story.',
     navShop:'商店', navAdmin:'商家后台', navCart:'购物车', navMember:'会员',
     navHome:'主页', navWomen:'女士睡衣', navKids:'小孩服装', navSale:'优惠',
     mTitle:'会员推荐计划', mSub:'注册成会员，分享你的专属链接，朋友下单你就能赚佣金。', mNormalMember:'普通会员',
@@ -633,8 +646,23 @@ const T = {
     aConnecting:'系统连接中，请稍后再试', aFillLogin:'请填写邮箱和密码', aCopied:'链接已复制 🌸 快分享给朋友吧！', aCartAdded:'已加入购物车 🛒', mWelcome:'欢迎回来，{name} 🌸', mGuideTitle:'新手 3 步,轻松上手：', mGuide1:'① 填好收货资料，立领 RM3', mGuide2:'② 复制你的专属链接,分享给朋友赚佣金', mGuide3:'③ 逛逛商店,挑几件喜欢的 🌸', aBadAmt:'请输入有效金额', aWdOk:'提现申请已提交，店主审核后会打款。', wdTitle:'申请提现', wdBalTpl:'当前佣金余额 RM {bal}', wdLowMsg:'佣金余额未满 RM {min}，暂时无法提现（最低提现额为 RM {min}）。不过不用担心，这笔余额可以在结算时直接抵扣购物金额 🌸', wdAmtL:'提现金额 (RM)', wdMethodL:'收款方式', wdMethodTng:'TNG 电子钱包', wdMethodBank:'银行转账', wdNameL:'户口名字', wdNameP:'与银行/TNG 户口一致的姓名', wdPhoneL:'TNG 手机号码', wdPhoneP:'例如 012-3456789', wdBankL:'银行名称', wdAccNoL:'银行账号', wdAccNoP:'请填写完整账号', wdBtn:'提交提现申请', wdLater:'稍后再说', wdMinErr:'提现金额不能低于 RM {min}', wdMaxErr:'提现金额不能超过佣金余额',
     aPickSize:'请选择尺码', aSoldOut:'该尺码已售罄', aStockShort:'库存不够了', aCartEmpty:'购物车是空的', aOrderFail:'下单失败，请重试',
     addrTitle:'填写收货资料，领 RM3', addrSub:'填好资料 + 把 App 加到手机主屏幕，即领 RM3（一次性）', addrName:'姓名', addrPhone:'手机号码', addrAddr:'详细地址', addrNameP:'收货人姓名', addrPhoneP:'手机号,例如 012-3456789', addrAddrP:'门牌号、街道、花园/区', addrCity:'城市', addrCityP:'例如：八打灵再也', addrPostcode:'邮政编码', addrPostcodeP:'例如：47800', addrState:'州属', addrStateP:'请选择州属', addrBtn:'安装 App 并领 RM3', addrLater:'稍后再说', addrFill:'请填写完整资料', addrPhoneInvalid:'请输入有效的手机号码', addrPostcodeInvalid:'请输入 5 位邮政编码', addrGot:'已获得 RM3 佣金！', addrEditTitle:'编辑收货地址', addrEditSub:'更新你的收货资料，方便下次购买', addrSaveBtn:'保存地址', addrSaved:'地址已更新', installNeed:'需要把 App 加到主屏幕才能领 RM3，请点「安装」并选择添加', iosTitle:'把 Yuna 加到主屏幕：', iosStep1:'① 点手机底部/顶部的「分享」按钮', iosStep2:'② 选「加入主画面 / Add to Home Screen」', iosStep3:'③ 完成后回来点下面按钮领 RM3', iosDone:'我已添加，领取 RM3',
-    heroTag:'舒适睡衣 · 萌趣童装', heroTitle:'柔软相伴，<br><em>安睡</em>每一夜',
-    heroDesc:'为你和宝贝，<br>带来柔软温暖的睡眠时光。', shopNow:'立即选购',
+    heroTag:'YUNA FASHION', heroTitle:'Wear Your <em>Story</em>.',
+    heroDesc:'为真实的日子、有意义的时刻，以及真正的你而设计。', shopNow:'探索 YUNA', ourStoryBtn:'我们的故事',
+    homeStoryHeading:'为你的生活而设计', homeStoryBody:'从忙碌的清晨，到安静的周末，YUNA 自然融入你在意的每一个时刻。',
+    aboutHeroLine:'每一位女性，都有值得被穿在身上的故事。',
+    aboutBeginningHeading:'我们的起点',
+    aboutBeginningBody:'每一天，女性都在不同的身份之间前行。\n\n有人努力工作，\n有人照顾家庭，\n有人在陌生的地方重新开始，\n也有人默默朝着只有自己看得见的梦想前进。\n\nYUNA 的开始，源自一个简单的想法：\n\n衣服应该陪伴真实生活，而不是让生活变得更复杂。\n\n我们知道，一件衣服无法彻底改变人生。\n\n但合适的衣服，可以改变一天的感受。\n\n它可以在忙碌的早晨带来舒适，\n在重要的时刻多给你一点自信，\n也可以提醒你，在照顾所有人之余，别忘了留一点空间给自己。\n\n因此，我们为每一个看似普通、却值得认真生活的日子而设计。\n\n上班可以穿，\n周末可以穿，\n喝咖啡、旅行、陪伴家人，\n以及迎接人生的新开始时，也可以穿。\n\nYUNA 不是要你成为别人。\n\n我们希望你穿得舒服、穿得自信，也依然像真正的自己。',
+    aboutBelieveHeading:'我们相信',
+    aboutVal1Name:'自信', aboutVal1Line:'穿出真实的自己，也感觉很好。',
+    aboutVal2Name:'舒适', aboutVal2Line:'从早到晚，始终自在。',
+    aboutVal3Name:'真我', aboutVal3Line:'像你，而不是别人。',
+    aboutVal4Name:'家人', aboutVal4Line:'设计时，心里想着我们所爱的人。',
+    aboutVal5Name:'成长', aboutVal5Line:'留一点空间，让改变慢慢发生。',
+    aboutPhilosophyHeading:'为真实生活而设计',
+    aboutPhilosophyBody:'我们的设计，不只是为了拍照，也不只是为了追赶短暂的潮流。\n\n我们为组成日常生活的每一个真实时刻而设计。\n\n一件衣服，应该能陪你度过忙碌的早晨，轻松搭配去上班，适合与家人相处，也值得一次又一次地穿上。\n\n我们的设计坚持五项原则：\n\n1. 让一天更自在的舒适感。\n2. 自然、耐看并容易穿着的轮廓。\n3. 有特点，却不过度复杂的细节。\n4. 能够适应工作、周末与家庭生活的实穿性。\n5. 让顾客真正愿意重复穿着的设计。\n\n好的设计，不应该盖过穿衣服的人。\n\n它应该让她自在行动、认真生活，并继续书写自己的故事。',
+    aboutClosingBody:'为真实的女性、真实的生活，以及仍在继续书写的故事而设计。',
+    aboutSeoTitle:'我们的故事 | YUNA Fashion',
+    aboutSeoDesc:'了解 YUNA Fashion 如何为真实女性、日常生活与每一个仍在书写的故事，创造舒适而有温度的服装。',
     prodTitle:'热销商品', viewMore:'查看更多', promoSub:'限时特惠', promoTitle:'儿童系列全场 8 折', promoDesc:'仅限本周，精选童装优惠中', promoBtn:'立即抢购',
     adminTitle:'商家后台 · 上传商品', adminSub:'填写商品资料 → 上传图片 → 保存，立即出现在商店里（数据保存在本浏览器）',
     fNameL:'商品名称', fNameP:'例如：冰丝吊带睡裙', fCatL:'分类', catW:'女士睡衣', catK:'儿童服装', catF:'亲子睡衣',
@@ -651,7 +679,7 @@ const T = {
     admOptimizeImg:'一键压缩已上传图片（加快首页加载）', admChangeImg:'点击换图', admEdit:'编辑', admOptimizing:'压缩中，请稍候…', admNoNeedOptimize:'没有需要压缩的图片，已经很小了 ✅', admOptimizingProgress:'压缩中… ({done}/{total})', admOptimizeDone:'完成！已压缩 {n} 张图片 ✅', admGuest:'访客', admPricePh:'价格', admStockPh:'库存', admConfirmPayment:'确认已收到这笔订单的款项？确认后推荐人会获得佣金。', admConfirmedPaidMsg:'已确认收款，佣金已入账。', admBonusSaved:'已保存，下级首购奖金现在是 RM {amt}', admSaveOk:'已保存 ✅', admFillName:'请填商品名称', admFillOnePrice:'至少填一个尺码的价格', admPublishOk:'已保存上架 ✅', admNoProducts:'还没有商品', admConfirmDeleteProduct:'确定删除这个商品？', sysNotConnected:'系统未连接', admOpFail:'失败：', admSaveFailShort:'保存失败', admGenericError:'出错了', aOrderFailDetail:'下单失败：', wdFailDetail:'提现失败：', admCatWomenShort:'女士', admTotalStock:'共{n}件', admMarkedPaid:'已标记打款', admRejectedRefunded:'已拒绝，余额已退回会员', admTrackingNoPh:'运单号', admSave:'保存',
     newT:'新品', saleT:'特惠', addT:'加入购物车', pFrom:'起', pLeft:'剩{n}件', pSold:'售罄', kgBoy:'男孩', kgGirl:'女孩', kgChart:'尺码对照表', cSize:'尺码', scTitle:'小孩尺码对照表', scWeight:'体重', scHeight:'身高', noProducts:'这个分类暂时还没有商品 🌷', alertFill:'请填写商品名称和售价', alertUp:'已上架！切到「商店」即可看到' },
 
-  en:{ freeShip:'Free shipping over RM 99 · 30-day returns', slogan:'Soft Comfort, Sweet Dreams', slogan2:'Soft Comfort, Sweet Dreams',
+  en:{ freeShip:'Free shipping over RM 99 · 30-day returns', slogan:'Wear Your Story.', slogan2:'Wear Your Story.',
     navShop:'Shop', navAdmin:'Admin', navCart:'Cart', navMember:'Member',
     navHome:'Home', navWomen:'Women', navKids:'Kids', navSale:'Sale',
     mTitle:'Member Referral Program', mSub:'Become a member, share your link — earn commission when friends order.', mNormalMember:'Member',
@@ -670,8 +698,23 @@ const T = {
     aConnecting:'Connecting, please try again', aFillLogin:'Please enter email and password', aCopied:'Link copied 🌸 share it with friends!', aCartAdded:'Added to cart 🛒', mWelcome:'Welcome back, {name} 🌸', mGuideTitle:'3 easy steps to start:', mGuide1:'1. Fill delivery info — get RM3', mGuide2:'2. Copy your link & share to earn', mGuide3:'3. Browse the shop & pick some favourites 🌸', aBadAmt:'Please enter a valid amount', aWdOk:'Withdrawal request submitted. Owner will pay after review.', wdTitle:'Withdraw commission', wdBalTpl:'Current balance RM {bal}', wdLowMsg:"Your balance is below RM {min}, so it can't be withdrawn yet (minimum withdrawal is RM {min}). No worries — you can still use this balance as store credit at checkout 🌸", wdAmtL:'Withdrawal amount (RM)', wdMethodL:'Payment method', wdMethodTng:'TNG e-wallet', wdMethodBank:'Bank transfer', wdNameL:'Account holder name', wdNameP:'Name matching your bank/TNG account', wdPhoneL:'TNG phone number', wdPhoneP:'e.g. 012-3456789', wdBankL:'Bank name', wdAccNoL:'Bank account number', wdAccNoP:'Enter full account number', wdBtn:'Submit withdrawal request', wdLater:'Maybe later', wdMinErr:'Withdrawal amount cannot be below RM {min}', wdMaxErr:'Withdrawal amount cannot exceed your balance',
     aPickSize:'Please select a size', aSoldOut:'This size is sold out', aStockShort:'Not enough stock', aCartEmpty:'Your cart is empty', aOrderFail:'Order failed, please retry',
     addrTitle:'Fill delivery info, get RM3', addrSub:'Fill info + add the App to your home screen to get RM3 (one-time)', addrName:'Name', addrPhone:'Phone', addrAddr:'Address', addrNameP:'Recipient name', addrPhoneP:'Phone e.g. 012-3456789', addrAddrP:'Unit no, street, taman/area', addrCity:'City', addrCityP:'e.g. Petaling Jaya', addrPostcode:'Postcode', addrPostcodeP:'e.g. 47800', addrState:'State', addrStateP:'Select state', addrBtn:'Install App & get RM3', addrLater:'Maybe later', addrFill:'Please fill all fields', addrPhoneInvalid:'Please enter a valid phone number', addrPostcodeInvalid:'Please enter a 5-digit postcode', addrGot:'You earned RM3!', addrEditTitle:'Edit delivery address', addrEditSub:'Update your delivery details for next time', addrSaveBtn:'Save address', addrSaved:'Address updated', installNeed:'Please add the App to your home screen to get RM3 — tap Install and confirm', iosTitle:'Add Yuna to your home screen:', iosStep1:'1. Tap the Share button', iosStep2:'2. Choose "Add to Home Screen"', iosStep3:'3. Come back and tap the button below', iosDone:'I have added it — get RM3',
-    heroTag:'Cozy Sleepwear · Sweet Kids', heroTitle:'Soft Comfort,<br><em>Sweet</em> Dreams',
-    heroDesc:'Soft, warm sleep moments<br>for you and your little one.', shopNow:'Shop now',
+    heroTag:'YUNA FASHION', heroTitle:'Wear Your <em>Story</em>.',
+    heroDesc:'Clothing made for real days, meaningful moments and the woman you already are.', shopNow:'Discover YUNA', ourStoryBtn:'Our Story',
+    homeStoryHeading:'Made for the Life You Live', homeStoryBody:'From busy mornings to quiet weekends, YUNA is created to move naturally through the moments that matter to you.',
+    aboutHeroLine:'Every woman carries a story worth wearing.',
+    aboutBeginningHeading:'Our Beginning',
+    aboutBeginningBody:'Every day, women move through many different roles.\n\nSome are building careers.\nSome are raising families.\nSome are starting again in a new place.\nSome are quietly working toward dreams that only they can see.\n\nYUNA began with a simple belief: what we wear should support real life, not make it more complicated.\n\nWe know that clothing cannot change a person’s entire life. But the right piece can change how a day feels. It can bring comfort on a busy morning, confidence before an important moment, or a small reminder to make space for yourself.\n\nThat is why we create clothing for ordinary days that matter.\n\nFor work and weekends.\nFor coffee and conversations.\nFor family time, travel and new beginnings.\n\nYUNA is not about dressing like somebody else.\n\nIt is about feeling comfortable, confident and recognisably yourself.',
+    aboutBelieveHeading:'What We Believe',
+    aboutVal1Name:'Confidence', aboutVal1Line:'Feeling good in what you wear, just as you are.',
+    aboutVal2Name:'Comfort', aboutVal2Line:'Ease that lasts from morning to night.',
+    aboutVal3Name:'Authenticity', aboutVal3Line:'Style that feels like you, not someone else.',
+    aboutVal4Name:'Family', aboutVal4Line:'Made with the people we love in mind.',
+    aboutVal5Name:'Growth', aboutVal5Line:'Room to change, grow and become.',
+    aboutPhilosophyHeading:'Designed for Real Life',
+    aboutPhilosophyBody:'We do not design only for photographs or passing trends.\n\nWe design for the moments that make up everyday life.\n\nA piece should feel comfortable during a busy morning, easy to style before work, suitable for time with family and natural enough to wear again and again.\n\nOur approach is guided by five principles:\n\n1. Comfort that supports the day.\n2. Silhouettes that feel natural and wearable.\n3. Details that add character without becoming excessive.\n4. Versatility across work, weekends and family life.\n5. Pieces customers will genuinely want to wear again.\n\nGood design should not overpower the person wearing it.\n\nIt should give her room to move, live and tell her own story.',
+    aboutClosingBody:'Made for real women, real moments and the stories still being written.',
+    aboutSeoTitle:'Our Story | YUNA Fashion',
+    aboutSeoDesc:'Discover YUNA Fashion, a women’s lifestyle brand creating comfortable, thoughtful clothing for real days, meaningful moments and every story still being written.',
     prodTitle:'Best sellers', viewMore:'View more', promoSub:'Limited offer', promoTitle:'20% off all kids wear', promoDesc:'This week only, selected styles', promoBtn:'Shop sale',
     adminTitle:'Admin · Add products', adminSub:'Fill in details → upload image → save. Appears in shop instantly (saved in this browser).',
     fNameL:'Product name', fNameP:'e.g. Silky Slip Nightgown', fCatL:'Category', catW:'Women Sleepwear', catK:'Kids Wear', catF:'Family Pajamas',
@@ -686,7 +729,7 @@ const T = {
     footBrandH:'Our story', footBrand1:'About us', footBrand2:'Design', footBrand3:'Partnership', footContactH:'Contact', footC1:'Live chat', rights:'All rights reserved', chatTitle:'Live chat', chatHi:'Hi! How can we help? We will reply soon 🌸', chatPh:'Type a message…', chatSendBtn:'Send',
     newT:'New', saleT:'Sale', addT:'Add to cart', pFrom:'+', pLeft:'{n} left', pSold:'Sold out', kgBoy:'Boy', kgGirl:'Girl', kgChart:'Size chart', cSize:'Size', scTitle:'Kids size chart', scWeight:'Weight', scHeight:'Height', noProducts:'No products in this category yet 🌷', alertFill:'Please enter name and price', alertUp:'Published! Switch to Shop to see it' },
 
-  ms:{ freeShip:'Penghantaran percuma melebihi RM 99 · Pulangan 30 hari', slogan:'Lembut Selesa, Tidur Lena', slogan2:'Lembut Selesa, Tidur Lena',
+  ms:{ freeShip:'Penghantaran percuma melebihi RM 99 · Pulangan 30 hari', slogan:'Wear Your Story.', slogan2:'Wear Your Story.',
     navShop:'Kedai', navAdmin:'Pentadbir', navCart:'Troli', navMember:'Ahli',
     navHome:'Utama', navWomen:'Wanita', navKids:'Kanak', navSale:'Promosi',
     mTitle:'Program Rujukan Ahli', mSub:'Daftar jadi ahli, kongsi pautan anda — dapat komisen bila kawan beli.', mNormalMember:'Ahli',
@@ -705,8 +748,23 @@ const T = {
     aConnecting:'Menyambung, sila cuba lagi', aFillLogin:'Sila isi emel dan kata laluan', aCopied:'Pautan disalin 🌸 kongsi dengan kawan!', aCartAdded:'Ditambah ke troli 🛒', mWelcome:'Selamat kembali, {name} 🌸', mGuideTitle:'3 langkah mudah untuk mula:', mGuide1:'1. Isi maklumat penghantaran — dapat RM3', mGuide2:'2. Salin pautan anda & kongsi untuk komisen', mGuide3:'3. Layari kedai & pilih kesukaan anda 🌸', aBadAmt:'Sila masukkan jumlah yang sah', aWdOk:'Permohonan keluar dihantar. Pemilik akan bayar selepas semakan.', wdTitle:'Keluarkan komisen', wdBalTpl:'Baki semasa RM {bal}', wdLowMsg:'Baki anda kurang daripada RM {min}, jadi belum boleh dikeluarkan (minimum RM {min}). Jangan risau — baki ini masih boleh digunakan sebagai kredit semasa bayaran 🌸', wdAmtL:'Jumlah pengeluaran (RM)', wdMethodL:'Kaedah pembayaran', wdMethodTng:'TNG e-wallet', wdMethodBank:'Pindahan bank', wdNameL:'Nama pemegang akaun', wdNameP:'Nama sama seperti akaun bank/TNG', wdPhoneL:'No. telefon TNG', wdPhoneP:'cth 012-3456789', wdBankL:'Nama bank', wdAccNoL:'Nombor akaun bank', wdAccNoP:'Masukkan nombor akaun penuh', wdBtn:'Hantar permohonan keluar', wdLater:'Kemudian', wdMinErr:'Jumlah pengeluaran tidak boleh kurang daripada RM {min}', wdMaxErr:'Jumlah pengeluaran tidak boleh melebihi baki anda',
     aPickSize:'Sila pilih saiz', aSoldOut:'Saiz ini habis dijual', aStockShort:'Stok tidak cukup', aCartEmpty:'Troli anda kosong', aOrderFail:'Pesanan gagal, sila cuba lagi',
     addrTitle:'Isi maklumat penghantaran, dapat RM3', addrSub:'Isi maklumat + tambah App ke skrin utama untuk dapat RM3 (sekali)', addrName:'Nama', addrPhone:'No. telefon', addrAddr:'Alamat', addrNameP:'Nama penerima', addrPhoneP:'No. telefon cth 012-3456789', addrAddrP:'No. unit, jalan, taman/kawasan', addrCity:'Bandar', addrCityP:'cth. Petaling Jaya', addrPostcode:'Poskod', addrPostcodeP:'cth. 47800', addrState:'Negeri', addrStateP:'Pilih negeri', addrBtn:'Pasang App & dapat RM3', addrLater:'Kemudian', addrFill:'Sila isi semua maklumat', addrPhoneInvalid:'Sila masukkan nombor telefon yang sah', addrPostcodeInvalid:'Sila masukkan poskod 5 digit', addrGot:'Anda dapat RM3!', addrEditTitle:'Edit alamat penghantaran', addrEditSub:'Kemas kini maklumat penghantaran anda untuk kali seterusnya', addrSaveBtn:'Simpan alamat', addrSaved:'Alamat dikemaskini', installNeed:'Sila tambah App ke skrin utama untuk dapat RM3 — tekan Pasang', iosTitle:'Tambah Yuna ke skrin utama:', iosStep1:'1. Tekan butang Kongsi (Share)', iosStep2:'2. Pilih "Add to Home Screen"', iosStep3:'3. Kembali dan tekan butang di bawah', iosDone:'Saya sudah tambah — dapat RM3',
-    heroTag:'Baju Tidur Selesa · Comel untuk Anak', heroTitle:'Lembut Selesa,<br><em>Tidur</em> Lena',
-    heroDesc:'Saat tidur lembut dan hangat<br>untuk anda dan si kecil.', shopNow:'Beli sekarang',
+    heroTag:'YUNA FASHION', heroTitle:'Wear Your <em>Story</em>.',
+    heroDesc:'Pakaian untuk kehidupan sebenar, detik yang bermakna dan diri anda yang sebenar.', shopNow:'Terokai YUNA', ourStoryBtn:'Kisah Kami',
+    homeStoryHeading:'Direka untuk Kehidupan Anda', homeStoryBody:'Dari pagi yang sibuk hingga hujung minggu yang tenang, YUNA dicipta untuk mengiringi setiap detik yang bermakna buat anda.',
+    aboutHeroLine:'Setiap wanita mempunyai kisah yang layak dipakai dengan bangga.',
+    aboutBeginningHeading:'Permulaan Kami',
+    aboutBeginningBody:'Setiap hari, wanita menjalani pelbagai peranan dalam kehidupan.\n\nAda yang membina kerjaya.\nAda yang menjaga keluarga.\nAda yang memulakan kehidupan baharu di tempat yang asing.\nAda juga yang terus berusaha mengejar impian yang hanya mereka sendiri dapat lihat.\n\nYUNA bermula dengan satu kepercayaan yang mudah:\n\nPakaian sepatutnya melengkapi kehidupan sebenar, bukan menjadikannya lebih rumit.\n\nKami tahu bahawa sehelai pakaian tidak mampu mengubah seluruh kehidupan seseorang.\n\nNamun pakaian yang tepat boleh mengubah perasaan dalam satu hari.\n\nIa boleh memberi keselesaan pada pagi yang sibuk, keyakinan sebelum saat yang penting, dan mengingatkan kita supaya tidak melupakan diri sendiri ketika menjaga orang lain.\n\nSebab itu kami menghasilkan pakaian untuk hari-hari biasa yang sebenarnya sangat bermakna.\n\nUntuk bekerja dan berehat.\nUntuk minum kopi dan berbual.\nUntuk masa bersama keluarga, perjalanan dan permulaan yang baharu.\n\nYUNA bukan tentang menjadi orang lain.\n\nIa tentang berasa selesa, yakin dan tetap menjadi diri sendiri.',
+    aboutBelieveHeading:'Apa Yang Kami Percaya',
+    aboutVal1Name:'Keyakinan', aboutVal1Line:'Berasa selesa dengan diri sendiri, apa adanya.',
+    aboutVal2Name:'Keselesaan', aboutVal2Line:'Rasa selesa dari pagi hingga malam.',
+    aboutVal3Name:'Keaslian', aboutVal3Line:'Gaya yang terasa seperti anda, bukan orang lain.',
+    aboutVal4Name:'Keluarga', aboutVal4Line:'Direka dengan orang tersayang di hati kami.',
+    aboutVal5Name:'Pertumbuhan', aboutVal5Line:'Ruang untuk berubah, berkembang dan menjadi diri yang lebih baik.',
+    aboutPhilosophyHeading:'Direka untuk Kehidupan Sebenar',
+    aboutPhilosophyBody:'Kami tidak mereka hanya untuk gambar atau tren sementara.\n\nKami mereka untuk detik-detik yang membentuk kehidupan seharian.\n\nSetiap helaian harus terasa selesa pada pagi yang sibuk, mudah dipadankan sebelum bekerja, sesuai untuk masa bersama keluarga dan cukup semula jadi untuk dipakai berulang kali.\n\nPendekatan kami dipandu oleh lima prinsip:\n\n1. Keselesaan yang menyokong sepanjang hari.\n2. Potongan yang terasa semula jadi dan selesa dipakai.\n3. Butiran yang menambah keunikan tanpa berlebihan.\n4. Kepelbagaian untuk bekerja, hujung minggu dan kehidupan berkeluarga.\n5. Rekaan yang pelanggan benar-benar ingin pakai berulang kali.\n\nReka bentuk yang baik tidak sepatutnya mengatasi peribadi orang yang memakainya.\n\nIa sepatutnya memberi ruang untuknya bergerak, hidup dan menceritakan kisahnya sendiri.',
+    aboutClosingBody:'Direka untuk wanita sebenar, kehidupan sebenar dan kisah yang masih sedang ditulis.',
+    aboutSeoTitle:'Kisah Kami | YUNA Fashion',
+    aboutSeoDesc:'Ketahui bagaimana YUNA Fashion mencipta pakaian yang selesa dan penuh pertimbangan untuk hari-hari sebenar, detik bermakna dan setiap kisah wanita yang masih ditulis.',
     prodTitle:'Paling laris', viewMore:'Lihat lagi', promoSub:'Tawaran terhad', promoTitle:'20% diskaun pakaian kanak', promoDesc:'Minggu ini sahaja, gaya terpilih', promoBtn:'Beli jualan',
     adminTitle:'Pentadbir · Tambah produk', adminSub:'Isi maklumat → muat naik gambar → simpan. Terus muncul di kedai (disimpan dalam pelayar ini).',
     fNameL:'Nama produk', fNameP:'cth: Gaun Tidur Sutera', fCatL:'Kategori', catW:'Baju Tidur Wanita', catK:'Pakaian Kanak', catF:'Piyama Keluarga',
@@ -721,7 +779,7 @@ const T = {
     footBrandH:'Kisah kami', footBrand1:'Tentang kami', footBrand2:'Reka bentuk', footBrand3:'Kerjasama', footContactH:'Hubungi', footC1:'Sembang langsung', rights:'Hak cipta terpelihara', chatTitle:'Sembang langsung', chatHi:'Hai! Boleh kami bantu? Kami akan balas segera 🌸', chatPh:'Taip mesej…', chatSendBtn:'Hantar',
     newT:'Baharu', saleT:'Jualan', addT:'Tambah ke troli', pFrom:'+', pLeft:'tinggal {n}', pSold:'Habis', kgBoy:'Lelaki', kgGirl:'Perempuan', kgChart:'Carta saiz', cSize:'Saiz', scTitle:'Carta saiz kanak-kanak', scWeight:'Berat', scHeight:'Tinggi', noProducts:'Belum ada produk dalam kategori ini 🌷', alertFill:'Sila isi nama dan harga', alertUp:'Diterbitkan! Tukar ke Kedai untuk lihat' },
 
-  vi:{ freeShip:'Miễn phí vận chuyển trên RM 99 · Đổi trả 30 ngày', slogan:'Êm ái mỗi đêm, ngọt ngào giấc mơ', slogan2:'Êm ái mỗi đêm, ngọt ngào giấc mơ',
+  vi:{ freeShip:'Miễn phí vận chuyển trên RM 99 · Đổi trả 30 ngày', slogan:'Wear Your Story.', slogan2:'Wear Your Story.',
     navShop:'Cửa hàng', navAdmin:'Quản trị', navCart:'Giỏ hàng', navMember:'Thành viên',
     navHome:'Trang chủ', navWomen:'Đồ nữ', navKids:'Trẻ em', navSale:'Ưu đãi',
     mTitle:'Chương trình giới thiệu', mSub:'Đăng ký thành viên, chia sẻ link — nhận hoa hồng khi bạn bè đặt hàng.', mNormalMember:'Thành viên',
@@ -740,8 +798,23 @@ const T = {
     aConnecting:'Đang kết nối, vui lòng thử lại', aFillLogin:'Vui lòng nhập email và mật khẩu', aCopied:'Đã sao chép link 🌸 chia sẻ với bạn bè nhé!', aCartAdded:'Đã thêm vào giỏ 🛒', mWelcome:'Chào mừng trở lại, {name} 🌸', mGuideTitle:'3 bước dễ để bắt đầu:', mGuide1:'1. Điền thông tin giao hàng — nhận RM3', mGuide2:'2. Sao chép link & chia sẻ để kiếm hoa hồng', mGuide3:'3. Dạo cửa hàng & chọn vài món yêu thích 🌸', aBadAmt:'Vui lòng nhập số tiền hợp lệ', aWdOk:'Đã gửi yêu cầu rút. Chủ shop sẽ thanh toán sau khi duyệt.', wdTitle:'Rút hoa hồng', wdBalTpl:'Số dư hiện tại RM {bal}', wdLowMsg:'Số dư của bạn dưới RM {min} nên chưa thể rút (mức rút tối thiểu là RM {min}). Đừng lo — số dư này vẫn có thể dùng làm tín dụng khi thanh toán 🌸', wdAmtL:'Số tiền rút (RM)', wdMethodL:'Phương thức nhận tiền', wdMethodTng:'Ví TNG', wdMethodBank:'Chuyển khoản ngân hàng', wdNameL:'Tên chủ tài khoản', wdNameP:'Tên khớp với tài khoản ngân hàng/TNG', wdPhoneL:'Số điện thoại TNG', wdPhoneP:'vd 012-3456789', wdBankL:'Tên ngân hàng', wdAccNoL:'Số tài khoản ngân hàng', wdAccNoP:'Nhập đầy đủ số tài khoản', wdBtn:'Gửi yêu cầu rút tiền', wdLater:'Để sau', wdMinErr:'Số tiền rút không được thấp hơn RM {min}', wdMaxErr:'Số tiền rút không được vượt quá số dư của bạn',
     aPickSize:'Vui lòng chọn size', aSoldOut:'Size này đã hết hàng', aStockShort:'Không đủ hàng', aCartEmpty:'Giỏ hàng trống', aOrderFail:'Đặt hàng thất bại, vui lòng thử lại',
     addrTitle:'Điền thông tin giao hàng, nhận RM3', addrSub:'Điền thông tin + thêm App vào màn hình chính để nhận RM3 (một lần)', addrName:'Tên', addrPhone:'Số điện thoại', addrAddr:'Địa chỉ', addrNameP:'Tên người nhận', addrPhoneP:'SĐT vd 012-3456789', addrAddrP:'Số nhà, đường, khu vực', addrCity:'Thành phố', addrCityP:'vd: Petaling Jaya', addrPostcode:'Mã bưu điện', addrPostcodeP:'vd: 47800', addrState:'Bang', addrStateP:'Chọn bang', addrBtn:'Cài App & nhận RM3', addrLater:'Để sau', addrFill:'Vui lòng điền đủ thông tin', addrPhoneInvalid:'Vui lòng nhập số điện thoại hợp lệ', addrPostcodeInvalid:'Vui lòng nhập mã bưu điện 5 chữ số', addrGot:'Bạn nhận được RM3!', addrEditTitle:'Sửa địa chỉ giao hàng', addrEditSub:'Cập nhật thông tin giao hàng cho lần sau', addrSaveBtn:'Lưu địa chỉ', addrSaved:'Đã cập nhật địa chỉ', installNeed:'Vui lòng thêm App vào màn hình chính để nhận RM3 — bấm Cài đặt', iosTitle:'Thêm Yuna vào màn hình chính:', iosStep1:'1. Bấm nút Chia sẻ (Share)', iosStep2:'2. Chọn "Add to Home Screen"', iosStep3:'3. Quay lại và bấm nút bên dưới', iosDone:'Tôi đã thêm — nhận RM3',
-    heroTag:'Đồ ngủ êm ái · Đồ trẻ em xinh xắn', heroTitle:'Êm ái mỗi đêm,<br>ngọt ngào <em>giấc mơ</em>',
-    heroDesc:'Khoảnh khắc ngủ êm ấm<br>cho bạn và bé yêu.', shopNow:'Mua ngay',
+    heroTag:'YUNA FASHION', heroTitle:'Wear Your <em>Story</em>.',
+    heroDesc:'Trang phục dành cho những ngày thật, những khoảnh khắc ý nghĩa và chính con người bạn.', shopNow:'Khám Phá YUNA', ourStoryBtn:'Câu Chuyện Của Chúng Tôi',
+    homeStoryHeading:'Được Tạo Ra Cho Cuộc Sống Của Bạn', homeStoryBody:'Từ những buổi sáng bận rộn đến cuối tuần yên bình, YUNA được tạo ra để đồng hành tự nhiên trong những khoảnh khắc quan trọng với bạn.',
+    aboutHeroLine:'Mỗi người phụ nữ đều có một câu chuyện xứng đáng được thể hiện.',
+    aboutBeginningHeading:'Khởi Đầu Của Chúng Tôi',
+    aboutBeginningBody:'Mỗi ngày, phụ nữ bước qua nhiều vai trò khác nhau trong cuộc sống.\n\nCó người đang xây dựng sự nghiệp.\nCó người chăm sóc gia đình.\nCó người bắt đầu lại ở một nơi hoàn toàn mới.\nVà cũng có người âm thầm tiến về phía những ước mơ chỉ riêng mình nhìn thấy.\n\nYUNA bắt đầu từ một niềm tin rất đơn giản:\n\nTrang phục nên đồng hành cùng cuộc sống thật, chứ không khiến cuộc sống trở nên phức tạp hơn.\n\nChúng tôi hiểu rằng một bộ trang phục không thể thay đổi toàn bộ cuộc đời.\n\nNhưng một thiết kế phù hợp có thể thay đổi cảm xúc của một ngày.\n\nNó có thể mang lại sự thoải mái trong một buổi sáng bận rộn, thêm một chút tự tin trước khoảnh khắc quan trọng, và nhắc bạn dành một khoảng nhỏ cho chính mình trong khi vẫn luôn chăm sóc mọi người xung quanh.\n\nVì vậy, chúng tôi thiết kế cho những ngày tưởng như bình thường nhưng luôn đáng được trân trọng.\n\nCho công việc và cuối tuần.\nCho những buổi cà phê và những cuộc trò chuyện.\nCho gia đình, những chuyến đi và những khởi đầu mới.\n\nYUNA không muốn bạn trở thành một người khác.\n\nChúng tôi mong bạn cảm thấy thoải mái, tự tin và vẫn là chính mình.',
+    aboutBelieveHeading:'Điều Chúng Tôi Tin Tưởng',
+    aboutVal1Name:'Tự tin', aboutVal1Line:'Cảm thấy thoải mái với chính con người bạn.',
+    aboutVal2Name:'Thoải mái', aboutVal2Line:'Dễ chịu từ sáng đến tối.',
+    aboutVal3Name:'Chân thật', aboutVal3Line:'Phong cách giống bạn, không phải ai khác.',
+    aboutVal4Name:'Gia đình', aboutVal4Line:'Được tạo ra với những người ta yêu thương trong tâm trí.',
+    aboutVal5Name:'Trưởng thành', aboutVal5Line:'Một khoảng không để thay đổi, phát triển và trở thành chính mình.',
+    aboutPhilosophyHeading:'Thiết Kế Cho Cuộc Sống Thật',
+    aboutPhilosophyBody:'Chúng tôi không chỉ thiết kế để chụp ảnh hay chạy theo xu hướng nhất thời.\n\nChúng tôi thiết kế cho những khoảnh khắc tạo nên cuộc sống hằng ngày.\n\nMột thiết kế nên mang lại cảm giác thoải mái trong buổi sáng bận rộn, dễ dàng phối đồ trước giờ làm, phù hợp cho thời gian bên gia đình và đủ tự nhiên để được mặc đi mặc lại nhiều lần.\n\nCách tiếp cận của chúng tôi được dẫn dắt bởi năm nguyên tắc:\n\n1. Sự thoải mái đồng hành cùng cả ngày dài.\n2. Form dáng tự nhiên và dễ mặc.\n3. Chi tiết tạo nên cá tính mà không cầu kỳ quá mức.\n4. Tính linh hoạt cho công việc, cuối tuần và cuộc sống gia đình.\n5. Những thiết kế khách hàng thực sự muốn mặc lại nhiều lần.\n\nMột thiết kế tốt không nên lấn át người mặc nó.\n\nNó nên cho cô ấy không gian để di chuyển, sống trọn vẹn và kể câu chuyện của riêng mình.',
+    aboutClosingBody:'Được tạo ra cho những người phụ nữ thật, những khoảnh khắc thật và những câu chuyện vẫn đang được viết tiếp.',
+    aboutSeoTitle:'Câu Chuyện Của Chúng Tôi | YUNA Fashion',
+    aboutSeoDesc:'Khám phá YUNA Fashion — thương hiệu thời trang dành cho phụ nữ, tạo nên những thiết kế thoải mái và tinh tế cho những ngày thật, khoảnh khắc ý nghĩa và câu chuyện vẫn đang được viết tiếp.',
     prodTitle:'Bán chạy nhất', viewMore:'Xem thêm', promoSub:'Ưu đãi có hạn', promoTitle:'Giảm 20% đồ trẻ em', promoDesc:'Chỉ tuần này, mẫu chọn lọc', promoBtn:'Mua ngay',
     adminTitle:'Quản trị · Thêm sản phẩm', adminSub:'Điền thông tin → tải ảnh → lưu. Hiện ngay trong cửa hàng (lưu trong trình duyệt này).',
     fNameL:'Tên sản phẩm', fNameP:'vd: Váy ngủ lụa', fCatL:'Danh mục', catW:'Đồ ngủ nữ', catK:'Đồ trẻ em', catF:'Pyjama gia đình',
@@ -863,6 +936,7 @@ function showShop(f){
   const tab=document.getElementById('tab_'+f); if(tab) tab.classList.add('active');
   const hero=document.querySelector('.hero'); if(hero) hero.style.display=f==='all'?'':'none';
   const promo=document.querySelector('.promo-banner'); if(promo) promo.style.display=f==='all'?'':'none';
+  const story=document.getElementById('homeStorySection'); if(story) story.style.display=f==='all'?'':'none';
   renderShop();
 }
 function matchFilter(p){
@@ -2067,9 +2141,56 @@ document.addEventListener('change', function(e){
     </div>
   </div>
   <script>
-const INFO={"order": {"t": {"zh": "如何下单", "en": "How to order", "ms": "Cara pesanan", "vi": "Cách đặt hàng"}, "c": {"zh": "1. 浏览商店,挑选喜欢的睡衣或童装\n2. 选好尺码,点「加入购物车」\n3. 进入购物车,确认商品与数量,点「前往结算」\n4. 选择付款方式(Touch 'n Go eWallet / DuitNow QR),转账后上传付款截图\n5. 提交订单 ✅ 我们核对付款后会尽快安排发货,并以 WhatsApp / 短信通知你 🌸", "en": "1. Browse the shop and pick what you like\n2. Choose your size and tap “Add to cart”\n3. Open the cart, check items & quantity, tap “Checkout”\n4. Pay via Touch 'n Go eWallet / DuitNow QR, then upload the payment screenshot\n5. Submit your order. Once we verify payment we’ll ship it and notify you via WhatsApp/SMS 🌸"}}, "size": {"t": {"zh": "尺码指南", "en": "Size guide", "ms": "Panduan saiz", "vi": "Hướng dẫn size"}, "c": {"zh": "👗 女士睡衣:M / L / XL(版型偏宽松,居家舒适)\n\n🧒 小孩服装:共 11 个尺码\n4 · 5 · 6 · 7 · 8 · 9 · 10 · 11 · 12 · S · M\n(依孩子年龄 / 身高选择)\n\n📏 小贴士:\n• 以孩子的身高和平时穿着尺码为准\n• 若介于两个尺码之间,建议选大一码更舒适\n\n需要帮忙?点右下角「在线客服」,告诉我们宝贝的身高体重,我们帮你推荐尺码 🌸", "en": "👗 Women's sleepwear: M / L / XL (relaxed, comfy fit)\n\n🧒 Kids: 11 sizes\n4 · 5 · 6 · 7 · 8 · 9 · 10 · 11 · 12 · S · M (by age / height)\n\n📏 Tip: go by your child's height and usual size; if in between, size up for comfort.\n\nNeed help? Tap Live Chat with your child's height & weight and we'll recommend a size 🌸"}}, "shipping": {"t": {"zh": "配送说明", "en": "Shipping", "ms": "Penghantaran", "vi": "Vận chuyển"}, "c": {"zh": "🚚 运费\n• 单笔满 RM99 —— 免邮\n• 未满 RM99 —— 运费 RM7(全马统一)\n\n📦 发货时间\n• 确认付款后 1–3 个工作日内寄出\n• 透过 J&T / Pos Laju 等快递派送\n\n⏱️ 送达时间\n• 西马:约 2–4 个工作日\n• 东马(沙巴 / 砂拉越):约 3–7 个工作日\n\n• 发货后我们会以 WhatsApp / 短信提供追踪号码\n• 公共假期或大促期间或略有延迟,敬请谅解 🌸", "en": "🚚 Shipping fee\n• Orders RM99 & above — FREE\n• Below RM99 — RM7 flat (all Malaysia)\n\n📦 Dispatch: within 1–3 working days after payment is confirmed, via J&T / Pos Laju.\n\n⏱️ Delivery: West Malaysia ~2–4 working days; East Malaysia (Sabah/Sarawak) ~3–7 working days.\n\nA tracking number is shared via WhatsApp/SMS after dispatch. Slight delays may occur during holidays/sales 🌸"}}, "returns": {"t": {"zh": "退换政策", "en": "Returns", "ms": "Pulangan", "vi": "Đổi trả"}, "c": {"zh": "我们希望你和宝贝都满意 🌸\n\n↩️ 退换期限:收到货起 7 天内可申请\n\n✅ 条件:\n• 商品全新、未穿着 / 未洗涤,吊牌完整,连同原包装\n• 基于卫生考量,睡衣 / 贴身衣物一经拆封,非质量问题恕不退换\n\n🛠️ 若收到瑕疵或错发商品:\n请在 3 天内联系我们并附上照片,我们免费更换或退款\n\n🚚 退换运费:\n• 质量问题:由我们承担\n• 个人原因(如尺码不合):由买家承担来回运费\n\n📩 申请方式:点「在线客服」或 WhatsApp,提供订单号 + 照片\n\n(本政策依据马来西亚消费者权益保障常规制定)", "en": "We want you and your little one to be happy 🌸\n\n↩️ Window: request within 7 days of delivery.\n\n✅ Conditions: item unused/unwashed, tags intact, in original packaging. For hygiene, opened sleepwear/intimates are non-returnable unless defective.\n\n🛠️ Faulty/wrong item: contact us within 3 days with photos for a free replacement or refund.\n\n🚚 Return shipping: covered by us for quality issues; buyer covers two-way postage for personal reasons (e.g. wrong size).\n\n📩 How: Live Chat or WhatsApp us with your order number + photos.\n\n(In line with Malaysian consumer-protection norms.)"}}, "about": {"t": {"zh": "关于我们", "en": "About us", "ms": "Tentang kami", "vi": "Về chúng tôi"}, "c": {"zh": "Yuna Fashion 始于一个简单的心愿 —— 让每一个家庭,都能拥有柔软安稳的睡眠时光。\n\n我们相信,睡衣不只是衣服,而是夜里最贴近肌肤的温柔陪伴。忙碌了一天,换上一件亲肤舒适的睡衣,是给自己和家人的一份小小关怀。\n\n从妈妈到宝贝,我们用心挑选每一块面料、每一道车缝,只为把这份温暖带进你的家。\n\n愿 Yuna 陪你和最爱的人,安睡每一夜 🌙", "en": "Yuna Fashion began with one simple wish — that every family could enjoy soft, peaceful nights.\n\nTo us, sleepwear isn't just clothing; it's the gentlest companion against your skin at night. After a long day, slipping into something soft is a small act of care for you and those you love.\n\nFrom mum to little one, we choose every fabric and stitch with heart, to bring that warmth into your home.\n\nMay Yuna keep you and your dearest sleeping soundly, every night 🌙"}}, "design": {"t": {"zh": "设计理念", "en": "Design", "ms": "Reka bentuk", "vi": "Thiết kế"}, "c": {"zh": "柔软 · 关怀 · 安稳 —— 这是 Yuna 的三个设计初心。\n\n🕊️ 柔软:精选亲肤面料(冰丝、纯棉),贴身不刺激,让肌肤自在呼吸。\n\n💗 关怀:剪裁宽松不勒身,细节车缝顺滑,连宝贝娇嫩的肌肤也能安心穿着。\n\n🌙 安稳:温柔的色调与简约版型,陪你卸下一天疲惫,把安稳与好眠带回家。\n\n每一件 Yuna,都愿成为你和家人夜晚里最安心的依靠。", "en": "Soft · Caring · Calm — the three hearts behind every Yuna piece.\n\n🕊️ Soft: skin-friendly fabrics (silky, pure cotton) that let skin breathe.\n\n💗 Caring: relaxed cuts and smooth seams, gentle enough for little ones' delicate skin.\n\n🌙 Calm: soothing tones and simple shapes to help you unwind and sleep well.\n\nEvery Yuna piece hopes to be your family's most reassuring comfort at night."}}, "partner": {"t": {"zh": "合作联系", "en": "Partnership", "ms": "Kerjasama", "vi": "Hợp tác"}, "c": {"zh": "欢迎批发、代理或品牌合作洽谈 🤝\n\n如果你也想把这份柔软与温暖带给更多家庭,欢迎联系我们:\n\n• 点右下角「在线客服」留言\n• 或透过页脚的 WhatsApp 与我们联系\n\n请留下你的称呼、联系方式与合作意向,我们会尽快回复你 🌸", "en": "We welcome wholesale, reseller and brand collaborations 🤝\n\nIf you'd love to bring this softness and warmth to more families, reach us:\n\n• Tap Live Chat (bottom-right) to leave a message\n• Or contact us via the WhatsApp link in the footer\n\nLeave your name, contact and what you have in mind — we'll get back to you soon 🌸"}}};
-function openInfo(k){var m=document.getElementById('infoModal');if(!m||!INFO[k])return;var it=INFO[k];document.getElementById('infoTitle').textContent=(it.t[lang]||it.t.zh);document.getElementById('infoBody').textContent=(it.c[lang]||it.c.en||it.c.zh);m.classList.remove('hide');}
-function closeInfo(){var m=document.getElementById('infoModal');if(m)m.classList.add('hide');}
+const INFO={"order": {"t": {"zh": "如何下单", "en": "How to order", "ms": "Cara pesanan", "vi": "Cách đặt hàng"}, "c": {"zh": "1. 浏览商店,挑选喜欢的睡衣或童装\n2. 选好尺码,点「加入购物车」\n3. 进入购物车,确认商品与数量,点「前往结算」\n4. 选择付款方式(Touch 'n Go eWallet / DuitNow QR),转账后上传付款截图\n5. 提交订单 ✅ 我们核对付款后会尽快安排发货,并以 WhatsApp / 短信通知你 🌸", "en": "1. Browse the shop and pick what you like\n2. Choose your size and tap “Add to cart”\n3. Open the cart, check items & quantity, tap “Checkout”\n4. Pay via Touch 'n Go eWallet / DuitNow QR, then upload the payment screenshot\n5. Submit your order. Once we verify payment we’ll ship it and notify you via WhatsApp/SMS 🌸"}}, "size": {"t": {"zh": "尺码指南", "en": "Size guide", "ms": "Panduan saiz", "vi": "Hướng dẫn size"}, "c": {"zh": "👗 女士睡衣:M / L / XL(版型偏宽松,居家舒适)\n\n🧒 小孩服装:共 11 个尺码\n4 · 5 · 6 · 7 · 8 · 9 · 10 · 11 · 12 · S · M\n(依孩子年龄 / 身高选择)\n\n📏 小贴士:\n• 以孩子的身高和平时穿着尺码为准\n• 若介于两个尺码之间,建议选大一码更舒适\n\n需要帮忙?点右下角「在线客服」,告诉我们宝贝的身高体重,我们帮你推荐尺码 🌸", "en": "👗 Women's sleepwear: M / L / XL (relaxed, comfy fit)\n\n🧒 Kids: 11 sizes\n4 · 5 · 6 · 7 · 8 · 9 · 10 · 11 · 12 · S · M (by age / height)\n\n📏 Tip: go by your child's height and usual size; if in between, size up for comfort.\n\nNeed help? Tap Live Chat with your child's height & weight and we'll recommend a size 🌸"}}, "shipping": {"t": {"zh": "配送说明", "en": "Shipping", "ms": "Penghantaran", "vi": "Vận chuyển"}, "c": {"zh": "🚚 运费\n• 单笔满 RM99 —— 免邮\n• 未满 RM99 —— 运费 RM7(全马统一)\n\n📦 发货时间\n• 确认付款后 1–3 个工作日内寄出\n• 透过 J&T / Pos Laju 等快递派送\n\n⏱️ 送达时间\n• 西马:约 2–4 个工作日\n• 东马(沙巴 / 砂拉越):约 3–7 个工作日\n\n• 发货后我们会以 WhatsApp / 短信提供追踪号码\n• 公共假期或大促期间或略有延迟,敬请谅解 🌸", "en": "🚚 Shipping fee\n• Orders RM99 & above — FREE\n• Below RM99 — RM7 flat (all Malaysia)\n\n📦 Dispatch: within 1–3 working days after payment is confirmed, via J&T / Pos Laju.\n\n⏱️ Delivery: West Malaysia ~2–4 working days; East Malaysia (Sabah/Sarawak) ~3–7 working days.\n\nA tracking number is shared via WhatsApp/SMS after dispatch. Slight delays may occur during holidays/sales 🌸"}}, "returns": {"t": {"zh": "退换政策", "en": "Returns", "ms": "Pulangan", "vi": "Đổi trả"}, "c": {"zh": "我们希望你和宝贝都满意 🌸\n\n↩️ 退换期限:收到货起 7 天内可申请\n\n✅ 条件:\n• 商品全新、未穿着 / 未洗涤,吊牌完整,连同原包装\n• 基于卫生考量,睡衣 / 贴身衣物一经拆封,非质量问题恕不退换\n\n🛠️ 若收到瑕疵或错发商品:\n请在 3 天内联系我们并附上照片,我们免费更换或退款\n\n🚚 退换运费:\n• 质量问题:由我们承担\n• 个人原因(如尺码不合):由买家承担来回运费\n\n📩 申请方式:点「在线客服」或 WhatsApp,提供订单号 + 照片\n\n(本政策依据马来西亚消费者权益保障常规制定)", "en": "We want you and your little one to be happy 🌸\n\n↩️ Window: request within 7 days of delivery.\n\n✅ Conditions: item unused/unwashed, tags intact, in original packaging. For hygiene, opened sleepwear/intimates are non-returnable unless defective.\n\n🛠️ Faulty/wrong item: contact us within 3 days with photos for a free replacement or refund.\n\n🚚 Return shipping: covered by us for quality issues; buyer covers two-way postage for personal reasons (e.g. wrong size).\n\n📩 How: Live Chat or WhatsApp us with your order number + photos.\n\n(In line with Malaysian consumer-protection norms.)"}}, "about": {"isHtml": true, "t": {"zh": "我们的故事", "en": "Our Story", "ms": "Kisah Kami", "vi": "Câu Chuyện Của Chúng Tôi"}, "c": {"zh": "Yuna Fashion 始于一个简单的心愿 —— 让每一个家庭,都能拥有柔软安稳的睡眠时光。\n\n我们相信,睡衣不只是衣服,而是夜里最贴近肌肤的温柔陪伴。忙碌了一天,换上一件亲肤舒适的睡衣,是给自己和家人的一份小小关怀。\n\n从妈妈到宝贝,我们用心挑选每一块面料、每一道车缝,只为把这份温暖带进你的家。\n\n愿 Yuna 陪你和最爱的人,安睡每一夜 🌙", "en": "Yuna Fashion began with one simple wish — that every family could enjoy soft, peaceful nights.\n\nTo us, sleepwear isn't just clothing; it's the gentlest companion against your skin at night. After a long day, slipping into something soft is a small act of care for you and those you love.\n\nFrom mum to little one, we choose every fabric and stitch with heart, to bring that warmth into your home.\n\nMay Yuna keep you and your dearest sleeping soundly, every night 🌙"}}, "design": {"t": {"zh": "为真实生活而设计", "en": "Designed for Real Life", "ms": "Direka untuk Kehidupan Sebenar", "vi": "Thiết Kế Cho Cuộc Sống Thật"}, "c": {"zh": "我们的设计，不只是为了拍照，也不只是为了追赶短暂的潮流。\n\n我们为组成日常生活的每一个真实时刻而设计。\n\n一件衣服，应该能陪你度过忙碌的早晨，轻松搭配去上班，适合与家人相处，也值得一次又一次地穿上。\n\n我们的设计坚持五项原则：\n\n1. 让一天更自在的舒适感。\n2. 自然、耐看并容易穿着的轮廓。\n3. 有特点，却不过度复杂的细节。\n4. 能够适应工作、周末与家庭生活的实穿性。\n5. 让顾客真正愿意重复穿着的设计。\n\n好的设计，不应该盖过穿衣服的人。\n\n它应该让她自在行动、认真生活，并继续书写自己的故事。", "en": "We do not design only for photographs or passing trends.\n\nWe design for the moments that make up everyday life.\n\nA piece should feel comfortable during a busy morning, easy to style before work, suitable for time with family and natural enough to wear again and again.\n\nOur approach is guided by five principles:\n\n1. Comfort that supports the day.\n2. Silhouettes that feel natural and wearable.\n3. Details that add character without becoming excessive.\n4. Versatility across work, weekends and family life.\n5. Pieces customers will genuinely want to wear again.\n\nGood design should not overpower the person wearing it.\n\nIt should give her room to move, live and tell her own story.", "ms": "Kami tidak mereka hanya untuk gambar atau tren sementara.\n\nKami mereka untuk detik-detik yang membentuk kehidupan seharian.\n\nSetiap helaian harus terasa selesa pada pagi yang sibuk, mudah dipadankan sebelum bekerja, sesuai untuk masa bersama keluarga dan cukup semula jadi untuk dipakai berulang kali.\n\nPendekatan kami dipandu oleh lima prinsip:\n\n1. Keselesaan yang menyokong sepanjang hari.\n2. Potongan yang terasa semula jadi dan selesa dipakai.\n3. Butiran yang menambah keunikan tanpa berlebihan.\n4. Kepelbagaian untuk bekerja, hujung minggu dan kehidupan berkeluarga.\n5. Rekaan yang pelanggan benar-benar ingin pakai berulang kali.\n\nReka bentuk yang baik tidak sepatutnya mengatasi peribadi orang yang memakainya.\n\nIa sepatutnya memberi ruang untuknya bergerak, hidup dan menceritakan kisahnya sendiri.", "vi": "Chúng tôi không chỉ thiết kế để chụp ảnh hay chạy theo xu hướng nhất thời.\n\nChúng tôi thiết kế cho những khoảnh khắc tạo nên cuộc sống hằng ngày.\n\nMột thiết kế nên mang lại cảm giác thoải mái trong buổi sáng bận rộn, dễ dàng phối đồ trước giờ làm, phù hợp cho thời gian bên gia đình và đủ tự nhiên để được mặc đi mặc lại nhiều lần.\n\nCách tiếp cận của chúng tôi được dẫn dắt bởi năm nguyên tắc:\n\n1. Sự thoải mái đồng hành cùng cả ngày dài.\n2. Form dáng tự nhiên và dễ mặc.\n3. Chi tiết tạo nên cá tính mà không cầu kỳ quá mức.\n4. Tính linh hoạt cho công việc, cuối tuần và cuộc sống gia đình.\n5. Những thiết kế khách hàng thực sự muốn mặc lại nhiều lần.\n\nMột thiết kế tốt không nên lấn át người mặc nó.\n\nNó nên cho cô ấy không gian để di chuyển, sống trọn vẹn và kể câu chuyện của riêng mình."}}, "partner": {"t": {"zh": "合作联系", "en": "Partnership", "ms": "Kerjasama", "vi": "Hợp tác"}, "c": {"zh": "欢迎批发、代理或品牌合作洽谈 🤝\n\n如果你也想把这份柔软与温暖带给更多家庭,欢迎联系我们:\n\n• 点右下角「在线客服」留言\n• 或透过页脚的 WhatsApp 与我们联系\n\n请留下你的称呼、联系方式与合作意向,我们会尽快回复你 🌸", "en": "We welcome wholesale, reseller and brand collaborations 🤝\n\nIf you'd love to bring this softness and warmth to more families, reach us:\n\n• Tap Live Chat (bottom-right) to leave a message\n• Or contact us via the WhatsApp link in the footer\n\nLeave your name, contact and what you have in mind — we'll get back to you soon 🌸"}}};
+function aboutValueRow(name,line){ return '<div style="background:var(--cream);border-radius:10px;padding:10px 14px;margin-bottom:8px"><b style="color:var(--berry)">'+esc(name)+'</b> — '+esc(line)+'</div>'; }
+function renderAboutHTML(t){
+  var values=[[t.aboutVal1Name,t.aboutVal1Line],[t.aboutVal2Name,t.aboutVal2Line],[t.aboutVal3Name,t.aboutVal3Line],[t.aboutVal4Name,t.aboutVal4Line],[t.aboutVal5Name,t.aboutVal5Line]]
+    .map(function(v){ return aboutValueRow(v[0],v[1]); }).join('');
+  return ''
+    +'<div style="font-size:15px;color:var(--rose);font-style:italic;margin-bottom:22px;line-height:1.6">'+esc(t.aboutHeroLine)+'</div>'
+    +'<div style="margin-bottom:24px">'
+      +'<div style="font-family:\'Playfair Display\',serif;font-size:17px;color:var(--berry);margin-bottom:8px">'+esc(t.aboutBeginningHeading)+'</div>'
+      +'<div style="white-space:pre-line;line-height:1.9">'+esc(t.aboutBeginningBody)+'</div>'
+    +'</div>'
+    +'<div style="margin-bottom:24px">'
+      +'<div style="font-family:\'Playfair Display\',serif;font-size:17px;color:var(--berry);margin-bottom:10px">'+esc(t.aboutBelieveHeading)+'</div>'
+      +values
+    +'</div>'
+    +'<div style="margin-bottom:24px">'
+      +'<div style="font-family:\'Playfair Display\',serif;font-size:17px;color:var(--berry);margin-bottom:8px">'+esc(t.aboutPhilosophyHeading)+'</div>'
+      +'<div style="white-space:pre-line;line-height:1.9">'+esc(t.aboutPhilosophyBody)+'</div>'
+    +'</div>'
+    +'<div style="text-align:center;padding-top:18px;border-top:1px solid var(--line)">'
+      +'<div style="font-family:\'Playfair Display\',serif;font-style:italic;font-size:19px;color:var(--rose);margin-bottom:8px">Wear Your Story.</div>'
+      +'<div style="color:var(--muted);margin-bottom:16px">'+esc(t.aboutClosingBody)+'</div>'
+      +'<button class="hero-btn" style="margin:0 auto" onclick="closeInfo();switchView(\'shop\');showShop(\'all\')">'+esc(t.shopNow)+' <i class="ti ti-arrow-right"></i></button>'
+    +'</div>';
+}
+function openInfo(k){
+  var m=document.getElementById('infoModal'); if(!m||!INFO[k]) return;
+  var it=INFO[k]; var t=T[lang]||T.zh;
+  var titleText=(it.t[lang]||it.t.zh);
+  document.getElementById('infoTitle').textContent=titleText;
+  var body=document.getElementById('infoBody');
+  if(k==='about'){
+    body.style.whiteSpace='normal';
+    body.innerHTML=renderAboutHTML(t);
+  } else {
+    body.style.whiteSpace='pre-line';
+    body.textContent=(it.c[lang]||it.c.en||it.c.zh);
+  }
+  m.classList.remove('hide');
+  if(k==='about'){
+    try{
+      document.title=t.aboutSeoTitle||titleText;
+      var md=document.getElementById('metaDesc'); if(md && t.aboutSeoDesc) md.setAttribute('content', t.aboutSeoDesc);
+    }catch(e){}
+  }
+}
+function closeInfo(){
+  var m=document.getElementById('infoModal'); if(m) m.classList.add('hide');
+  try{ document.title='Yuna Fashion Shop'; }catch(e){}
+}
   </script>
 <script>try{applyLang();}catch(e){}</script>
 </body>
