@@ -20,7 +20,7 @@
   * { box-sizing:border-box; margin:0; padding:0; }
   :root {
     --rose:#C9767A; --rose-light:#F7DCE4; --cream:#FDF8F5; --berry:#6E4053;
-    --lavender:#E5D8EC; --sage:#D4ECD4; --text:#2C1A1F; --muted:#927580; --line:#ddc0c8;
+    --lavender:#E5D8EC; --sage:#D4ECD4; --text:#2C1A1F; --muted:#927580; --line:#ddc0c8; --near-black:#171717;
   }
   body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--text); }
   .wrap { max-width:1180px; margin:0 auto; }
@@ -36,8 +36,10 @@
   /* NAV */
   nav { display:flex; align-items:center; justify-content:space-between; padding:14px 28px; background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:100; flex-wrap:wrap; gap:12px; }
   .nav-brand { display:flex; flex-direction:column; }
-  .nav-logo { font-family:'Playfair Display',serif; font-size:23px; font-weight:600; color:var(--berry); line-height:1; }
-  .nav-logo span { color:var(--rose); font-style:italic; }
+  .nav-logo { font-family:'Playfair Display',serif; font-size:23px; font-weight:600; line-height:1; }
+  .nav-logo .logo-y { color:var(--rose); }
+  .nav-logo .logo-una { color:var(--near-black); }
+  .nav-logo .logo-fashion { font-family:'DM Sans',sans-serif; font-size:9px; font-weight:500; letter-spacing:3px; color:var(--near-black); margin-top:4px; }
   .nav-slogan { font-size:11px; color:var(--rose); font-weight:500; margin-top:4px; font-style:italic; }
   .nav-tabs { display:flex; gap:8px; align-items:center; }
   .vtab { border:1px solid var(--line); background:#fff; color:var(--muted); padding:7px 15px; border-radius:18px; font-size:13px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; display:flex; align-items:center; gap:6px; transition:all .2s; }
@@ -187,8 +189,10 @@
   /* FOOTER */
   footer { background:var(--berry); color:#fff; padding:36px 28px 22px; }
   .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:30px; margin-bottom:28px; }
-  .footer-brand { font-family:'Playfair Display',serif; font-size:20px; margin-bottom:6px; }
-  .footer-brand span { color:var(--rose-light); font-style:italic; }
+  .footer-brand { font-family:'Playfair Display',serif; font-size:20px; margin-bottom:2px; }
+  .footer-brand .logo-y { color:var(--rose-light); }
+  .footer-brand .logo-una { color:#fff; }
+  .footer-brand .logo-fashion { font-family:'DM Sans',sans-serif; font-size:9px; font-weight:500; letter-spacing:3px; color:rgba(255,255,255,.7); margin-bottom:6px; }
   .footer-slogan { font-size:12px; color:var(--rose-light); font-style:italic; margin-bottom:10px; }
   .footer-tagline { font-size:13px; opacity:.65; line-height:1.6; }
   .footer-col h4 { font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase; opacity:.5; margin-bottom:14px; }
@@ -244,7 +248,7 @@
 
   <nav>
     <div class="nav-brand">
-      <div class="nav-logo">Yuna <span>Fashion</span></div>
+      <div class="nav-logo"><span class="logo-y">Y</span><span class="logo-una">UNA</span><div class="logo-fashion">FASHION</div></div>
       <div class="nav-slogan" data-i="slogan"></div>
     </div>
     <div class="nav-tabs">
@@ -599,7 +603,7 @@
   <footer>
     <div class="footer-grid">
       <div>
-        <div class="footer-brand">Yuna <span>Fashion</span></div>
+        <div class="footer-brand"><span class="logo-y">Y</span><span class="logo-una">UNA</span><div class="logo-fashion">FASHION</div></div>
         <div class="footer-slogan" data-i="slogan2"></div>
       </div>
       <div class="footer-col"><h4 data-i="footShopH"></h4><ul>
