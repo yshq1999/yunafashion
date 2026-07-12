@@ -258,7 +258,7 @@
       <button class="vtab" id="tab_kids" onclick="showShop('kids')"><span data-i="navKids"></span></button>
       <button class="vtab" id="tab_sale" onclick="showShop('sale')"><span data-i="navSale"></span></button>
       <button class="vtab vtab-flash" id="tabMember" onclick="switchView('member')"><span data-i="navMember"></span></button>
-      <button class="vtab" id="tabAdmin" onclick="switchView('admin')" style="display:none">后台</button>
+      <button class="vtab" id="tabAdmin" onclick="switchView('admin')" style="display:none" data-i="admMgmt">后台</button>
       <button class="vtab cart-icon" id="tabCart" type="button" onclick="switchView('cart')" aria-label="购物车"><i class="ti ti-shopping-bag"></i><span class="vcart-count" id="cartCount">0</span></button>
     </div>
   </nav>
@@ -314,30 +314,102 @@
 
   <!-- ADMIN -->
   <div class="panel hide" id="viewAdmin">
-    <div class="ph" data-i="adminTitle"></div>
-    <div class="psub" data-i="adminSub"></div>
-    <div class="admin-wrap">
-      <div class="form-card">
-        <div class="field"><label data-i="fNameL"></label><input id="fName" data-iph="fNameP" /></div>
-        <div class="field"><label data-i="fCatL"></label>
-          <select id="fCat"><option data-i="catW"></option><option data-i="catK"></option><option data-i="catF"></option></select>
-        </div>
-        <div class="field"><label data-i="fForL"></label><input id="fFor" data-iph="fForP" /></div>
-        <div class="row2">
-          <div class="field"><label data-i="fPriceL"></label><input id="fPrice" type="number" placeholder="89" /></div>
-          <div class="field"><label data-i="fOldL"></label><input id="fOld" type="number" placeholder="119" /></div>
-        </div>
-        <div class="field"><label data-i="fImgL"></label>
-          <div class="upload-zone" id="imgZone" onclick="document.getElementById('fImg').click()">
-            <div id="imgPlaceholder"><i class="ti ti-photo" style="font-size:24px"></i><br><span data-i="uploadImg"></span></div>
-          </div>
-          <input type="file" id="fImg" accept="image/*" class="hide" />
-        </div>
-        <button class="save-btn" onclick="addProduct()" data-i="saveBtn"></button>
+    <div id="memberAdmin">
+      <div class="ph" data-i="admMgmt">店主管理</div>
+      <div class="psub" data-i="admOnlyYou">只有你(店主)能看到这一区</div>
+      <div class="form-card" style="margin:14px 0">
+        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admOrdersH">待确认订单 — 确认收款后会给推荐人入账佣金</div>
+        <div id="adminOrders" class="psub">没有待确认订单</div>
       </div>
-      <div>
-        <div style="font-size:13px;font-weight:500;color:var(--berry);margin-bottom:12px;"><span data-i="curProd"></span> (<span id="prodCnt">0</span>)</div>
-        <div class="admin-list" id="adminList"></div>
+      <div class="form-card" style="margin:14px 0">
+        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admSearchH">订单查询 — 查看所有订单（含已确认）</div>
+        <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+          <input id="admOrderSearch" data-iph="admSearchPh" style="flex:1;min-width:140px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text);font-size:13px" onkeydown="if(event.key==='Enter')searchOrders()"/>
+          <select id="admOrderStatusFilter" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text);font-size:13px">
+            <option value="" data-i="admStatusAll">全部状态</option>
+            <option value="pending" data-i="admStatusPending">待付款</option>
+            <option value="paid" data-i="admStatusPaid">已付款</option>
+          </select>
+          <button class="add-btn" style="width:auto;margin:0;padding:8px 16px" type="button" onclick="searchOrders()" data-i="admSearchBtn">查询</button>
+        </div>
+        <div id="admOrderResults" class="psub" data-i="admSearchHint">输入姓名/邮箱或选择状态后点查询</div>
+      </div>
+      <div class="form-card" style="margin:14px 0">
+        <div class="psub" style="margin-bottom:6px;font-weight:500;color:var(--berry)" data-i="admCourierH">物流公司管理 — 设置各物流的追踪链接</div>
+        <div class="psub" style="margin-bottom:10px;font-size:12px" data-i="admCourierHint">网址里可以加 {code} 占位符，系统会自动替换成客人的运单号；不确定的话先只填官网追踪页链接也可以，客人自己去页面输入号码查询一样能用。</div>
+        <div id="courierList" style="margin-bottom:10px"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input id="courierNameInput" data-iph="admCourierNameP" style="flex:1;min-width:120px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text);font-size:13px"/>
+          <input id="courierUrlInput" data-iph="admCourierUrlP" style="flex:2;min-width:180px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text);font-size:13px"/>
+          <button class="add-btn" style="width:auto;margin:0;padding:8px 16px" type="button" onclick="addCourier()" data-i="admCourierAdd">添加</button>
+        </div>
+      </div>
+      <div class="form-card" style="margin:14px 0">
+        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admMemberH">会员查找 — 核实 TikTok 关注截图后发放 RM2</div>
+        <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+          <input id="admMemberSearch" data-iph="admMemberSearchPh" style="flex:1;min-width:140px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text);font-size:13px" onkeydown="if(event.key==='Enter')searchMembers()"/>
+          <button class="add-btn" style="width:auto;margin:0;padding:8px 16px" type="button" onclick="searchMembers()" data-i="admSearchBtn">查询</button>
+        </div>
+        <div id="admMemberResults" class="psub" data-i="admMemberHint">输入姓名/邮箱后点查询</div>
+      </div>
+      <div class="form-card">
+        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admWdsH">提现申请 — 打款到会员账号后点「已打款」</div>
+        <div id="adminWds" class="psub">没有提现申请</div>
+      </div>
+      <div class="form-card" style="margin-top:14px">
+        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admSetH">设置 — 佣金 / 运费（改完点保存）</div>
+        <div class="row2"><div class="field"><label data-i="admL1">L1 直接佣金 %</label><input id="setL1" type="number" step="0.5"/></div><div class="field"><label data-i="admL2">L2 佣金 %</label><input id="setL2" type="number" step="0.5"/></div></div>
+        <div class="row2"><div class="field"><label data-i="admL3">L3 佣金 %</label><input id="setL3" type="number" step="0.5"/></div><div class="field"><label data-i="admBonus">首购奖 RM</label><input id="setBonus" type="number"/></div></div>
+        <div class="row2"><div class="field"><label data-i="admShipMin">免邮门槛 RM</label><input id="setShipMin" type="number"/></div><div class="field"><label data-i="admShipFee">运费 RM</label><input id="setShipFee" type="number"/></div></div>
+        <div class="field"><label data-i="admWdMin">提现门槛 RM</label><input id="setWdMin" type="number"/></div>
+        <div class="field"><label data-i="admWa">WhatsApp 链接</label><input id="setWa" placeholder="https://wa.me/60123456789"/></div>
+        <div class="field"><label data-i="admTt">TikTok 链接</label><input id="setTt" placeholder="https://www.tiktok.com/@yourshop"/></div>
+        <div class="psub" style="margin:14px 0 10px;font-weight:500;color:var(--berry)" data-i="admPayH">收款方式 — 结算页会显示给客人</div>
+        <div class="field"><label data-i="admPayAccNo">收款账号（TNG 手机号 / 银行账号）</label><input id="setPayAccNo" placeholder="例如：012-3456789"/></div>
+        <div class="field"><label data-i="admPayAccName">收款人姓名</label><input id="setPayAccName" placeholder="例如：Yuna Fashion Shop"/></div>
+        <div class="row2">
+          <div class="field"><label data-i="admTngQr">TNG QR 收款码</label>
+            <div class="upload-zone" id="tngQrZone" onclick="document.getElementById('tngQrImg').click()"><div id="tngQrPh"><i class="ti ti-qrcode" style="font-size:22px"></i><br><span data-i="admUploadClick">点击上传图片</span></div></div>
+            <input type="file" id="tngQrImg" accept="image/*" class="hide"/>
+          </div>
+          <div class="field"><label data-i="admDuitQr">DuitNow QR 收款码</label>
+            <div class="upload-zone" id="duitQrZone" onclick="document.getElementById('duitQrImg').click()"><div id="duitQrPh"><i class="ti ti-qrcode" style="font-size:22px"></i><br><span data-i="admUploadClick">点击上传图片</span></div></div>
+            <input type="file" id="duitQrImg" accept="image/*" class="hide"/>
+          </div>
+        </div>
+        <button class="save-btn" type="button" onclick="saveSettings()" data-i="admSaveSet">保存设置</button>
+        <div id="setMsg" class="psub" style="margin-top:6px;color:var(--rose)"></div>
+      </div>
+      <div class="form-card" style="margin-top:14px">
+        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admChatH">客服消息 — 客户的咨询会显示在这里</div>
+        <div id="adminChatList" class="psub">—</div>
+        <div id="adminThreadBox" class="hide" style="margin-top:12px">
+          <div id="adminThreadMsgs" style="max-height:240px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--cream)"></div>
+          <div style="display:flex;gap:8px;margin-top:8px"><label for="adminImgInput" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--cream);cursor:pointer;flex-shrink:0"><i class="ti ti-photo" style="font-size:18px;color:var(--berry)"></i></label><input id="adminImgInput" type="file" accept="image/*" style="display:none"/><input id="adminReplyInput" onkeydown="if(event.key==='Enter')adminReply()" placeholder="回复…" style="flex:1;padding:8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--text)"/><button class="add-btn" style="width:auto;margin:0;padding:8px 14px" type="button" onclick="adminReply()">↑</button></div>
+        </div>
+      </div>
+      <div class="form-card" style="margin-top:14px">
+        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admProdH">上传 / 管理商品</div>
+        <div class="field"><label data-i="admCat">分类</label>
+          <select id="pmCat" onchange="pmRenderSizes()"><option value="women" data-i="admCatW">女士睡衣</option><option value="boy" data-i="admCatB">小孩 · 男孩</option><option value="girl" data-i="admCatG">小孩 · 女孩</option></select>
+        </div>
+        <div class="field"><label data-i="admNameZh">商品名称（中文）</label><input id="pmName" placeholder="例如：冰丝吊带睡裙"/></div>
+        <div class="field"><label data-i="admNameEn">英文名 (可选)</label><input id="pmNameEn" placeholder="e.g. Silky Slip Nightgown"/></div>
+        <div class="field"><label data-i="admNameMs">马来名 (可选)</label><input id="pmNameMs" placeholder="cth: Gaun Tidur Sutera"/></div>
+        <div class="field"><label data-i="admNameVi">越南名 (可选)</label><input id="pmNameVi" placeholder="vd: Vay ngu lua"/></div>
+        <div class="field"><label data-i="admNote">说明（可选）</label><input id="pmNote" placeholder="例如：冰丝 / 亲肤"/></div>
+        <div class="field"><label data-i="admTag">标签</label><select id="pmTag"><option value="" data-i="admTagNone">无</option><option value="new" data-i="admTagNew">新品</option><option value="sale" data-i="admTagSale">特惠</option></select></div>
+        <div class="field"><label data-i="admImg">商品图片</label>
+          <div class="upload-zone" id="pmImgZone" onclick="document.getElementById('pmImg').click()"><div id="pmImgPh"><i class="ti ti-photo" style="font-size:22px"></i><br>点击上传图片</div></div>
+          <input type="file" id="pmImg" accept="image/*" class="hide"/>
+        </div>
+        <div class="field"><label data-i="admSizes">各尺码 · 价格(RM) / 库存</label><div id="pmSizes"></div></div>
+        <button class="save-btn" type="button" onclick="pmSave()" data-i="admSaveProd">保存上架</button>
+        <div id="pmMsg" class="psub" style="margin-top:8px;color:var(--rose)"></div>
+        <button class="add-btn" style="width:auto;margin:10px 0 0;padding:8px 14px" type="button" data-i="admOptimizeImg" onclick="pmOptimizeAllImages()">一键压缩已上传图片（加快首页加载）</button>
+        <div id="pmOptMsg" class="psub" style="margin-top:6px"></div>
+        <div style="font-size:13px;font-weight:500;color:var(--berry);margin:16px 0 8px" data-i="admCurProd">现有商品</div>
+        <div id="pmList" class="psub">—</div>
       </div>
     </div>
   </div>
@@ -500,105 +572,6 @@
       </div>
       <button class="add-btn" style="max-width:160px;margin-top:16px" type="button" onclick="memberLogout()" data-i="mLogout"></button>
     </div>
-
-    <div id="memberAdmin" class="hide" style="margin-top:28px">
-      <div class="ph" style="font-size:20px" data-i="admMgmt">店主管理</div>
-      <div class="psub" data-i="admOnlyYou">只有你(店主)能看到这一区</div>
-      <div class="form-card" style="margin:14px 0">
-        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admOrdersH">待确认订单 — 确认收款后会给推荐人入账佣金</div>
-        <div id="adminOrders" class="psub">没有待确认订单</div>
-      </div>
-      <div class="form-card" style="margin:14px 0">
-        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admSearchH">订单查询 — 查看所有订单（含已确认）</div>
-        <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-          <input id="admOrderSearch" data-iph="admSearchPh" style="flex:1;min-width:140px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text);font-size:13px" onkeydown="if(event.key==='Enter')searchOrders()"/>
-          <select id="admOrderStatusFilter" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text);font-size:13px">
-            <option value="" data-i="admStatusAll">全部状态</option>
-            <option value="pending" data-i="admStatusPending">待付款</option>
-            <option value="paid" data-i="admStatusPaid">已付款</option>
-          </select>
-          <button class="add-btn" style="width:auto;margin:0;padding:8px 16px" type="button" onclick="searchOrders()" data-i="admSearchBtn">查询</button>
-        </div>
-        <div id="admOrderResults" class="psub" data-i="admSearchHint">输入姓名/邮箱或选择状态后点查询</div>
-      </div>
-      <div class="form-card" style="margin:14px 0">
-        <div class="psub" style="margin-bottom:6px;font-weight:500;color:var(--berry)" data-i="admCourierH">物流公司管理 — 设置各物流的追踪链接</div>
-        <div class="psub" style="margin-bottom:10px;font-size:12px" data-i="admCourierHint">网址里可以加 {code} 占位符，系统会自动替换成客人的运单号；不确定的话先只填官网追踪页链接也可以，客人自己去页面输入号码查询一样能用。</div>
-        <div id="courierList" style="margin-bottom:10px"></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <input id="courierNameInput" data-iph="admCourierNameP" style="flex:1;min-width:120px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text);font-size:13px"/>
-          <input id="courierUrlInput" data-iph="admCourierUrlP" style="flex:2;min-width:180px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text);font-size:13px"/>
-          <button class="add-btn" style="width:auto;margin:0;padding:8px 16px" type="button" onclick="addCourier()" data-i="admCourierAdd">添加</button>
-        </div>
-      </div>
-      <div class="form-card" style="margin:14px 0">
-        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admMemberH">会员查找 — 核实 TikTok 关注截图后发放 RM2</div>
-        <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-          <input id="admMemberSearch" data-iph="admMemberSearchPh" style="flex:1;min-width:140px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--text);font-size:13px" onkeydown="if(event.key==='Enter')searchMembers()"/>
-          <button class="add-btn" style="width:auto;margin:0;padding:8px 16px" type="button" onclick="searchMembers()" data-i="admSearchBtn">查询</button>
-        </div>
-        <div id="admMemberResults" class="psub" data-i="admMemberHint">输入姓名/邮箱后点查询</div>
-      </div>
-      <div class="form-card">
-        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admWdsH">提现申请 — 打款到会员账号后点「已打款」</div>
-        <div id="adminWds" class="psub">没有提现申请</div>
-      </div>
-      <div class="form-card" style="margin-top:14px">
-        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admSetH">设置 — 佣金 / 运费（改完点保存）</div>
-        <div class="row2"><div class="field"><label data-i="admL1">L1 直接佣金 %</label><input id="setL1" type="number" step="0.5"/></div><div class="field"><label data-i="admL2">L2 佣金 %</label><input id="setL2" type="number" step="0.5"/></div></div>
-        <div class="row2"><div class="field"><label data-i="admL3">L3 佣金 %</label><input id="setL3" type="number" step="0.5"/></div><div class="field"><label data-i="admBonus">首购奖 RM</label><input id="setBonus" type="number"/></div></div>
-        <div class="row2"><div class="field"><label data-i="admShipMin">免邮门槛 RM</label><input id="setShipMin" type="number"/></div><div class="field"><label data-i="admShipFee">运费 RM</label><input id="setShipFee" type="number"/></div></div>
-        <div class="field"><label data-i="admWdMin">提现门槛 RM</label><input id="setWdMin" type="number"/></div>
-        <div class="field"><label data-i="admWa">WhatsApp 链接</label><input id="setWa" placeholder="https://wa.me/60123456789"/></div>
-        <div class="field"><label data-i="admTt">TikTok 链接</label><input id="setTt" placeholder="https://www.tiktok.com/@yourshop"/></div>
-        <div class="psub" style="margin:14px 0 10px;font-weight:500;color:var(--berry)" data-i="admPayH">收款方式 — 结算页会显示给客人</div>
-        <div class="field"><label data-i="admPayAccNo">收款账号（TNG 手机号 / 银行账号）</label><input id="setPayAccNo" placeholder="例如：012-3456789"/></div>
-        <div class="field"><label data-i="admPayAccName">收款人姓名</label><input id="setPayAccName" placeholder="例如：Yuna Fashion Shop"/></div>
-        <div class="row2">
-          <div class="field"><label data-i="admTngQr">TNG QR 收款码</label>
-            <div class="upload-zone" id="tngQrZone" onclick="document.getElementById('tngQrImg').click()"><div id="tngQrPh"><i class="ti ti-qrcode" style="font-size:22px"></i><br><span data-i="admUploadClick">点击上传图片</span></div></div>
-            <input type="file" id="tngQrImg" accept="image/*" class="hide"/>
-          </div>
-          <div class="field"><label data-i="admDuitQr">DuitNow QR 收款码</label>
-            <div class="upload-zone" id="duitQrZone" onclick="document.getElementById('duitQrImg').click()"><div id="duitQrPh"><i class="ti ti-qrcode" style="font-size:22px"></i><br><span data-i="admUploadClick">点击上传图片</span></div></div>
-            <input type="file" id="duitQrImg" accept="image/*" class="hide"/>
-          </div>
-        </div>
-        <button class="save-btn" type="button" onclick="saveSettings()" data-i="admSaveSet">保存设置</button>
-        <div id="setMsg" class="psub" style="margin-top:6px;color:var(--rose)"></div>
-      </div>
-      <div class="form-card" style="margin-top:14px">
-        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admChatH">客服消息 — 客户的咨询会显示在这里</div>
-        <div id="adminChatList" class="psub">—</div>
-        <div id="adminThreadBox" class="hide" style="margin-top:12px">
-          <div id="adminThreadMsgs" style="max-height:240px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--cream)"></div>
-          <div style="display:flex;gap:8px;margin-top:8px"><label for="adminImgInput" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--cream);cursor:pointer;flex-shrink:0"><i class="ti ti-photo" style="font-size:18px;color:var(--berry)"></i></label><input id="adminImgInput" type="file" accept="image/*" style="display:none"/><input id="adminReplyInput" onkeydown="if(event.key==='Enter')adminReply()" placeholder="回复…" style="flex:1;padding:8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--text)"/><button class="add-btn" style="width:auto;margin:0;padding:8px 14px" type="button" onclick="adminReply()">↑</button></div>
-        </div>
-      </div>
-      <div class="form-card" style="margin-top:14px">
-        <div class="psub" style="margin-bottom:10px;font-weight:500;color:var(--berry)" data-i="admProdH">上传 / 管理商品</div>
-        <div class="field"><label data-i="admCat">分类</label>
-          <select id="pmCat" onchange="pmRenderSizes()"><option value="women" data-i="admCatW">女士睡衣</option><option value="boy" data-i="admCatB">小孩 · 男孩</option><option value="girl" data-i="admCatG">小孩 · 女孩</option></select>
-        </div>
-        <div class="field"><label data-i="admNameZh">商品名称（中文）</label><input id="pmName" placeholder="例如：冰丝吊带睡裙"/></div>
-        <div class="field"><label data-i="admNameEn">英文名 (可选)</label><input id="pmNameEn" placeholder="e.g. Silky Slip Nightgown"/></div>
-        <div class="field"><label data-i="admNameMs">马来名 (可选)</label><input id="pmNameMs" placeholder="cth: Gaun Tidur Sutera"/></div>
-        <div class="field"><label data-i="admNameVi">越南名 (可选)</label><input id="pmNameVi" placeholder="vd: Vay ngu lua"/></div>
-        <div class="field"><label data-i="admNote">说明（可选）</label><input id="pmNote" placeholder="例如：冰丝 / 亲肤"/></div>
-        <div class="field"><label data-i="admTag">标签</label><select id="pmTag"><option value="" data-i="admTagNone">无</option><option value="new" data-i="admTagNew">新品</option><option value="sale" data-i="admTagSale">特惠</option></select></div>
-        <div class="field"><label data-i="admImg">商品图片</label>
-          <div class="upload-zone" id="pmImgZone" onclick="document.getElementById('pmImg').click()"><div id="pmImgPh"><i class="ti ti-photo" style="font-size:22px"></i><br>点击上传图片</div></div>
-          <input type="file" id="pmImg" accept="image/*" class="hide"/>
-        </div>
-        <div class="field"><label data-i="admSizes">各尺码 · 价格(RM) / 库存</label><div id="pmSizes"></div></div>
-        <button class="save-btn" type="button" onclick="pmSave()" data-i="admSaveProd">保存上架</button>
-        <div id="pmMsg" class="psub" style="margin-top:8px;color:var(--rose)"></div>
-        <button class="add-btn" style="width:auto;margin:10px 0 0;padding:8px 14px" type="button" data-i="admOptimizeImg" onclick="pmOptimizeAllImages()">一键压缩已上传图片（加快首页加载）</button>
-        <div id="pmOptMsg" class="psub" style="margin-top:6px"></div>
-        <div style="font-size:13px;font-weight:500;color:var(--berry);margin:16px 0 8px" data-i="admCurProd">现有商品</div>
-        <div id="pmList" class="psub">—</div>
-      </div>
-    </div>
   </div>
 
   <footer>
@@ -704,7 +677,7 @@ const T = {
     aPickSize:'Please select a size', aSoldOut:'This size is sold out', aStockShort:'Not enough stock', aCartEmpty:'Your cart is empty', aOrderFail:'Order failed, please retry',
     addrTitle:'Fill delivery info, get RM3', addrSub:'Fill info + add the App to your home screen to get RM3 (one-time)', addrName:'Name', addrPhone:'Phone', addrAddr:'Address', addrNameP:'Recipient name', addrPhoneP:'Phone e.g. 012-3456789', addrAddrP:'Unit no, street, taman/area', addrCity:'City', addrCityP:'e.g. Petaling Jaya', addrPostcode:'Postcode', addrPostcodeP:'e.g. 47800', addrState:'State', addrStateP:'Select state', addrBtn:'Install App & get RM3', addrLater:'Maybe later', addrFill:'Please fill all fields', addrPhoneInvalid:'Please enter a valid phone number', addrPostcodeInvalid:'Please enter a 5-digit postcode', addrGot:'You earned RM3!', addrEditTitle:'Edit delivery address', addrEditSub:'Update your delivery details for next time', addrSaveBtn:'Save address', addrSaved:'Address updated', installNeed:'Please add the App to your home screen to get RM3 — tap Install and confirm', iosTitle:'Add Yuna to your home screen:', iosStep1:'1. Tap the Share button', iosStep2:'2. Choose "Add to Home Screen"', iosStep3:'3. Come back and tap the button below', iosDone:'I have added it — get RM3',
     heroTag:'YUNA FASHION', heroTitle:'Wear Your <em>Story</em>.',
-    heroDesc:'Clothing made for real days, meaningful moments and the woman you already are.', shopNow:'Discover YUNA', ourStoryBtn:'Our Story',
+    heroDesc:'Clothing made for real days, meaningful moments and the woman you already are.', shopNow:'Discover YUNA', ourStoryBtn:'Our Story', admMgmt:'Store Admin',
     homeStoryHeading:'Made for the Life You Live', homeStoryBody:'From busy mornings to quiet weekends, YUNA is created to move naturally through the moments that matter to you.',
     aboutHeroLine:'Every woman carries a story worth wearing.',
     aboutBeginningHeading:'Our Beginning',
@@ -754,7 +727,7 @@ const T = {
     aPickSize:'Sila pilih saiz', aSoldOut:'Saiz ini habis dijual', aStockShort:'Stok tidak cukup', aCartEmpty:'Troli anda kosong', aOrderFail:'Pesanan gagal, sila cuba lagi',
     addrTitle:'Isi maklumat penghantaran, dapat RM3', addrSub:'Isi maklumat + tambah App ke skrin utama untuk dapat RM3 (sekali)', addrName:'Nama', addrPhone:'No. telefon', addrAddr:'Alamat', addrNameP:'Nama penerima', addrPhoneP:'No. telefon cth 012-3456789', addrAddrP:'No. unit, jalan, taman/kawasan', addrCity:'Bandar', addrCityP:'cth. Petaling Jaya', addrPostcode:'Poskod', addrPostcodeP:'cth. 47800', addrState:'Negeri', addrStateP:'Pilih negeri', addrBtn:'Pasang App & dapat RM3', addrLater:'Kemudian', addrFill:'Sila isi semua maklumat', addrPhoneInvalid:'Sila masukkan nombor telefon yang sah', addrPostcodeInvalid:'Sila masukkan poskod 5 digit', addrGot:'Anda dapat RM3!', addrEditTitle:'Edit alamat penghantaran', addrEditSub:'Kemas kini maklumat penghantaran anda untuk kali seterusnya', addrSaveBtn:'Simpan alamat', addrSaved:'Alamat dikemaskini', installNeed:'Sila tambah App ke skrin utama untuk dapat RM3 — tekan Pasang', iosTitle:'Tambah Yuna ke skrin utama:', iosStep1:'1. Tekan butang Kongsi (Share)', iosStep2:'2. Pilih "Add to Home Screen"', iosStep3:'3. Kembali dan tekan butang di bawah', iosDone:'Saya sudah tambah — dapat RM3',
     heroTag:'YUNA FASHION', heroTitle:'Wear Your <em>Story</em>.',
-    heroDesc:'Pakaian untuk kehidupan sebenar, detik yang bermakna dan diri anda yang sebenar.', shopNow:'Terokai YUNA', ourStoryBtn:'Kisah Kami',
+    heroDesc:'Pakaian untuk kehidupan sebenar, detik yang bermakna dan diri anda yang sebenar.', shopNow:'Terokai YUNA', ourStoryBtn:'Kisah Kami', admMgmt:'Pengurusan Kedai',
     homeStoryHeading:'Direka untuk Kehidupan Anda', homeStoryBody:'Dari pagi yang sibuk hingga hujung minggu yang tenang, YUNA dicipta untuk mengiringi setiap detik yang bermakna buat anda.',
     aboutHeroLine:'Setiap wanita mempunyai kisah yang layak dipakai dengan bangga.',
     aboutBeginningHeading:'Permulaan Kami',
@@ -837,35 +810,8 @@ const T = {
     newT:'Mới', saleT:'Sale', addT:'Thêm vào giỏ', pFrom:'+', pLeft:'còn {n}', pSold:'Hết hàng', kgBoy:'Bé trai', kgGirl:'Bé gái', kgChart:'Bảng size', cSize:'Size', scTitle:'Bảng size trẻ em', scWeight:'Cân nặng', scHeight:'Chiều cao', noProducts:'Chưa có sản phẩm trong mục này 🌷', alertFill:'Vui lòng nhập tên và giá', alertUp:'Đã đăng! Chuyển sang Cửa hàng để xem' }
 };
 
-/* ============ 默认商品 ============ */
-const defaultProducts = [
-  { name:'冰丝吊带睡裙', for:'女士 / S-XL', price:89, old:119, tag:'new', emoji:'👗', img:null },
-  { name:'小熊珊瑚绒套装', for:'儿童 / 90-140cm', price:79, old:0, tag:'new', emoji:'🧸', img:null },
-  { name:'纯棉短袖睡衣', for:'女士 / S-XXL', price:69, old:99, tag:'sale', emoji:'👚', img:null },
-  { name:'星星连体睡衣', for:'儿童 / 80-120cm', price:75, old:0, tag:'', emoji:'⭐', img:null }
-];
-
-let products, cart = [], pendingImg = null, payMethod = 'tngqr', proofUploaded = false, lang = 'zh';
-
-/* ============ 后台密码（可自行修改）============ */
-const ADMIN_PASS = 'yuna2580';
-let adminUnlocked = false;
-function openAdmin(){
-  if(adminUnlocked) return true;
-  const p = prompt('请输入管理密码 / Admin password');
-  if(p === null) return false;
-  if(p !== ADMIN_PASS){ alert('密码错误 / Wrong password'); return false; }
-  adminUnlocked = true; return true;
-}
-
-/* 从浏览器本地读取已保存的商品 */
-try {
-  const saved = localStorage.getItem('yuna_products');
-  products = saved ? JSON.parse(saved) : defaultProducts.slice();
-} catch(e){ products = defaultProducts.slice(); }
+let cart = [], payMethod = 'tngqr', proofUploaded = false, lang = 'zh';
 try { lang = localStorage.getItem('yuna_lang') || 'zh'; } catch(e){}
-
-function saveProducts(){ try{ localStorage.setItem('yuna_products', JSON.stringify(products)); }catch(e){} }
 
 /* ============ 语言 ============ */
 function updateEarnLabels(){
@@ -902,7 +848,7 @@ function applyLang(){
     const fg=document.getElementById('flowerGold'); if(fg) fg.innerHTML=flowerSVG('#E7B53C',50,'gold');
   }catch(e){}
   updateEarnLabels();
-  renderShop(); renderAdmin(); renderCart();
+  renderShop(); renderCart();
   if(typeof renderMember==='function'){ try{ renderMember(); }catch(e){} }
 }
 
@@ -921,13 +867,12 @@ document.addEventListener('click', e=>{ if(!e.target.closest('#langDD')){ const 
 /* ============ 视图切换 ============ */
 let shopFilter='all'; let dbProducts=[]; let kidGender='boy';
 function switchView(v){
-  if(v==='admin' && !openAdmin()) return;
   ['Shop','Admin','Cart','Checkout','Success','Member'].forEach(n=>document.getElementById('view'+n).classList.add('hide'));
   if(v!=='shop') document.querySelectorAll('.nav-tabs .vtab').forEach(b=>b.classList.remove('active'));
   const tm=document.getElementById('tabMember'); if(tm) tm.classList.toggle('active', v==='member');
   const tc=document.getElementById('tabCart'); if(tc) tc.classList.toggle('active', v==='cart');
   if(v==='shop') document.getElementById('viewShop').classList.remove('hide');
-  if(v==='admin'){ document.getElementById('viewAdmin').classList.remove('hide'); renderAdmin(); }
+  if(v==='admin'){ document.getElementById('viewAdmin').classList.remove('hide'); renderAdminPanel(); }
   if(v==='cart'){ document.getElementById('viewCart').classList.remove('hide'); renderCart(); }
   if(v==='checkout'){ document.getElementById('viewCheckout').classList.remove('hide'); renderCheckout(); }
   if(v==='success') document.getElementById('viewSuccess').classList.remove('hide');
@@ -1077,42 +1022,6 @@ function renderShop(){
   if(!items.length){ grid.innerHTML = shopFilter==='sale' ? '' : '<div class="psub" style="padding:24px 0">'+t.noProducts+'</div>'; return; }
   grid.innerHTML = items.map(p=>productCardHTML(p,t)).join('');
 }
-
-/* ============ 后台 ============ */
-function renderAdmin(){
-  const t = T[lang];
-  const cnt = document.getElementById('prodCnt'); if(cnt) cnt.textContent = products.length;
-  const list = document.getElementById('adminList'); if(!list) return;
-  list.innerHTML = products.map((p,i)=>`
-    <div class="admin-item">
-      <div class="admin-thumb">${p.img?`<img src="${p.img}">`:(p.emoji||'🛍️')}</div>
-      <div class="admin-meta"><div class="nm">${p.name}</div><div class="pr">RM ${p.price} ${p.old?`<span style="color:var(--muted);text-decoration:line-through;font-weight:400">RM ${p.old}</span>`:''}</div></div>
-      <button class="del-btn" onclick="delProduct(${i})" aria-label="delete"><i class="ti ti-trash"></i></button>
-    </div>`).join('');
-}
-
-document.getElementById('fImg').addEventListener('change', e=>{
-  const f = e.target.files[0]; if(!f) return;
-  const r = new FileReader();
-  r.onload = ev=>{ pendingImg = ev.target.result;
-    document.getElementById('imgPlaceholder').innerHTML = `<img src="${pendingImg}"><br>${T[lang].uploadImg}`; };
-  r.readAsDataURL(f);
-});
-
-function addProduct(){
-  const t = T[lang];
-  const name = document.getElementById('fName').value.trim();
-  const price = parseInt(document.getElementById('fPrice').value);
-  if(!name || !price){ alert(t.alertFill); return; }
-  products.unshift({ name, for:document.getElementById('fFor').value.trim(),
-    price, old:parseInt(document.getElementById('fOld').value)||0, tag:'new', emoji:'🛍️', img:pendingImg });
-  saveProducts();
-  ['fName','fFor','fPrice','fOld'].forEach(id=>document.getElementById(id).value='');
-  pendingImg=null;
-  document.getElementById('imgPlaceholder').innerHTML=`<i class="ti ti-photo" style="font-size:24px"></i><br>${t.uploadImg}`;
-  renderAdmin(); renderShop(); alert(t.alertUp);
-}
-function delProduct(i){ products.splice(i,1); saveProducts(); renderAdmin(); renderShop(); }
 
 /* ============ 购物车 ============ */
 function addToCartDB(pid){
@@ -1434,8 +1343,8 @@ async function renderMember(){
         document.getElementById('tierProgress').textContent = prog;
       }
     }catch(e){}
-    const adm=document.getElementById('memberAdmin');
-    if(sbProfile.is_admin){ adm.classList.remove('hide'); await renderAdminPanel(); } else { adm.classList.add('hide'); }
+    const tabAdm=document.getElementById('tabAdmin');
+    if(tabAdm) tabAdm.style.display = sbProfile.is_admin ? '' : 'none';
     if(!sbProfile.profile_bonus_claimed){ try{ if(!sessionStorage.getItem('addrShown')){ sessionStorage.setItem('addrShown','1'); openAddr(); } }catch(e){} }
   } else {
     authBox.classList.remove('hide'); dash.classList.add('hide'); memberAuthTab(authMode);
