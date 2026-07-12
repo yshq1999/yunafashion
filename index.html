@@ -37,7 +37,8 @@
   nav { display:flex; align-items:center; justify-content:space-between; padding:14px 28px; background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:100; flex-wrap:wrap; gap:12px; }
   .nav-brand { display:flex; flex-direction:column; }
   .nav-logo { font-family:'Playfair Display',serif; font-size:23px; font-weight:600; line-height:1; }
-  .nav-logo .logo-y { color:var(--rose); }
+  .nav-logo .logo-y { color:var(--rose); font-size:1.2em; display:inline-block; animation:logoYGlow 2.6s ease-in-out infinite; }
+  @keyframes logoYGlow { 0%,100%{ text-shadow:0 0 0 rgba(201,118,122,0);} 50%{ text-shadow:0 0 10px rgba(201,118,122,.75);} }
   .nav-logo .logo-una { color:var(--near-black); }
   .nav-logo .logo-fashion { font-family:'DM Sans',sans-serif; font-size:9px; font-weight:500; letter-spacing:3px; color:var(--near-black); margin-top:4px; }
   .nav-slogan { font-size:11px; color:var(--rose); font-weight:500; margin-top:4px; font-style:italic; }
@@ -190,7 +191,7 @@
   footer { background:var(--berry); color:#fff; padding:36px 28px 22px; }
   .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:30px; margin-bottom:28px; }
   .footer-brand { font-family:'Playfair Display',serif; font-size:20px; margin-bottom:2px; }
-  .footer-brand .logo-y { color:var(--rose-light); }
+  .footer-brand .logo-y { color:var(--rose-light); font-size:1.2em; display:inline-block; animation:logoYGlow 2.6s ease-in-out infinite; }
   .footer-brand .logo-una { color:#fff; }
   .footer-brand .logo-fashion { font-family:'DM Sans',sans-serif; font-size:9px; font-weight:500; letter-spacing:3px; color:rgba(255,255,255,.7); margin-bottom:6px; }
   .footer-slogan { font-size:12px; color:var(--rose-light); font-style:italic; margin-bottom:10px; }
