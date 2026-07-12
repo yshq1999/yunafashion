@@ -832,6 +832,22 @@ function updateEarnLabels(){
     buildList('tierCommGold',3);
   }catch(e){}
 }
+function refreshAdminPlaceholders(){
+  try{
+    document.querySelectorAll('#pmSizes input[id^="pmp_"]').forEach(el=>{ el.placeholder = aTx('admPricePh'); });
+    document.querySelectorAll('#pmSizes input[id^="pms_"]').forEach(el=>{ el.placeholder = aTx('admStockPh'); });
+    const ph=document.getElementById('pmImgPh');
+    if(ph){
+      const img=ph.querySelector('img');
+      if(img){ ph.innerHTML='<img src="'+img.getAttribute('src')+'" style="max-height:70px;border-radius:8px"><br>'+aTx('admChangeImg'); }
+      else { ph.innerHTML='<i class="ti ti-photo" style="font-size:22px"></i><br>'+aTx('admUploadClick'); }
+    }
+    const tp=document.getElementById('tngQrPh');
+    if(tp){ const img=tp.querySelector('img'); if(img){ tp.innerHTML='<img src="'+img.getAttribute('src')+'" style="max-height:70px;border-radius:8px"><br>'+aTx('admChangeImg'); } else { tp.innerHTML='<i class="ti ti-qrcode" style="font-size:22px"></i><br>'+aTx('admUploadClick'); } }
+    const dp=document.getElementById('duitQrPh');
+    if(dp){ const img=dp.querySelector('img'); if(img){ dp.innerHTML='<img src="'+img.getAttribute('src')+'" style="max-height:70px;border-radius:8px"><br>'+aTx('admChangeImg'); } else { dp.innerHTML='<i class="ti ti-qrcode" style="font-size:22px"></i><br>'+aTx('admUploadClick'); } }
+  }catch(e){}
+}
 function applyLang(){
   const t = T[lang];
   document.documentElement.lang = lang;
@@ -849,6 +865,7 @@ function applyLang(){
   }catch(e){}
   updateEarnLabels();
   renderShop(); renderCart();
+  refreshAdminPlaceholders();
   if(typeof renderMember==='function'){ try{ renderMember(); }catch(e){} }
 }
 
