@@ -409,6 +409,12 @@
           <div class="upload-zone" id="pmImgZone" onclick="document.getElementById('pmImg').click()"><div id="pmImgPh"><i class="ti ti-photo" style="font-size:22px"></i><br>点击上传图片</div></div>
           <input type="file" id="pmImg" accept="image/*" class="hide"/>
         </div>
+        <div class="field"><label data-i="admExtraImg">更多同款照片（选填）</label>
+          <div class="psub" style="margin-bottom:8px;font-size:12px" data-i="admExtraImgHint">同一款不同颜色，一次多选几张，保存时会自动用同样的尺码/价格/库存各生成一件商品，并自动归成一组、前台可切换</div>
+          <div class="upload-zone" id="pmExtraImgZone" onclick="document.getElementById('pmExtraImg').click()"><div id="pmExtraImgPh"><i class="ti ti-photo" style="font-size:22px"></i><br><span data-i="admExtraImgClick">点击选择一张或多张图片</span></div></div>
+          <input type="file" id="pmExtraImg" accept="image/*" multiple class="hide"/>
+          <div id="pmExtraImgList" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
+        </div>
         <div class="field"><label data-i="admSizes">各尺码 · 价格(RM) / 库存</label><div id="pmSizes"></div></div>
         <button class="save-btn" type="button" onclick="pmSave()" data-i="admSaveProd">保存上架</button>
         <div id="pmMsg" class="psub" style="margin-top:8px;color:var(--rose)"></div>
@@ -662,7 +668,7 @@ const T = {
     footShopH:'购物指南', footShop1:'如何下单', footShop2:'尺码指南', footShop3:'配送说明', footShop4:'退换政策',
     footBrandH:'品牌故事', footBrand1:'关于我们', footBrand2:'设计理念', footBrand3:'合作联系', footContactH:'联系我们', footC1:'在线客服', rights:'版权所有', chatTitle:'在线客服', chatHi:'你好！有什么可以帮你？我们会尽快回复 🌸', chatPh:'输入消息…', chatSendBtn:'发送', chatPhoneAsk:'开始对话前，麻烦先留下您的手机号码，方便我们跟进您的问题 🌸', chatPhonePh:'手机号码', chatPhoneBtn:'开始对话', chatPhoneInvalid:'请输入有效的手机号码',
     admMgmt:'店主管理', admOnlyYou:'只有你(店主)能看到这一区', admOrdersH:'待确认订单 — 确认收款后会给推荐人入账佣金', admSearchH:'订单查询 — 查看所有订单（含已确认）', admSearchPh:'输入客人姓名/邮箱/手机号码', admStatusAll:'全部状态', admStatusPending:'待付款', admStatusPaid:'已付款', admStatusCancelled:'已取消', admSearchBtn:'查询', admSearchHint:'输入姓名/邮箱/手机号码或选择状态后点查询', admSearchNone:'没有符合条件的订单', admSearching:'查询中…', admSearchFail:'查询失败：', admCourierH:'物流公司管理 — 设置各物流的追踪链接', admCourierHint:'网址里可以加 {code} 占位符，系统会自动替换成客人的运单号；不确定的话先只填官网追踪页链接也可以，客人自己去页面输入号码查询一样能用。', admCourierAdd:'添加', admCourierNameP:'物流公司名称，例如 J&T Express', admCourierUrlP:'追踪网址，例如 https://.../track?code={code}', admCourierNone:'还没有添加物流公司', admCourierFillBoth:'请填写名称和网址', admNoTracking:'还没有填写物流信息', admSetTracking:'设置物流', admTrackSaved:'物流信息已保存', admTrackSaveFail:'保存失败：', admMemberH:'会员查找 — 核实 TikTok 关注截图后发放 RM2', admMemberSearchPh:'输入客人姓名/邮箱/手机号码', admMemberHint:'输入姓名/邮箱/手机号码后点查询', admMemberNone:'没有符合条件的会员', admGrantTiktok:'发放 RM2', admTiktokGranted:'已发放', admTiktokGrantOk:'已发放 RM2', admTiktokGrantFail:'发放失败：', admWdsH:'提现申请 — 打款到会员账号后点「已打款」', admSetH:'设置 — 佣金 / 运费（改完点保存）', admL1:'L1 直接佣金 %', admL2:'L2 佣金 %', admL3:'L3 佣金 %', admBonus:'首购奖 RM', admShipMin:'免邮门槛 RM', admShipFee:'运费 RM', admWdMin:'提现门槛 RM', admWa:'WhatsApp 链接', admTt:'TikTok 链接', admPayH:'收款方式 — 结算页会显示给客人', admPayAccNo:'收款账号（TNG 手机号 / 银行账号）', admPayAccName:'收款人姓名', admTngQr:'TNG QR 收款码', admDuitQr:'DuitNow QR 收款码', admUploadClick:'点击上传图片', admSaveSet:'保存设置', admProdH:'上传 / 管理商品', admCat:'分类', admCatW:'女士睡衣', admCatB:'小孩 · 男孩', admCatG:'小孩 · 女孩', admNameZh:'商品名称（中文）', admNameEn:'英文名 (可选)', admNameMs:'马来名 (可选)', admNameVi:'越南名 (可选)', admNote:'说明（可选）', admTag:'标签', admTagNone:'无', admTagNew:'新品', admTagSale:'特惠', admImg:'商品图片', admSizes:'各尺码 · 价格(RM) / 库存', admSaveProd:'保存上架', admCurProd:'现有商品', admChatH:'客服消息 — 客户的咨询会显示在这里', admNoChat:'暂无客服消息', admReplyPh:'回复…', admNoOrders:'没有待确认订单', admConfirmPaid:'确认收款', admNoWds:'没有提现申请', admPaid:'已打款', admReject:'拒绝', admShipTo:'收货', admCopyAddr:'复制地址', admCopied:'已复制到剪贴板', admNoAddr:'（客人还没填收货资料）',
-    admOptimizeImg:'一键压缩已上传图片（加快首页加载）', admChangeImg:'点击换图', admEdit:'编辑', admOptimizing:'压缩中，请稍候…', admNoNeedOptimize:'没有需要压缩的图片，已经很小了 ✅', admOptimizingProgress:'压缩中… ({done}/{total})', admOptimizeDone:'完成！已压缩 {n} 张图片 ✅', admGuest:'访客', admPricePh:'价格', admStockPh:'库存', admConfirmPayment:'确认已收到这笔订单的款项？确认后推荐人会获得佣金。', admConfirmedPaidMsg:'已确认收款，佣金已入账。', admBonusSaved:'已保存，下级首购奖金现在是 RM {amt}', admSaveOk:'已保存 ✅', admFillName:'请填商品名称', admFillOnePrice:'至少填一个尺码的价格', admPublishOk:'已保存上架 ✅', admNoProducts:'还没有商品', admConfirmDeleteProduct:'确定删除这个商品？', sysNotConnected:'系统未连接', admOpFail:'失败：', admSaveFailShort:'保存失败', admGenericError:'出错了', aOrderFailDetail:'下单失败：', wdFailDetail:'提现失败：', admCatWomenShort:'女士', admTotalStock:'共{n}件', admVariantGroup:'同款分组（选填）', admVariantGroupP:'想跟其它商品合并成一张可切换的卡片，填一样的名字', admMarkedPaid:'已标记打款', admRejectedRefunded:'已拒绝，余额已退回会员', admTrackingNoPh:'运单号', admSave:'保存', admRemindPay:'催付款', admRemindPayMsg:'您好，您在 Yuna Fashion 的订单（RM {amt}）我们还未收到付款，请尽快完成付款，谢谢！🌸', admPayMethodL:'付款方式', admViewProof:'点击查看大图', admNoProof:'未上传截图', admCancelOrder:'取消订单', admConfirmCancelOrder:'确定取消这个订单？如果下单时用了佣金抵扣，会退回会员余额。', admCancelOk:'订单已取消',
+    admOptimizeImg:'一键压缩已上传图片（加快首页加载）', admChangeImg:'点击换图', admEdit:'编辑', admOptimizing:'压缩中，请稍候…', admNoNeedOptimize:'没有需要压缩的图片，已经很小了 ✅', admOptimizingProgress:'压缩中… ({done}/{total})', admOptimizeDone:'完成！已压缩 {n} 张图片 ✅', admGuest:'访客', admPricePh:'价格', admStockPh:'库存', admConfirmPayment:'确认已收到这笔订单的款项？确认后推荐人会获得佣金。', admConfirmedPaidMsg:'已确认收款，佣金已入账。', admBonusSaved:'已保存，下级首购奖金现在是 RM {amt}', admSaveOk:'已保存 ✅', admFillName:'请填商品名称', admFillOnePrice:'至少填一个尺码的价格', admPublishOk:'已保存上架 ✅', admNoProducts:'还没有商品', admConfirmDeleteProduct:'确定删除这个商品？', sysNotConnected:'系统未连接', admOpFail:'失败：', admSaveFailShort:'保存失败', admGenericError:'出错了', aOrderFailDetail:'下单失败：', wdFailDetail:'提现失败：', admCatWomenShort:'女士', admTotalStock:'共{n}件', admVariantGroup:'同款分组（选填）', admVariantGroupP:'想跟其它商品合并成一张可切换的卡片，填一样的名字', admExtraImg:'更多同款照片（选填）', admExtraImgHint:'同一款不同颜色，一次多选几张，保存时会自动用同样的尺码/价格/库存各生成一件商品，并自动归成一组、前台可切换', admExtraImgClick:'点击选择一张或多张图片', admMarkedPaid:'已标记打款', admRejectedRefunded:'已拒绝，余额已退回会员', admTrackingNoPh:'运单号', admSave:'保存', admRemindPay:'催付款', admRemindPayMsg:'您好，您在 Yuna Fashion 的订单（RM {amt}）我们还未收到付款，请尽快完成付款，谢谢！🌸', admPayMethodL:'付款方式', admViewProof:'点击查看大图', admNoProof:'未上传截图', admCancelOrder:'取消订单', admConfirmCancelOrder:'确定取消这个订单？如果下单时用了佣金抵扣，会退回会员余额。', admCancelOk:'订单已取消',
     newT:'新品', saleT:'特惠', addT:'加入购物车', pFrom:'起', pLeft:'剩{n}件', pSold:'售罄', kgBoy:'男孩', kgGirl:'女孩', kgChart:'尺码对照表', cSize:'尺码', scTitle:'小孩尺码对照表', scWeight:'体重', scHeight:'身高', noProducts:'这个分类暂时还没有商品 🌷', alertFill:'请填写商品名称和售价', alertUp:'已上架！切到「商店」即可看到' },
 
   en:{ freeShip:'Free shipping over RM 99 · 30-day returns', slogan:'Wear Your Story.', slogan2:'Wear Your Story.',
@@ -814,7 +820,7 @@ const T = {
     footShopH:'Mua sắm', footShop1:'Cách đặt hàng', footShop2:'Hướng dẫn size', footShop3:'Vận chuyển', footShop4:'Đổi trả',
     footBrandH:'Câu chuyện', footBrand1:'Về chúng tôi', footBrand2:'Thiết kế', footBrand3:'Hợp tác', footContactH:'Liên hệ', footC1:'Trò chuyện', rights:'Bảo lưu mọi quyền', chatTitle:'Trò chuyện', chatHi:'Xin chào! Chúng tôi giúp gì được? Sẽ trả lời sớm 🌸', chatPh:'Nhập tin nhắn…', chatSendBtn:'Gửi', chatPhoneAsk:'Trước khi bắt đầu, vui lòng để lại số điện thoại để chúng tôi tiện liên hệ 🌸', chatPhonePh:'Số điện thoại', chatPhoneBtn:'Bắt đầu trò chuyện', chatPhoneInvalid:'Vui lòng nhập số điện thoại hợp lệ',
     admMgmt:'Quản lý cửa hàng', admOnlyYou:'Chỉ chủ shop thấy khu vực này', admOrdersH:'Đơn chờ xác nhận — xác nhận thanh toán sẽ ghi hoa hồng cho người giới thiệu', admSearchH:'Tra cứu đơn hàng — xem tất cả đơn (kể cả đã xác nhận)', admSearchPh:'Nhập tên/email/số điện thoại khách hàng', admStatusAll:'Tất cả trạng thái', admStatusPending:'Chờ thanh toán', admStatusPaid:'Đã thanh toán', admStatusCancelled:'Đã hủy', admSearchBtn:'Tra cứu', admSearchHint:'Nhập tên/email/số điện thoại hoặc chọn trạng thái rồi bấm tra cứu', admSearchNone:'Không có đơn hàng phù hợp', admSearching:'Đang tra cứu…', admSearchFail:'Tra cứu thất bại: ', admCourierH:'Quản lý đơn vị vận chuyển — thiết lập link theo dõi', admCourierHint:'Có thể thêm ký hiệu {code} trong link, hệ thống sẽ tự thay bằng mã vận đơn của khách; nếu chưa chắc chắn, chỉ cần điền link trang tra cứu chính thức, khách tự nhập mã vận đơn để tra cũng được.', admCourierAdd:'Thêm', admCourierNameP:'Tên đơn vị vận chuyển, ví dụ J&T Express', admCourierUrlP:'Link theo dõi, ví dụ https://.../track?code={code}', admCourierNone:'Chưa thêm đơn vị vận chuyển nào', admCourierFillBoth:'Vui lòng điền tên và link', admNoTracking:'Chưa điền thông tin vận chuyển', admSetTracking:'Thiết lập vận chuyển', admTrackSaved:'Đã lưu thông tin vận chuyển', admTrackSaveFail:'Lưu thất bại: ', admMemberH:'Tìm hội viên — xác minh ảnh chụp theo dõi TikTok rồi cấp RM2', admMemberSearchPh:'Nhập tên/email/số điện thoại khách hàng', admMemberHint:'Nhập tên/email/số điện thoại rồi bấm tra cứu', admMemberNone:'Không có hội viên phù hợp', admGrantTiktok:'Cấp RM2', admTiktokGranted:'Đã cấp', admTiktokGrantOk:'Đã cấp RM2', admTiktokGrantFail:'Cấp thất bại: ', admWdsH:'Yêu cầu rút tiền — chuyển cho hội viên xong bấm「Đã trả」', admSetH:'Cài đặt — hoa hồng / phí ship (sửa xong bấm lưu)', admL1:'Hoa hồng L1 %', admL2:'Hoa hồng L2 %', admL3:'Hoa hồng L3 %', admBonus:'Thưởng mua đầu RM', admShipMin:'Mức miễn ship RM', admShipFee:'Phí ship RM', admWdMin:'Mức rút tối thiểu RM', admWa:'Liên kết WhatsApp', admTt:'Liên kết TikTok', admPayH:'Phương thức nhận tiền — hiển thị cho khách ở trang thanh toán', admPayAccNo:'Số tài khoản nhận tiền (SĐT TNG / số tài khoản ngân hàng)', admPayAccName:'Tên người nhận tiền', admTngQr:'Mã QR nhận tiền TNG', admDuitQr:'Mã QR nhận tiền DuitNow', admUploadClick:'Nhấn để tải lên hình ảnh', admSaveSet:'Lưu cài đặt', admProdH:'Tải lên / quản lý sản phẩm', admCat:'Phân loại', admCatW:'Đồ ngủ nữ', admCatB:'Trẻ em · Bé trai', admCatG:'Trẻ em · Bé gái', admNameZh:'Tên sản phẩm (tiếng Trung)', admNameEn:'Tên tiếng Anh (tùy chọn)', admNameMs:'Tên tiếng Mã Lai (tùy chọn)', admNameVi:'Tên tiếng Việt (tùy chọn)', admNote:'Mô tả (tùy chọn)', admTag:'Nhãn', admTagNone:'Không', admTagNew:'Mới', admTagSale:'Ưu đãi', admImg:'Hình sản phẩm', admSizes:'Từng size · Giá(RM) / Tồn kho', admSaveProd:'Lưu & đăng bán', admCurProd:'Sản phẩm hiện có', admChatH:'Tin nhắn CSKH — câu hỏi của khách hiện ở đây', admNoChat:'Chưa có tin nhắn', admReplyPh:'Trả lời…', admNoOrders:'Không có đơn chờ', admConfirmPaid:'Xác nhận đã nhận tiền', admNoWds:'Không có yêu cầu rút', admPaid:'Đã trả', admReject:'Từ chối', admShipTo:'Giao đến', admCopyAddr:'Sao chép địa chỉ', admCopied:'Đã sao chép', admNoAddr:'(Khách chưa điền thông tin giao hàng)',
-    admOptimizeImg:'Nén ảnh đã tải lên (giúp trang chủ load nhanh hơn)', admChangeImg:'Nhấn để đổi ảnh', admEdit:'Sửa', admOptimizing:'Đang nén, vui lòng chờ…', admNoNeedOptimize:'Không có ảnh cần nén, đã đủ nhỏ rồi ✅', admOptimizingProgress:'Đang nén… ({done}/{total})', admOptimizeDone:'Xong! Đã nén {n} ảnh ✅', admGuest:'Khách', admPricePh:'Giá', admStockPh:'Tồn kho', admConfirmPayment:'Xác nhận đã nhận được tiền cho đơn này? Sau khi xác nhận, người giới thiệu sẽ được cộng hoa hồng.', admConfirmedPaidMsg:'Đã xác nhận thanh toán, hoa hồng đã được cộng.', admBonusSaved:'Đã lưu, thưởng mua đầu của tuyến dưới hiện là RM {amt}', admSaveOk:'Đã lưu ✅', admFillName:'Vui lòng điền tên sản phẩm', admFillOnePrice:'Vui lòng điền giá cho ít nhất một size', admPublishOk:'Đã lưu và đăng bán ✅', admNoProducts:'Chưa có sản phẩm nào', admConfirmDeleteProduct:'Bạn có chắc muốn xoá sản phẩm này?', sysNotConnected:'Hệ thống chưa kết nối', admOpFail:'Thất bại: ', admSaveFailShort:'Lưu thất bại', admGenericError:'Đã xảy ra lỗi', admCatWomenShort:'Nữ', admTotalStock:'Tổng {n} sp', admVariantGroup:'Nhóm cùng mẫu (tùy chọn)', admVariantGroupP:'Nếu muốn gộp chung một thẻ có thể chuyển đổi với sản phẩm khác, nhập cùng một tên', admMarkedPaid:'Đã đánh dấu đã trả', admRejectedRefunded:'Đã từ chối, số dư đã hoàn lại cho hội viên', admTrackingNoPh:'Mã vận đơn', admSave:'Lưu', admRemindPay:'Nhắc thanh toán', admRemindPayMsg:'Xin chào, đơn hàng của bạn tại Yuna Fashion (RM {amt}) chúng tôi vẫn chưa nhận được thanh toán. Vui lòng hoàn tất thanh toán sớm nhất có thể, cảm ơn bạn! 🌸', admPayMethodL:'Phương thức thanh toán', admViewProof:'Nhấn để xem ảnh lớn', admNoProof:'Chưa tải ảnh chụp', admCancelOrder:'Hủy đơn', admConfirmCancelOrder:'Xác nhận hủy đơn hàng này? Nếu lúc đặt hàng có dùng tín dụng hoa hồng, số dư sẽ được hoàn lại cho hội viên.', admCancelOk:'Đã hủy đơn hàng', aOrderFailDetail:'Đặt hàng thất bại: ', wdFailDetail:'Rút tiền thất bại: ',
+    admOptimizeImg:'Nén ảnh đã tải lên (giúp trang chủ load nhanh hơn)', admChangeImg:'Nhấn để đổi ảnh', admEdit:'Sửa', admOptimizing:'Đang nén, vui lòng chờ…', admNoNeedOptimize:'Không có ảnh cần nén, đã đủ nhỏ rồi ✅', admOptimizingProgress:'Đang nén… ({done}/{total})', admOptimizeDone:'Xong! Đã nén {n} ảnh ✅', admGuest:'Khách', admPricePh:'Giá', admStockPh:'Tồn kho', admConfirmPayment:'Xác nhận đã nhận được tiền cho đơn này? Sau khi xác nhận, người giới thiệu sẽ được cộng hoa hồng.', admConfirmedPaidMsg:'Đã xác nhận thanh toán, hoa hồng đã được cộng.', admBonusSaved:'Đã lưu, thưởng mua đầu của tuyến dưới hiện là RM {amt}', admSaveOk:'Đã lưu ✅', admFillName:'Vui lòng điền tên sản phẩm', admFillOnePrice:'Vui lòng điền giá cho ít nhất một size', admPublishOk:'Đã lưu và đăng bán ✅', admNoProducts:'Chưa có sản phẩm nào', admConfirmDeleteProduct:'Bạn có chắc muốn xoá sản phẩm này?', sysNotConnected:'Hệ thống chưa kết nối', admOpFail:'Thất bại: ', admSaveFailShort:'Lưu thất bại', admGenericError:'Đã xảy ra lỗi', admCatWomenShort:'Nữ', admTotalStock:'Tổng {n} sp', admVariantGroup:'Nhóm cùng mẫu (tùy chọn)', admVariantGroupP:'Nếu muốn gộp chung một thẻ có thể chuyển đổi với sản phẩm khác, nhập cùng một tên', admExtraImg:'Thêm ảnh cùng mẫu (tùy chọn)', admExtraImgHint:'Cùng mẫu khác màu, chọn nhiều ảnh một lúc - khi lưu sẽ tự động tạo mỗi ảnh thành một sản phẩm với cùng size/giá/tồn kho, và tự gộp thành một nhóm có thể chuyển đổi ở trang chủ', admExtraImgClick:'Nhấn để chọn một hoặc nhiều ảnh', admMarkedPaid:'Đã đánh dấu đã trả', admRejectedRefunded:'Đã từ chối, số dư đã hoàn lại cho hội viên', admTrackingNoPh:'Mã vận đơn', admSave:'Lưu', admRemindPay:'Nhắc thanh toán', admRemindPayMsg:'Xin chào, đơn hàng của bạn tại Yuna Fashion (RM {amt}) chúng tôi vẫn chưa nhận được thanh toán. Vui lòng hoàn tất thanh toán sớm nhất có thể, cảm ơn bạn! 🌸', admPayMethodL:'Phương thức thanh toán', admViewProof:'Nhấn để xem ảnh lớn', admNoProof:'Chưa tải ảnh chụp', admCancelOrder:'Hủy đơn', admConfirmCancelOrder:'Xác nhận hủy đơn hàng này? Nếu lúc đặt hàng có dùng tín dụng hoa hồng, số dư sẽ được hoàn lại cho hội viên.', admCancelOk:'Đã hủy đơn hàng', aOrderFailDetail:'Đặt hàng thất bại: ', wdFailDetail:'Rút tiền thất bại: ',
     newT:'Mới', saleT:'Sale', addT:'Thêm vào giỏ', pFrom:'+', pLeft:'còn {n}', pSold:'Hết hàng', kgBoy:'Bé trai', kgGirl:'Bé gái', kgChart:'Bảng size', cSize:'Size', scTitle:'Bảng size trẻ em', scWeight:'Cân nặng', scHeight:'Chiều cao', noProducts:'Chưa có sản phẩm trong mục này 🌷', alertFill:'Vui lòng nhập tên và giá', alertUp:'Đã đăng! Chuyển sang Cửa hàng để xem' }
 };
 
@@ -1722,7 +1728,15 @@ async function saveSettings(){
 }
 
 /* ============ 商品管理（数据库）============ */
-let pendingPmImg=null, pmEditId=null, pmCurImg=null;
+let pendingPmImg=null, pmEditId=null, pmCurImg=null, pendingExtraImages=[];
+function renderExtraImgList(){
+  const el=document.getElementById('pmExtraImgList'); if(!el) return;
+  el.innerHTML = pendingExtraImages.map((img,i)=>
+    '<div style="position:relative"><img src="'+img+'" style="width:50px;height:50px;object-fit:cover;border-radius:8px;border:1px solid var(--line)">'
+    +'<span onclick="removeExtraImg('+i+')" style="position:absolute;top:-6px;right:-6px;background:var(--rose);color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;line-height:1">×</span></div>'
+  ).join('');
+}
+function removeExtraImg(i){ pendingExtraImages.splice(i,1); renderExtraImgList(); }
 const PM_SIZES={women:['M','L','XL'], boy:['4','5','6','7','8','9','10','11','12','S','M'], girl:['4','5','6','7','8','9','10','11','12','S','M']};
 function pmRenderSizes(){
   const catEl=document.getElementById('pmCat'); if(!catEl) return;
@@ -1749,23 +1763,37 @@ async function pmSave(){
   if(!sizes.some(x=>x.price>0)){ msg.textContent=aTx('admFillOnePrice'); return; }
   try{
     let pid=pmEditId;
+    let groupVal=variantGroup;
     if(pid){
-      await sb.from('products').update({category:cat,name:name,name_en:nEn,name_ms:nMs,name_vi:nVi,note:note,tag:tag,variant_group:variantGroup,image:(pendingPmImg||pmCurImg)}).eq('id',pid);
+      await sb.from('products').update({category:cat,name:name,name_en:nEn,name_ms:nMs,name_vi:nVi,note:note,tag:tag,variant_group:groupVal,image:(pendingPmImg||pmCurImg)}).eq('id',pid);
       await sb.from('product_sizes').delete().eq('product_id',pid);
     } else {
-      const res=await sb.from('products').insert({category:cat,name:name,name_en:nEn,name_ms:nMs,name_vi:nVi,note:note,tag:tag,variant_group:variantGroup,image:pendingPmImg}).select('id').single();
+      const res=await sb.from('products').insert({category:cat,name:name,name_en:nEn,name_ms:nMs,name_vi:nVi,note:note,tag:tag,variant_group:groupVal,image:pendingPmImg}).select('id').single();
       if(res.error){ msg.textContent=aTx('admTrackSaveFail')+res.error.message; return; }
       pid=res.data.id;
     }
     await sb.from('product_sizes').insert(sizes.map(x=>({product_id:pid,size:x.size,price:x.price,stock:x.stock,sort:x.sort})));
+    if(pendingExtraImages.length){
+      if(!groupVal){
+        groupVal='auto-'+pid;
+        await sb.from('products').update({variant_group:groupVal}).eq('id',pid);
+      }
+      for(const img of pendingExtraImages){
+        const r2=await sb.from('products').insert({category:cat,name:name,name_en:nEn,name_ms:nMs,name_vi:nVi,note:note,tag:tag,variant_group:groupVal,image:img}).select('id').single();
+        if(!r2.error){
+          await sb.from('product_sizes').insert(sizes.map(x=>({product_id:r2.data.id,size:x.size,price:x.price,stock:x.stock,sort:x.sort})));
+        }
+      }
+    }
     pmReset(); alert(aTx('admPublishOk')); await loadProducts(); pmRenderList();
   }catch(e){ msg.textContent=aTx('admSaveFailShort'); }
 }
 function pmReset(){
-  pmEditId=null; pendingPmImg=null; pmCurImg=null;
+  pmEditId=null; pendingPmImg=null; pmCurImg=null; pendingExtraImages=[];
   ['pmName','pmNote','pmNameEn','pmNameMs','pmNameVi','pmVariantGroup'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   const tg=document.getElementById('pmTag'); if(tg) tg.value='';
   const ph=document.getElementById('pmImgPh'); if(ph) ph.innerHTML='<i class="ti ti-photo" style="font-size:22px"></i><br>'+aTx('admUploadClick');
+  renderExtraImgList();
   pmRenderSizes();
 }
 function pmRenderList(){
@@ -2074,6 +2102,15 @@ async function adminReplyImage(dataUri){
 }
 document.addEventListener('change', function(e){
   if(e.target && e.target.id==='pmImg'){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ compressImage(ev.target.result,1000,0.8).then(small=>{ pendingPmImg=small; const ph=document.getElementById('pmImgPh'); if(ph) ph.innerHTML='<img src="'+pendingPmImg+'" style="max-height:70px;border-radius:8px"><br>'+aTx('admChangeImg'); }); }; r.readAsDataURL(f); }
+  if(e.target && e.target.id==='pmExtraImg'){
+    const files=Array.from(e.target.files||[]);
+    files.forEach(f=>{
+      const r=new FileReader();
+      r.onload=ev=>{ compressImage(ev.target.result,1000,0.8).then(small=>{ pendingExtraImages.push(small); renderExtraImgList(); }); };
+      r.readAsDataURL(f);
+    });
+    e.target.value='';
+  }
   if(e.target && e.target.id==='tngQrImg'){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ pendingTngQr=ev.target.result; const ph=document.getElementById('tngQrPh'); if(ph) ph.innerHTML='<img src="'+pendingTngQr+'" style="max-height:70px;border-radius:8px"><br>'+aTx('admChangeImg'); }; r.readAsDataURL(f); }
   if(e.target && e.target.id==='duitQrImg'){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ pendingDuitQr=ev.target.result; const ph=document.getElementById('duitQrPh'); if(ph) ph.innerHTML='<img src="'+pendingDuitQr+'" style="max-height:70px;border-radius:8px"><br>'+aTx('admChangeImg'); }; r.readAsDataURL(f); }
   if(e.target && e.target.id==='chatImgInput'){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ chatSendImage(ev.target.result); e.target.value=''; }; r.readAsDataURL(f); }
