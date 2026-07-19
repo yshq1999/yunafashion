@@ -603,6 +603,8 @@ function isStandalone(){ return window.matchMedia("(display-mode: standalone)").
 function isIOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent); }
 function showToast(msg){ var w=document.getElementById('toastWrap'); if(!w){ w=document.createElement('div'); w.id='toastWrap'; w.className='toast-wrap'; document.body.appendChild(w); } var t=document.createElement('div'); t.className='toast'; t.textContent=msg; w.appendChild(t); requestAnimationFrame(function(){ t.classList.add('show'); }); setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ t.remove(); },300); },2200); }
 function copyShipBtn(btn){ try{ var txt=decodeURIComponent(btn.getAttribute('data-ship')); navigator.clipboard.writeText(txt); }catch(e){} showToast(aTx('admCopied')); }
+function copyTrackingNo(el){ try{ var txt=decodeURIComponent(el.getAttribute('data-track')); navigator.clipboard.writeText(txt); }catch(e){} showToast(T[lang].aCopied); }
+function toWaPhone(phone){ var d=(phone||'').replace(/\D/g,''); if(!d) return ''; if(d.charAt(0)==='0') d='60'+d.slice(1); else if(d.slice(0,2)!=='60') d='60'+d; return d; }
 function dismissGuide(){ try{ localStorage.setItem('yuna_guide_hide','1'); }catch(e){} var g=document.getElementById('memberGuide'); if(g) g.classList.add('hide'); }
 const T = {
   zh:{ freeShip:'免费配送满 RM 99 · 30 天退换', slogan:'Wear Your Story.', slogan2:'Wear Your Story.',
@@ -622,7 +624,7 @@ const T = {
     mMyOrders:'我的订单', mNoOrders:'还没有订单记录', mOrdPending:'待付款', mOrdPaid:'已确认', mTrackLink:'查看物流 →',
     mProgTpl:'已有效推荐 {refs} 人 · 再推荐 {n} 人 或 自己再消费 RM{amt} 升「{next}」', mProgMaxTpl:'已有效推荐 {refs} 人 · 已是最高等级 🎉',
     aConnecting:'系统连接中，请稍后再试', aFillLogin:'请填写邮箱和密码', aCopied:'链接已复制 🌸 快分享给朋友吧！', aCartAdded:'已加入购物车 🛒', mWelcome:'欢迎回来，{name} 🌸', mGuideTitle:'新手 3 步,轻松上手：', mGuide1:'① 填好收货资料，立领 RM3', mGuide2:'② 复制你的专属链接,分享给朋友赚佣金', mGuide3:'③ 逛逛商店,挑几件喜欢的 🌸', aBadAmt:'请输入有效金额', aWdOk:'提现申请已提交，店主审核后会打款。', wdTitle:'申请提现', wdBalTpl:'当前佣金余额 RM {bal}', wdLowMsg:'佣金余额未满 RM {min}，暂时无法提现（最低提现额为 RM {min}）。不过不用担心，这笔余额可以在结算时直接抵扣购物金额 🌸', wdAmtL:'提现金额 (RM)', wdMethodL:'收款方式', wdMethodTng:'TNG 电子钱包', wdMethodBank:'银行转账', wdNameL:'户口名字', wdNameP:'与银行/TNG 户口一致的姓名', wdPhoneL:'TNG 手机号码', wdPhoneP:'例如 012-3456789', wdBankL:'银行名称', wdAccNoL:'银行账号', wdAccNoP:'请填写完整账号', wdBtn:'提交提现申请', wdLater:'稍后再说', wdMinErr:'提现金额不能低于 RM {min}', wdMaxErr:'提现金额不能超过佣金余额',
-    aPickSize:'请选择尺码', aSoldOut:'该尺码已售罄', aStockShort:'库存不够了', aCartEmpty:'购物车是空的', aOrderFail:'下单失败，请重试',
+    aPickSize:'请选择尺码', aSoldOut:'该尺码已售罄', aStockShort:'库存不够了', aCartEmpty:'购物车是空的', aOrderFail:'下单失败，请重试', aProofRequired:'请先上传付款截图',
     addrTitle:'填写收货资料，领 RM3', addrSub:'填好资料 + 把 App 加到手机主屏幕，即领 RM3（一次性）', addrName:'姓名', addrPhone:'手机号码', addrAddr:'详细地址', addrNameP:'收货人姓名', addrPhoneP:'手机号,例如 012-3456789', addrAddrP:'门牌号、街道、花园/区', addrCity:'城市', addrCityP:'例如：八打灵再也', addrPostcode:'邮政编码', addrPostcodeP:'例如：47800', addrState:'州属', addrStateP:'请选择州属', addrBtn:'安装 App 并领 RM3', addrLater:'稍后再说', addrFill:'请填写完整资料', addrPhoneInvalid:'请输入有效的手机号码', addrPostcodeInvalid:'请输入 5 位邮政编码', addrGot:'已获得 RM3 佣金！', addrEditTitle:'编辑收货地址', addrEditSub:'更新你的收货资料，方便下次购买', addrSaveBtn:'保存地址', addrSaved:'地址已更新', installNeed:'需要把 App 加到主屏幕才能领 RM3，请点「安装」并选择添加', iosTitle:'把 Yuna 加到主屏幕：', iosStep1:'① 点手机底部/顶部的「分享」按钮', iosStep2:'② 选「加入主画面 / Add to Home Screen」', iosStep3:'③ 完成后回来点下面按钮领 RM3', iosDone:'我已添加，领取 RM3',
     heroTag:'YUNA FASHION', heroTitle:'Wear Your <em>Story</em>.',
     heroDesc:'为真实的日子、有意义的时刻，以及真正的你而设计。', shopNow:'探索 YUNA', ourStoryBtn:'我们的故事',
@@ -648,13 +650,13 @@ const T = {
     fImgL:'商品图片', uploadImg:'点击上传图片', saveBtn:'保存并上架', curProd:'当前商品',
     cartTitle:'购物车', cartSub:'确认商品数量后点击结算', cartTotalLabel:'合计', checkoutBtn:'前往结算 →', emptyCart:'购物车还是空的 · 去商店挑选喜欢的吧',
     backCart:'返回购物车', coTitle:'结算付款', choosePay:'选择付款方式', tngAcc:'TNG 户口', useCreditL:'使用佣金抵扣（可用 RM {bal}）', coItemsL:'商品', coShipL:'运费', coFreeL:'免费', coCreditDeductL:'佣金抵扣', coPayableL:'应付',
-    proofL:'上传付款截图（选填）', proofP:'付款后点击上传截图', proofChatHint:'💬 也可以不上传，直接点击右下角在线客服通知我们付款啦', submitOrder:'提交订单',
+    proofL:'上传付款截图（必填）', proofP:'付款后点击上传截图', proofChatHint:'💬 上传后我们会尽快核实付款并安排发货', submitOrder:'提交订单',
     payTng:"用 Touch 'n Go eWallet 扫码", payDuit:'用任意银行 App 扫 DuitNow QR', payAccTo:'转账到以下 TNG eWallet 户口：', payNotSet:'店主还没设置收款方式，请点右下角在线客服联系我们付款',
     successH:'订单已提交！', orderNo:'订单编号', successMsg:'我们会核对你的付款截图，确认后尽快发货。', keepShop:'继续购物',
     footShopH:'购物指南', footShop1:'如何下单', footShop2:'尺码指南', footShop3:'配送说明', footShop4:'退换政策',
-    footBrandH:'品牌故事', footBrand1:'关于我们', footBrand2:'设计理念', footBrand3:'合作联系', footContactH:'联系我们', footC1:'在线客服', rights:'版权所有', chatTitle:'在线客服', chatHi:'你好！有什么可以帮你？我们会尽快回复 🌸', chatPh:'输入消息…', chatSendBtn:'发送',
+    footBrandH:'品牌故事', footBrand1:'关于我们', footBrand2:'设计理念', footBrand3:'合作联系', footContactH:'联系我们', footC1:'在线客服', rights:'版权所有', chatTitle:'在线客服', chatHi:'你好！有什么可以帮你？我们会尽快回复 🌸', chatPh:'输入消息…', chatSendBtn:'发送', chatPhoneAsk:'开始对话前，麻烦先留下您的手机号码，方便我们跟进您的问题 🌸', chatPhonePh:'手机号码', chatPhoneBtn:'开始对话', chatPhoneInvalid:'请输入有效的手机号码',
     admMgmt:'店主管理', admOnlyYou:'只有你(店主)能看到这一区', admOrdersH:'待确认订单 — 确认收款后会给推荐人入账佣金', admSearchH:'订单查询 — 查看所有订单（含已确认）', admSearchPh:'输入客人姓名/邮箱/手机号码', admStatusAll:'全部状态', admStatusPending:'待付款', admStatusPaid:'已付款', admSearchBtn:'查询', admSearchHint:'输入姓名/邮箱/手机号码或选择状态后点查询', admSearchNone:'没有符合条件的订单', admSearching:'查询中…', admSearchFail:'查询失败：', admCourierH:'物流公司管理 — 设置各物流的追踪链接', admCourierHint:'网址里可以加 {code} 占位符，系统会自动替换成客人的运单号；不确定的话先只填官网追踪页链接也可以，客人自己去页面输入号码查询一样能用。', admCourierAdd:'添加', admCourierNameP:'物流公司名称，例如 J&T Express', admCourierUrlP:'追踪网址，例如 https://.../track?code={code}', admCourierNone:'还没有添加物流公司', admCourierFillBoth:'请填写名称和网址', admNoTracking:'还没有填写物流信息', admSetTracking:'设置物流', admTrackSaved:'物流信息已保存', admTrackSaveFail:'保存失败：', admMemberH:'会员查找 — 核实 TikTok 关注截图后发放 RM2', admMemberSearchPh:'输入客人姓名/邮箱/手机号码', admMemberHint:'输入姓名/邮箱/手机号码后点查询', admMemberNone:'没有符合条件的会员', admGrantTiktok:'发放 RM2', admTiktokGranted:'已发放', admTiktokGrantOk:'已发放 RM2', admTiktokGrantFail:'发放失败：', admWdsH:'提现申请 — 打款到会员账号后点「已打款」', admSetH:'设置 — 佣金 / 运费（改完点保存）', admL1:'L1 直接佣金 %', admL2:'L2 佣金 %', admL3:'L3 佣金 %', admBonus:'首购奖 RM', admShipMin:'免邮门槛 RM', admShipFee:'运费 RM', admWdMin:'提现门槛 RM', admWa:'WhatsApp 链接', admTt:'TikTok 链接', admPayH:'收款方式 — 结算页会显示给客人', admPayAccNo:'收款账号（TNG 手机号 / 银行账号）', admPayAccName:'收款人姓名', admTngQr:'TNG QR 收款码', admDuitQr:'DuitNow QR 收款码', admUploadClick:'点击上传图片', admSaveSet:'保存设置', admProdH:'上传 / 管理商品', admCat:'分类', admCatW:'女士睡衣', admCatB:'小孩 · 男孩', admCatG:'小孩 · 女孩', admNameZh:'商品名称（中文）', admNameEn:'英文名 (可选)', admNameMs:'马来名 (可选)', admNameVi:'越南名 (可选)', admNote:'说明（可选）', admTag:'标签', admTagNone:'无', admTagNew:'新品', admTagSale:'特惠', admImg:'商品图片', admSizes:'各尺码 · 价格(RM) / 库存', admSaveProd:'保存上架', admCurProd:'现有商品', admChatH:'客服消息 — 客户的咨询会显示在这里', admNoChat:'暂无客服消息', admReplyPh:'回复…', admNoOrders:'没有待确认订单', admConfirmPaid:'确认收款', admNoWds:'没有提现申请', admPaid:'已打款', admReject:'拒绝', admShipTo:'收货', admCopyAddr:'复制地址', admCopied:'已复制到剪贴板', admNoAddr:'（客人还没填收货资料）',
-    admOptimizeImg:'一键压缩已上传图片（加快首页加载）', admChangeImg:'点击换图', admEdit:'编辑', admOptimizing:'压缩中，请稍候…', admNoNeedOptimize:'没有需要压缩的图片，已经很小了 ✅', admOptimizingProgress:'压缩中… ({done}/{total})', admOptimizeDone:'完成！已压缩 {n} 张图片 ✅', admGuest:'访客', admPricePh:'价格', admStockPh:'库存', admConfirmPayment:'确认已收到这笔订单的款项？确认后推荐人会获得佣金。', admConfirmedPaidMsg:'已确认收款，佣金已入账。', admBonusSaved:'已保存，下级首购奖金现在是 RM {amt}', admSaveOk:'已保存 ✅', admFillName:'请填商品名称', admFillOnePrice:'至少填一个尺码的价格', admPublishOk:'已保存上架 ✅', admNoProducts:'还没有商品', admConfirmDeleteProduct:'确定删除这个商品？', sysNotConnected:'系统未连接', admOpFail:'失败：', admSaveFailShort:'保存失败', admGenericError:'出错了', aOrderFailDetail:'下单失败：', wdFailDetail:'提现失败：', admCatWomenShort:'女士', admTotalStock:'共{n}件', admMarkedPaid:'已标记打款', admRejectedRefunded:'已拒绝，余额已退回会员', admTrackingNoPh:'运单号', admSave:'保存',
+    admOptimizeImg:'一键压缩已上传图片（加快首页加载）', admChangeImg:'点击换图', admEdit:'编辑', admOptimizing:'压缩中，请稍候…', admNoNeedOptimize:'没有需要压缩的图片，已经很小了 ✅', admOptimizingProgress:'压缩中… ({done}/{total})', admOptimizeDone:'完成！已压缩 {n} 张图片 ✅', admGuest:'访客', admPricePh:'价格', admStockPh:'库存', admConfirmPayment:'确认已收到这笔订单的款项？确认后推荐人会获得佣金。', admConfirmedPaidMsg:'已确认收款，佣金已入账。', admBonusSaved:'已保存，下级首购奖金现在是 RM {amt}', admSaveOk:'已保存 ✅', admFillName:'请填商品名称', admFillOnePrice:'至少填一个尺码的价格', admPublishOk:'已保存上架 ✅', admNoProducts:'还没有商品', admConfirmDeleteProduct:'确定删除这个商品？', sysNotConnected:'系统未连接', admOpFail:'失败：', admSaveFailShort:'保存失败', admGenericError:'出错了', aOrderFailDetail:'下单失败：', wdFailDetail:'提现失败：', admCatWomenShort:'女士', admTotalStock:'共{n}件', admMarkedPaid:'已标记打款', admRejectedRefunded:'已拒绝，余额已退回会员', admTrackingNoPh:'运单号', admSave:'保存', admRemindPay:'催付款', admRemindPayMsg:'您好，您在 Yuna Fashion 的订单（RM {amt}）我们还未收到付款，请尽快完成付款，谢谢！🌸',
     newT:'新品', saleT:'特惠', addT:'加入购物车', pFrom:'起', pLeft:'剩{n}件', pSold:'售罄', kgBoy:'男孩', kgGirl:'女孩', kgChart:'尺码对照表', cSize:'尺码', scTitle:'小孩尺码对照表', scWeight:'体重', scHeight:'身高', noProducts:'这个分类暂时还没有商品 🌷', alertFill:'请填写商品名称和售价', alertUp:'已上架！切到「商店」即可看到' },
 
   en:{ freeShip:'Free shipping over RM 99 · 30-day returns', slogan:'Wear Your Story.', slogan2:'Wear Your Story.',
@@ -674,7 +676,7 @@ const T = {
     mMyOrders:'My orders', mNoOrders:'No orders yet', mOrdPending:'Awaiting payment', mOrdPaid:'Confirmed', mTrackLink:'Track shipment →',
     mProgTpl:'{refs} valid referrals · Refer {n} more or spend RM{amt} yourself to reach {next}', mProgMaxTpl:'{refs} valid referrals · Top tier reached 🎉',
     aConnecting:'Connecting, please try again', aFillLogin:'Please enter email and password', aCopied:'Link copied 🌸 share it with friends!', aCartAdded:'Added to cart 🛒', mWelcome:'Welcome back, {name} 🌸', mGuideTitle:'3 easy steps to start:', mGuide1:'1. Fill delivery info — get RM3', mGuide2:'2. Copy your link & share to earn', mGuide3:'3. Browse the shop & pick some favourites 🌸', aBadAmt:'Please enter a valid amount', aWdOk:'Withdrawal request submitted. Owner will pay after review.', wdTitle:'Withdraw commission', wdBalTpl:'Current balance RM {bal}', wdLowMsg:"Your balance is below RM {min}, so it can't be withdrawn yet (minimum withdrawal is RM {min}). No worries — you can still use this balance as store credit at checkout 🌸", wdAmtL:'Withdrawal amount (RM)', wdMethodL:'Payment method', wdMethodTng:'TNG e-wallet', wdMethodBank:'Bank transfer', wdNameL:'Account holder name', wdNameP:'Name matching your bank/TNG account', wdPhoneL:'TNG phone number', wdPhoneP:'e.g. 012-3456789', wdBankL:'Bank name', wdAccNoL:'Bank account number', wdAccNoP:'Enter full account number', wdBtn:'Submit withdrawal request', wdLater:'Maybe later', wdMinErr:'Withdrawal amount cannot be below RM {min}', wdMaxErr:'Withdrawal amount cannot exceed your balance',
-    aPickSize:'Please select a size', aSoldOut:'This size is sold out', aStockShort:'Not enough stock', aCartEmpty:'Your cart is empty', aOrderFail:'Order failed, please retry',
+    aPickSize:'Please select a size', aSoldOut:'This size is sold out', aStockShort:'Not enough stock', aCartEmpty:'Your cart is empty', aOrderFail:'Order failed, please retry', aProofRequired:'Please upload your payment screenshot first',
     addrTitle:'Fill delivery info, get RM3', addrSub:'Fill info + add the App to your home screen to get RM3 (one-time)', addrName:'Name', addrPhone:'Phone', addrAddr:'Address', addrNameP:'Recipient name', addrPhoneP:'Phone e.g. 012-3456789', addrAddrP:'Unit no, street, taman/area', addrCity:'City', addrCityP:'e.g. Petaling Jaya', addrPostcode:'Postcode', addrPostcodeP:'e.g. 47800', addrState:'State', addrStateP:'Select state', addrBtn:'Install App & get RM3', addrLater:'Maybe later', addrFill:'Please fill all fields', addrPhoneInvalid:'Please enter a valid phone number', addrPostcodeInvalid:'Please enter a 5-digit postcode', addrGot:'You earned RM3!', addrEditTitle:'Edit delivery address', addrEditSub:'Update your delivery details for next time', addrSaveBtn:'Save address', addrSaved:'Address updated', installNeed:'Please add the App to your home screen to get RM3 — tap Install and confirm', iosTitle:'Add Yuna to your home screen:', iosStep1:'1. Tap the Share button', iosStep2:'2. Choose "Add to Home Screen"', iosStep3:'3. Come back and tap the button below', iosDone:'I have added it — get RM3',
     heroTag:'YUNA FASHION', heroTitle:'Wear Your <em>Story</em>.',
     heroDesc:'Clothing made for real days, meaningful moments and the woman you already are.', shopNow:'Discover YUNA', ourStoryBtn:'Our Story', admMgmt:'Store Admin',
@@ -700,11 +702,11 @@ const T = {
     fImgL:'Product image', uploadImg:'Click to upload', saveBtn:'Save & publish', curProd:'Current products',
     cartTitle:'Cart', cartSub:'Adjust quantity, then checkout', cartTotalLabel:'Total', checkoutBtn:'Checkout →', emptyCart:'Your cart is empty · go pick something you love',
     backCart:'Back to cart', coTitle:'Checkout', choosePay:'Choose payment method', tngAcc:'TNG Account', useCreditL:'Use commission credit (RM {bal} available)', coItemsL:'Items', coShipL:'Shipping', coFreeL:'Free', coCreditDeductL:'Credit applied', coPayableL:'Payable',
-    proofL:'Upload payment screenshot (optional)', proofP:'Upload after paying', proofChatHint:"💬 Or skip this and just tap the livechat button to let us know you've paid", submitOrder:'Place order',
+    proofL:'Upload payment screenshot (required)', proofP:'Upload after paying', proofChatHint:"💬 We'll verify your payment and ship as soon as possible", submitOrder:'Place order',
     payTng:"Scan with Touch 'n Go eWallet", payDuit:'Scan DuitNow QR with any bank app', payAccTo:'Transfer to this TNG eWallet account:', payNotSet:'Payment details not set up yet — tap livechat to arrange payment',
     successH:'Order placed!', orderNo:'Order no.', successMsg:'We will verify your payment screenshot and ship as soon as confirmed.', keepShop:'Keep shopping',
     footShopH:'Shopping', footShop1:'How to order', footShop2:'Size guide', footShop3:'Shipping', footShop4:'Returns',
-    footBrandH:'Our story', footBrand1:'About us', footBrand2:'Design', footBrand3:'Partnership', footContactH:'Contact', footC1:'Live chat', rights:'All rights reserved', chatTitle:'Live chat', chatHi:'Hi! How can we help? We will reply soon 🌸', chatPh:'Type a message…', chatSendBtn:'Send',
+    footBrandH:'Our story', footBrand1:'About us', footBrand2:'Design', footBrand3:'Partnership', footContactH:'Contact', footC1:'Live chat', rights:'All rights reserved', chatTitle:'Live chat', chatHi:'Hi! How can we help? We will reply soon 🌸', chatPh:'Type a message…', chatSendBtn:'Send', chatPhoneAsk:'Before we start, please leave your phone number so we can follow up 🌸', chatPhonePh:'Phone number', chatPhoneBtn:'Start chat', chatPhoneInvalid:'Please enter a valid phone number',
     newT:'New', saleT:'Sale', addT:'Add to cart', pFrom:'+', pLeft:'{n} left', pSold:'Sold out', kgBoy:'Boy', kgGirl:'Girl', kgChart:'Size chart', cSize:'Size', scTitle:'Kids size chart', scWeight:'Weight', scHeight:'Height', noProducts:'No products in this category yet 🌷', alertFill:'Please enter name and price', alertUp:'Published! Switch to Shop to see it' },
 
   ms:{ freeShip:'Penghantaran percuma melebihi RM 99 · Pulangan 30 hari', slogan:'Wear Your Story.', slogan2:'Wear Your Story.',
@@ -724,7 +726,7 @@ const T = {
     mMyOrders:'Pesanan saya', mNoOrders:'Belum ada pesanan', mOrdPending:'Menunggu bayaran', mOrdPaid:'Disahkan', mTrackLink:'Jejak penghantaran →',
     mProgTpl:'{refs} rujukan sah · Ajak {n} lagi atau belanja RM{amt} sendiri untuk {next}', mProgMaxTpl:'{refs} rujukan sah · Tahap tertinggi dicapai 🎉',
     aConnecting:'Menyambung, sila cuba lagi', aFillLogin:'Sila isi emel dan kata laluan', aCopied:'Pautan disalin 🌸 kongsi dengan kawan!', aCartAdded:'Ditambah ke troli 🛒', mWelcome:'Selamat kembali, {name} 🌸', mGuideTitle:'3 langkah mudah untuk mula:', mGuide1:'1. Isi maklumat penghantaran — dapat RM3', mGuide2:'2. Salin pautan anda & kongsi untuk komisen', mGuide3:'3. Layari kedai & pilih kesukaan anda 🌸', aBadAmt:'Sila masukkan jumlah yang sah', aWdOk:'Permohonan keluar dihantar. Pemilik akan bayar selepas semakan.', wdTitle:'Keluarkan komisen', wdBalTpl:'Baki semasa RM {bal}', wdLowMsg:'Baki anda kurang daripada RM {min}, jadi belum boleh dikeluarkan (minimum RM {min}). Jangan risau — baki ini masih boleh digunakan sebagai kredit semasa bayaran 🌸', wdAmtL:'Jumlah pengeluaran (RM)', wdMethodL:'Kaedah pembayaran', wdMethodTng:'TNG e-wallet', wdMethodBank:'Pindahan bank', wdNameL:'Nama pemegang akaun', wdNameP:'Nama sama seperti akaun bank/TNG', wdPhoneL:'No. telefon TNG', wdPhoneP:'cth 012-3456789', wdBankL:'Nama bank', wdAccNoL:'Nombor akaun bank', wdAccNoP:'Masukkan nombor akaun penuh', wdBtn:'Hantar permohonan keluar', wdLater:'Kemudian', wdMinErr:'Jumlah pengeluaran tidak boleh kurang daripada RM {min}', wdMaxErr:'Jumlah pengeluaran tidak boleh melebihi baki anda',
-    aPickSize:'Sila pilih saiz', aSoldOut:'Saiz ini habis dijual', aStockShort:'Stok tidak cukup', aCartEmpty:'Troli anda kosong', aOrderFail:'Pesanan gagal, sila cuba lagi',
+    aPickSize:'Sila pilih saiz', aSoldOut:'Saiz ini habis dijual', aStockShort:'Stok tidak cukup', aCartEmpty:'Troli anda kosong', aOrderFail:'Pesanan gagal, sila cuba lagi', aProofRequired:'Sila muat naik tangkapan skrin bayaran dahulu',
     addrTitle:'Isi maklumat penghantaran, dapat RM3', addrSub:'Isi maklumat + tambah App ke skrin utama untuk dapat RM3 (sekali)', addrName:'Nama', addrPhone:'No. telefon', addrAddr:'Alamat', addrNameP:'Nama penerima', addrPhoneP:'No. telefon cth 012-3456789', addrAddrP:'No. unit, jalan, taman/kawasan', addrCity:'Bandar', addrCityP:'cth. Petaling Jaya', addrPostcode:'Poskod', addrPostcodeP:'cth. 47800', addrState:'Negeri', addrStateP:'Pilih negeri', addrBtn:'Pasang App & dapat RM3', addrLater:'Kemudian', addrFill:'Sila isi semua maklumat', addrPhoneInvalid:'Sila masukkan nombor telefon yang sah', addrPostcodeInvalid:'Sila masukkan poskod 5 digit', addrGot:'Anda dapat RM3!', addrEditTitle:'Edit alamat penghantaran', addrEditSub:'Kemas kini maklumat penghantaran anda untuk kali seterusnya', addrSaveBtn:'Simpan alamat', addrSaved:'Alamat dikemaskini', installNeed:'Sila tambah App ke skrin utama untuk dapat RM3 — tekan Pasang', iosTitle:'Tambah Yuna ke skrin utama:', iosStep1:'1. Tekan butang Kongsi (Share)', iosStep2:'2. Pilih "Add to Home Screen"', iosStep3:'3. Kembali dan tekan butang di bawah', iosDone:'Saya sudah tambah — dapat RM3',
     heroTag:'YUNA FASHION', heroTitle:'Wear Your <em>Story</em>.',
     heroDesc:'Pakaian untuk kehidupan sebenar, detik yang bermakna dan diri anda yang sebenar.', shopNow:'Terokai YUNA', ourStoryBtn:'Kisah Kami', admMgmt:'Pengurusan Kedai',
@@ -750,11 +752,11 @@ const T = {
     fImgL:'Gambar produk', uploadImg:'Klik untuk muat naik', saveBtn:'Simpan & terbit', curProd:'Produk semasa',
     cartTitle:'Troli', cartSub:'Laraskan kuantiti, kemudian bayar', cartTotalLabel:'Jumlah', checkoutBtn:'Bayar →', emptyCart:'Troli anda kosong · pergi pilih kesukaan anda',
     backCart:'Kembali ke troli', coTitle:'Pembayaran', choosePay:'Pilih kaedah pembayaran', tngAcc:'Akaun TNG', useCreditL:'Guna kredit komisen (RM {bal} tersedia)', coItemsL:'Barang', coShipL:'Penghantaran', coFreeL:'Percuma', coCreditDeductL:'Kredit digunakan', coPayableL:'Perlu dibayar',
-    proofL:'Muat naik tangkapan skrin bayaran (pilihan)', proofP:'Muat naik selepas bayar', proofChatHint:'💬 Atau tekan sahaja butang livechat untuk maklumkan kami anda sudah bayar', submitOrder:'Hantar pesanan',
+    proofL:'Muat naik tangkapan skrin bayaran (wajib)', proofP:'Muat naik selepas bayar', proofChatHint:'💬 Kami akan sahkan bayaran anda dan hantar pesanan secepat mungkin', submitOrder:'Hantar pesanan',
     payTng:"Imbas dengan Touch 'n Go eWallet", payDuit:'Imbas DuitNow QR dengan mana-mana app bank', payAccTo:'Pindah ke akaun TNG eWallet ini:', payNotSet:'Maklumat pembayaran belum disediakan — tekan livechat untuk aturkan bayaran',
     successH:'Pesanan dihantar!', orderNo:'No. pesanan', successMsg:'Kami akan sahkan tangkapan skrin bayaran anda dan hantar sebaik disahkan.', keepShop:'Terus beli-belah',
     footShopH:'Membeli-belah', footShop1:'Cara pesanan', footShop2:'Panduan saiz', footShop3:'Penghantaran', footShop4:'Pulangan',
-    footBrandH:'Kisah kami', footBrand1:'Tentang kami', footBrand2:'Reka bentuk', footBrand3:'Kerjasama', footContactH:'Hubungi', footC1:'Sembang langsung', rights:'Hak cipta terpelihara', chatTitle:'Sembang langsung', chatHi:'Hai! Boleh kami bantu? Kami akan balas segera 🌸', chatPh:'Taip mesej…', chatSendBtn:'Hantar',
+    footBrandH:'Kisah kami', footBrand1:'Tentang kami', footBrand2:'Reka bentuk', footBrand3:'Kerjasama', footContactH:'Hubungi', footC1:'Sembang langsung', rights:'Hak cipta terpelihara', chatTitle:'Sembang langsung', chatHi:'Hai! Boleh kami bantu? Kami akan balas segera 🌸', chatPh:'Taip mesej…', chatSendBtn:'Hantar', chatPhoneAsk:'Sebelum bermula, sila tinggalkan nombor telefon anda supaya kami boleh susulan 🌸', chatPhonePh:'Nombor telefon', chatPhoneBtn:'Mula sembang', chatPhoneInvalid:'Sila masukkan nombor telefon yang sah',
     newT:'Baharu', saleT:'Jualan', addT:'Tambah ke troli', pFrom:'+', pLeft:'tinggal {n}', pSold:'Habis', kgBoy:'Lelaki', kgGirl:'Perempuan', kgChart:'Carta saiz', cSize:'Saiz', scTitle:'Carta saiz kanak-kanak', scWeight:'Berat', scHeight:'Tinggi', noProducts:'Belum ada produk dalam kategori ini 🌷', alertFill:'Sila isi nama dan harga', alertUp:'Diterbitkan! Tukar ke Kedai untuk lihat' },
 
   vi:{ freeShip:'Miễn phí vận chuyển trên RM 99 · Đổi trả 30 ngày', slogan:'Wear Your Story.', slogan2:'Wear Your Story.',
@@ -774,7 +776,7 @@ const T = {
     mMyOrders:'Đơn hàng của tôi', mNoOrders:'Chưa có đơn hàng', mOrdPending:'Chờ thanh toán', mOrdPaid:'Đã xác nhận', mTrackLink:'Theo dõi vận chuyển →',
     mProgTpl:'{refs} giới thiệu hợp lệ · Giới thiệu thêm {n} hoặc tự mua thêm RM{amt} để lên {next}', mProgMaxTpl:'{refs} giới thiệu hợp lệ · Đã đạt hạng cao nhất 🎉',
     aConnecting:'Đang kết nối, vui lòng thử lại', aFillLogin:'Vui lòng nhập email và mật khẩu', aCopied:'Đã sao chép link 🌸 chia sẻ với bạn bè nhé!', aCartAdded:'Đã thêm vào giỏ 🛒', mWelcome:'Chào mừng trở lại, {name} 🌸', mGuideTitle:'3 bước dễ để bắt đầu:', mGuide1:'1. Điền thông tin giao hàng — nhận RM3', mGuide2:'2. Sao chép link & chia sẻ để kiếm hoa hồng', mGuide3:'3. Dạo cửa hàng & chọn vài món yêu thích 🌸', aBadAmt:'Vui lòng nhập số tiền hợp lệ', aWdOk:'Đã gửi yêu cầu rút. Chủ shop sẽ thanh toán sau khi duyệt.', wdTitle:'Rút hoa hồng', wdBalTpl:'Số dư hiện tại RM {bal}', wdLowMsg:'Số dư của bạn dưới RM {min} nên chưa thể rút (mức rút tối thiểu là RM {min}). Đừng lo — số dư này vẫn có thể dùng làm tín dụng khi thanh toán 🌸', wdAmtL:'Số tiền rút (RM)', wdMethodL:'Phương thức nhận tiền', wdMethodTng:'Ví TNG', wdMethodBank:'Chuyển khoản ngân hàng', wdNameL:'Tên chủ tài khoản', wdNameP:'Tên khớp với tài khoản ngân hàng/TNG', wdPhoneL:'Số điện thoại TNG', wdPhoneP:'vd 012-3456789', wdBankL:'Tên ngân hàng', wdAccNoL:'Số tài khoản ngân hàng', wdAccNoP:'Nhập đầy đủ số tài khoản', wdBtn:'Gửi yêu cầu rút tiền', wdLater:'Để sau', wdMinErr:'Số tiền rút không được thấp hơn RM {min}', wdMaxErr:'Số tiền rút không được vượt quá số dư của bạn',
-    aPickSize:'Vui lòng chọn size', aSoldOut:'Size này đã hết hàng', aStockShort:'Không đủ hàng', aCartEmpty:'Giỏ hàng trống', aOrderFail:'Đặt hàng thất bại, vui lòng thử lại',
+    aPickSize:'Vui lòng chọn size', aSoldOut:'Size này đã hết hàng', aStockShort:'Không đủ hàng', aCartEmpty:'Giỏ hàng trống', aOrderFail:'Đặt hàng thất bại, vui lòng thử lại', aProofRequired:'Vui lòng tải ảnh chụp thanh toán trước',
     addrTitle:'Điền thông tin giao hàng, nhận RM3', addrSub:'Điền thông tin + thêm App vào màn hình chính để nhận RM3 (một lần)', addrName:'Tên', addrPhone:'Số điện thoại', addrAddr:'Địa chỉ', addrNameP:'Tên người nhận', addrPhoneP:'SĐT vd 012-3456789', addrAddrP:'Số nhà, đường, khu vực', addrCity:'Thành phố', addrCityP:'vd: Petaling Jaya', addrPostcode:'Mã bưu điện', addrPostcodeP:'vd: 47800', addrState:'Bang', addrStateP:'Chọn bang', addrBtn:'Cài App & nhận RM3', addrLater:'Để sau', addrFill:'Vui lòng điền đủ thông tin', addrPhoneInvalid:'Vui lòng nhập số điện thoại hợp lệ', addrPostcodeInvalid:'Vui lòng nhập mã bưu điện 5 chữ số', addrGot:'Bạn nhận được RM3!', addrEditTitle:'Sửa địa chỉ giao hàng', addrEditSub:'Cập nhật thông tin giao hàng cho lần sau', addrSaveBtn:'Lưu địa chỉ', addrSaved:'Đã cập nhật địa chỉ', installNeed:'Vui lòng thêm App vào màn hình chính để nhận RM3 — bấm Cài đặt', iosTitle:'Thêm Yuna vào màn hình chính:', iosStep1:'1. Bấm nút Chia sẻ (Share)', iosStep2:'2. Chọn "Add to Home Screen"', iosStep3:'3. Quay lại và bấm nút bên dưới', iosDone:'Tôi đã thêm — nhận RM3',
     heroTag:'YUNA FASHION', heroTitle:'Wear Your <em>Story</em>.',
     heroDesc:'Trang phục dành cho những ngày thật, những khoảnh khắc ý nghĩa và chính con người bạn.', shopNow:'Khám Phá YUNA', ourStoryBtn:'Câu Chuyện Của Chúng Tôi',
@@ -800,13 +802,13 @@ const T = {
     fImgL:'Ảnh sản phẩm', uploadImg:'Nhấn để tải lên', saveBtn:'Lưu & đăng bán', curProd:'Sản phẩm hiện có',
     cartTitle:'Giỏ hàng', cartSub:'Điều chỉnh số lượng rồi thanh toán', cartTotalLabel:'Tổng', checkoutBtn:'Thanh toán →', emptyCart:'Giỏ hàng trống · hãy chọn món bạn thích',
     backCart:'Về giỏ hàng', coTitle:'Thanh toán', choosePay:'Chọn phương thức thanh toán', tngAcc:'Tài khoản TNG', useCreditL:'Dùng tín dụng hoa hồng (còn RM {bal})', coItemsL:'Sản phẩm', coShipL:'Phí ship', coFreeL:'Miễn phí', coCreditDeductL:'Trừ hoa hồng', coPayableL:'Cần thanh toán',
-    proofL:'Tải ảnh chụp thanh toán (không bắt buộc)', proofP:'Tải lên sau khi thanh toán', proofChatHint:'💬 Hoặc bấm livechat để báo cho chúng tôi là bạn đã thanh toán', submitOrder:'Đặt hàng',
+    proofL:'Tải ảnh chụp thanh toán (bắt buộc)', proofP:'Tải lên sau khi thanh toán', proofChatHint:'💬 Chúng tôi sẽ xác nhận thanh toán và giao hàng sớm nhất có thể', submitOrder:'Đặt hàng',
     payTng:"Quét bằng Touch 'n Go eWallet", payDuit:'Quét DuitNow QR bằng app ngân hàng', payAccTo:'Chuyển vào tài khoản TNG eWallet này:', payNotSet:'Chưa thiết lập thông tin thanh toán — bấm livechat để sắp xếp thanh toán',
     successH:'Đã đặt hàng!', orderNo:'Mã đơn', successMsg:'Chúng tôi sẽ kiểm tra ảnh thanh toán và giao hàng sớm nhất sau khi xác nhận.', keepShop:'Tiếp tục mua',
     footShopH:'Mua sắm', footShop1:'Cách đặt hàng', footShop2:'Hướng dẫn size', footShop3:'Vận chuyển', footShop4:'Đổi trả',
-    footBrandH:'Câu chuyện', footBrand1:'Về chúng tôi', footBrand2:'Thiết kế', footBrand3:'Hợp tác', footContactH:'Liên hệ', footC1:'Trò chuyện', rights:'Bảo lưu mọi quyền', chatTitle:'Trò chuyện', chatHi:'Xin chào! Chúng tôi giúp gì được? Sẽ trả lời sớm 🌸', chatPh:'Nhập tin nhắn…', chatSendBtn:'Gửi',
+    footBrandH:'Câu chuyện', footBrand1:'Về chúng tôi', footBrand2:'Thiết kế', footBrand3:'Hợp tác', footContactH:'Liên hệ', footC1:'Trò chuyện', rights:'Bảo lưu mọi quyền', chatTitle:'Trò chuyện', chatHi:'Xin chào! Chúng tôi giúp gì được? Sẽ trả lời sớm 🌸', chatPh:'Nhập tin nhắn…', chatSendBtn:'Gửi', chatPhoneAsk:'Trước khi bắt đầu, vui lòng để lại số điện thoại để chúng tôi tiện liên hệ 🌸', chatPhonePh:'Số điện thoại', chatPhoneBtn:'Bắt đầu trò chuyện', chatPhoneInvalid:'Vui lòng nhập số điện thoại hợp lệ',
     admMgmt:'Quản lý cửa hàng', admOnlyYou:'Chỉ chủ shop thấy khu vực này', admOrdersH:'Đơn chờ xác nhận — xác nhận thanh toán sẽ ghi hoa hồng cho người giới thiệu', admSearchH:'Tra cứu đơn hàng — xem tất cả đơn (kể cả đã xác nhận)', admSearchPh:'Nhập tên/email/số điện thoại khách hàng', admStatusAll:'Tất cả trạng thái', admStatusPending:'Chờ thanh toán', admStatusPaid:'Đã thanh toán', admSearchBtn:'Tra cứu', admSearchHint:'Nhập tên/email/số điện thoại hoặc chọn trạng thái rồi bấm tra cứu', admSearchNone:'Không có đơn hàng phù hợp', admSearching:'Đang tra cứu…', admSearchFail:'Tra cứu thất bại: ', admCourierH:'Quản lý đơn vị vận chuyển — thiết lập link theo dõi', admCourierHint:'Có thể thêm ký hiệu {code} trong link, hệ thống sẽ tự thay bằng mã vận đơn của khách; nếu chưa chắc chắn, chỉ cần điền link trang tra cứu chính thức, khách tự nhập mã vận đơn để tra cũng được.', admCourierAdd:'Thêm', admCourierNameP:'Tên đơn vị vận chuyển, ví dụ J&T Express', admCourierUrlP:'Link theo dõi, ví dụ https://.../track?code={code}', admCourierNone:'Chưa thêm đơn vị vận chuyển nào', admCourierFillBoth:'Vui lòng điền tên và link', admNoTracking:'Chưa điền thông tin vận chuyển', admSetTracking:'Thiết lập vận chuyển', admTrackSaved:'Đã lưu thông tin vận chuyển', admTrackSaveFail:'Lưu thất bại: ', admMemberH:'Tìm hội viên — xác minh ảnh chụp theo dõi TikTok rồi cấp RM2', admMemberSearchPh:'Nhập tên/email/số điện thoại khách hàng', admMemberHint:'Nhập tên/email/số điện thoại rồi bấm tra cứu', admMemberNone:'Không có hội viên phù hợp', admGrantTiktok:'Cấp RM2', admTiktokGranted:'Đã cấp', admTiktokGrantOk:'Đã cấp RM2', admTiktokGrantFail:'Cấp thất bại: ', admWdsH:'Yêu cầu rút tiền — chuyển cho hội viên xong bấm「Đã trả」', admSetH:'Cài đặt — hoa hồng / phí ship (sửa xong bấm lưu)', admL1:'Hoa hồng L1 %', admL2:'Hoa hồng L2 %', admL3:'Hoa hồng L3 %', admBonus:'Thưởng mua đầu RM', admShipMin:'Mức miễn ship RM', admShipFee:'Phí ship RM', admWdMin:'Mức rút tối thiểu RM', admWa:'Liên kết WhatsApp', admTt:'Liên kết TikTok', admPayH:'Phương thức nhận tiền — hiển thị cho khách ở trang thanh toán', admPayAccNo:'Số tài khoản nhận tiền (SĐT TNG / số tài khoản ngân hàng)', admPayAccName:'Tên người nhận tiền', admTngQr:'Mã QR nhận tiền TNG', admDuitQr:'Mã QR nhận tiền DuitNow', admUploadClick:'Nhấn để tải lên hình ảnh', admSaveSet:'Lưu cài đặt', admProdH:'Tải lên / quản lý sản phẩm', admCat:'Phân loại', admCatW:'Đồ ngủ nữ', admCatB:'Trẻ em · Bé trai', admCatG:'Trẻ em · Bé gái', admNameZh:'Tên sản phẩm (tiếng Trung)', admNameEn:'Tên tiếng Anh (tùy chọn)', admNameMs:'Tên tiếng Mã Lai (tùy chọn)', admNameVi:'Tên tiếng Việt (tùy chọn)', admNote:'Mô tả (tùy chọn)', admTag:'Nhãn', admTagNone:'Không', admTagNew:'Mới', admTagSale:'Ưu đãi', admImg:'Hình sản phẩm', admSizes:'Từng size · Giá(RM) / Tồn kho', admSaveProd:'Lưu & đăng bán', admCurProd:'Sản phẩm hiện có', admChatH:'Tin nhắn CSKH — câu hỏi của khách hiện ở đây', admNoChat:'Chưa có tin nhắn', admReplyPh:'Trả lời…', admNoOrders:'Không có đơn chờ', admConfirmPaid:'Xác nhận đã nhận tiền', admNoWds:'Không có yêu cầu rút', admPaid:'Đã trả', admReject:'Từ chối', admShipTo:'Giao đến', admCopyAddr:'Sao chép địa chỉ', admCopied:'Đã sao chép', admNoAddr:'(Khách chưa điền thông tin giao hàng)',
-    admOptimizeImg:'Nén ảnh đã tải lên (giúp trang chủ load nhanh hơn)', admChangeImg:'Nhấn để đổi ảnh', admEdit:'Sửa', admOptimizing:'Đang nén, vui lòng chờ…', admNoNeedOptimize:'Không có ảnh cần nén, đã đủ nhỏ rồi ✅', admOptimizingProgress:'Đang nén… ({done}/{total})', admOptimizeDone:'Xong! Đã nén {n} ảnh ✅', admGuest:'Khách', admPricePh:'Giá', admStockPh:'Tồn kho', admConfirmPayment:'Xác nhận đã nhận được tiền cho đơn này? Sau khi xác nhận, người giới thiệu sẽ được cộng hoa hồng.', admConfirmedPaidMsg:'Đã xác nhận thanh toán, hoa hồng đã được cộng.', admBonusSaved:'Đã lưu, thưởng mua đầu của tuyến dưới hiện là RM {amt}', admSaveOk:'Đã lưu ✅', admFillName:'Vui lòng điền tên sản phẩm', admFillOnePrice:'Vui lòng điền giá cho ít nhất một size', admPublishOk:'Đã lưu và đăng bán ✅', admNoProducts:'Chưa có sản phẩm nào', admConfirmDeleteProduct:'Bạn có chắc muốn xoá sản phẩm này?', sysNotConnected:'Hệ thống chưa kết nối', admOpFail:'Thất bại: ', admSaveFailShort:'Lưu thất bại', admGenericError:'Đã xảy ra lỗi', admCatWomenShort:'Nữ', admTotalStock:'Tổng {n} sp', admMarkedPaid:'Đã đánh dấu đã trả', admRejectedRefunded:'Đã từ chối, số dư đã hoàn lại cho hội viên', admTrackingNoPh:'Mã vận đơn', admSave:'Lưu', aOrderFailDetail:'Đặt hàng thất bại: ', wdFailDetail:'Rút tiền thất bại: ',
+    admOptimizeImg:'Nén ảnh đã tải lên (giúp trang chủ load nhanh hơn)', admChangeImg:'Nhấn để đổi ảnh', admEdit:'Sửa', admOptimizing:'Đang nén, vui lòng chờ…', admNoNeedOptimize:'Không có ảnh cần nén, đã đủ nhỏ rồi ✅', admOptimizingProgress:'Đang nén… ({done}/{total})', admOptimizeDone:'Xong! Đã nén {n} ảnh ✅', admGuest:'Khách', admPricePh:'Giá', admStockPh:'Tồn kho', admConfirmPayment:'Xác nhận đã nhận được tiền cho đơn này? Sau khi xác nhận, người giới thiệu sẽ được cộng hoa hồng.', admConfirmedPaidMsg:'Đã xác nhận thanh toán, hoa hồng đã được cộng.', admBonusSaved:'Đã lưu, thưởng mua đầu của tuyến dưới hiện là RM {amt}', admSaveOk:'Đã lưu ✅', admFillName:'Vui lòng điền tên sản phẩm', admFillOnePrice:'Vui lòng điền giá cho ít nhất một size', admPublishOk:'Đã lưu và đăng bán ✅', admNoProducts:'Chưa có sản phẩm nào', admConfirmDeleteProduct:'Bạn có chắc muốn xoá sản phẩm này?', sysNotConnected:'Hệ thống chưa kết nối', admOpFail:'Thất bại: ', admSaveFailShort:'Lưu thất bại', admGenericError:'Đã xảy ra lỗi', admCatWomenShort:'Nữ', admTotalStock:'Tổng {n} sp', admMarkedPaid:'Đã đánh dấu đã trả', admRejectedRefunded:'Đã từ chối, số dư đã hoàn lại cho hội viên', admTrackingNoPh:'Mã vận đơn', admSave:'Lưu', admRemindPay:'Nhắc thanh toán', admRemindPayMsg:'Xin chào, đơn hàng của bạn tại Yuna Fashion (RM {amt}) chúng tôi vẫn chưa nhận được thanh toán. Vui lòng hoàn tất thanh toán sớm nhất có thể, cảm ơn bạn! 🌸', aOrderFailDetail:'Đặt hàng thất bại: ', wdFailDetail:'Rút tiền thất bại: ',
     newT:'Mới', saleT:'Sale', addT:'Thêm vào giỏ', pFrom:'+', pLeft:'còn {n}', pSold:'Hết hàng', kgBoy:'Bé trai', kgGirl:'Bé gái', kgChart:'Bảng size', cSize:'Size', scTitle:'Bảng size trẻ em', scWeight:'Cân nặng', scHeight:'Chiều cao', noProducts:'Chưa có sản phẩm trong mục này 🌷', alertFill:'Vui lòng nhập tên và giá', alertUp:'Đã đăng! Chuyển sang Cửa hàng để xem' }
 };
 
@@ -1084,6 +1086,7 @@ function creditToApply(){
 }
 function renderCheckout(){
   const t = T[lang];
+  document.getElementById('submitBtn').disabled = !proofUploaded;
   const sub=cartTotal(), ship=shipFee();
   const bal=creditAvailable();
   const box=document.getElementById('creditBox');
@@ -1139,6 +1142,7 @@ function toggleSizeChart(){ const el=document.getElementById('sizeChart'); if(!e
 async function submitOrder(){
   const t = T[lang];
   if(!cart.length){ alert(T[lang].aCartEmpty); return; }
+  if(!proofUploaded){ alert(t.aProofRequired); return; }
   const btn=document.getElementById('submitBtn'); btn.disabled=true;
   const usedCredit = creditToApply();
   try{
@@ -1291,7 +1295,7 @@ async function renderMember(){
             if(o.courier){
               const c=couriers.find(c=>c.name===o.courier);
               const url = (c && c.url && o.tracking_no) ? c.url.replace('{code}', encodeURIComponent(o.tracking_no)) : '';
-              trackHTML = `<div style="margin-top:4px;font-size:12px;color:var(--berry)">🚚 ${esc(o.courier)}${o.tracking_no?(' · '+esc(o.tracking_no)):''}`
+              trackHTML = `<div style="margin-top:4px;font-size:12px;color:var(--berry)">🚚 ${esc(o.courier)}${o.tracking_no?(' · '+esc(o.tracking_no)+' <i class="ti ti-copy" style="cursor:pointer;font-size:13px" title="Copy" data-track="'+encodeURIComponent(o.tracking_no)+'" onclick="copyTrackingNo(this)"></i>'):''}`
                 + (url?` · <a href="${esc(url)}" target="_blank" rel="noopener" style="color:var(--rose);text-decoration:underline">${T0.mTrackLink}</a>`:'')
                 + `</div>`;
             }
@@ -1458,10 +1462,12 @@ async function renderAdminPanel(){
           <button class="add-btn" style="width:auto;margin:6px 0 0;padding:4px 12px;font-size:11px" type="button" data-ship="${cp}" onclick="copyShipBtn(this)">📋 ${aTx('admCopyAddr')}</button>
         </div>`;
       } else { ship=`<div class="psub" style="font-size:12px;margin-top:4px;color:var(--muted)">${aTx('admNoAddr')}</div>`; }
+      const waPhone=toWaPhone(m.phone);
+      const remindBtn = waPhone ? `<a class="del-btn" style="width:auto;margin:0;padding:6px 12px;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center" target="_blank" rel="noopener" href="https://wa.me/${waPhone}?text=${encodeURIComponent(aTx('admRemindPayMsg').replace('{amt}',Number(o.amount).toFixed(2)))}">${aTx('admRemindPay')}</a>` : '';
       return `<div style="padding:10px 0;border-bottom:1px solid var(--line)">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
           <span style="font-size:13px">${esc(nm)} · RM ${Number(o.amount).toFixed(2)} · ${new Date(o.created_at).toLocaleDateString()}</span>
-          <button class="add-btn" style="width:auto;margin:0;padding:6px 12px;white-space:nowrap" type="button" onclick="confirmPaid('${o.id}')">${aTx('admConfirmPaid')}</button>
+          <span style="display:flex;gap:6px;white-space:nowrap">${remindBtn}<button class="add-btn" style="width:auto;margin:0;padding:6px 12px;white-space:nowrap" type="button" onclick="confirmPaid('${o.id}')">${aTx('admConfirmPaid')}</button></span>
         </div>${ship}</div>`;
     }).join('');
   } else { oEl.textContent=aTx('admNoOrders'); }
@@ -1886,11 +1892,33 @@ function openChat(){
   document.getElementById('chatInput').placeholder=T[lang].chatPh;
   document.getElementById('chatTitleT').textContent=T[lang].chatTitle;
   document.getElementById('chatSendT').textContent=T[lang].chatSendBtn;
+  document.getElementById('chatPhoneAskT').textContent=T[lang].chatPhoneAsk;
+  document.getElementById('chatPhoneInput').placeholder=T[lang].chatPhonePh;
+  document.getElementById('chatPhoneBtnT').textContent=T[lang].chatPhoneBtn;
+  var savedPhone=''; try{ savedPhone=localStorage.getItem('yuna_chat_phone')||''; }catch(e){}
+  if(!savedPhone && !(sbProfile&&sbProfile.phone)){
+    document.getElementById('chatPhoneGate').classList.remove('hide');
+    document.getElementById('chatMsgs').classList.add('hide');
+    document.getElementById('chatInputBar').classList.add('hide');
+    setTimeout(function(){ document.getElementById('chatPhoneInput').focus(); },100);
+    return;
+  }
+  document.getElementById('chatPhoneGate').classList.add('hide');
+  document.getElementById('chatMsgs').classList.remove('hide');
+  document.getElementById('chatInputBar').classList.remove('hide');
   chatFetch();
   if(__chatTimer) clearInterval(__chatTimer);
   __chatTimer=setInterval(chatFetch,4000);
   setTimeout(function(){ document.getElementById('chatInput').focus(); },100);
 }
+function submitChatPhone(){
+  var v=(document.getElementById('chatPhoneInput').value||'').trim();
+  if(!v || v.replace(/\D/g,'').length<7){ document.getElementById('chatPhoneMsg').textContent=T[lang].chatPhoneInvalid; return; }
+  try{ localStorage.setItem('yuna_chat_phone', v); }catch(e){}
+  document.getElementById('chatPhoneMsg').textContent='';
+  openChat();
+}
+function chatPhone(){ try{ return (sbProfile&&sbProfile.phone) || localStorage.getItem('yuna_chat_phone') || ''; }catch(e){ return (sbProfile&&sbProfile.phone)||''; } }
 function closeChat(){ var m=document.getElementById('chatPanel'); if(m) m.classList.add('hide'); if(__chatTimer){ clearInterval(__chatTimer); __chatTimer=null; } }
 function toggleChat(){ var m=document.getElementById('chatPanel'); if(m && m.classList.contains('hide')) openChat(); else closeChat(); }
 async function chatFetch(){
@@ -1913,7 +1941,7 @@ async function chatSend(){
   var inp=document.getElementById('chatInput'); var txt=(inp.value||'').trim(); if(!txt) return;
   if(!sb){ alert(T[lang].sysNotConnected); return; }
   inp.value='';
-  var nm=(sbProfile&&sbProfile.full_name)||'';
+  var nm=((sbProfile&&sbProfile.full_name)||'')+(chatPhone()?(' · '+chatPhone()):'');
   try{ var r=await sb.rpc('chat_send',{p_thread:__chatTid,p_name:nm,p_body:txt});
     if(r.error){ inp.value=txt; return; }
     __chatTid=r.data; try{ localStorage.setItem('yuna_chat_tid',__chatTid); }catch(e){}
@@ -1922,7 +1950,7 @@ async function chatSend(){
 }
 async function chatSendImage(dataUri){
   if(!sb){ alert(T[lang].sysNotConnected); return; }
-  var nm=(sbProfile&&sbProfile.full_name)||'';
+  var nm=((sbProfile&&sbProfile.full_name)||'')+(chatPhone()?(' · '+chatPhone()):'');
   try{ var r=await sb.rpc('chat_send',{p_thread:__chatTid,p_name:nm,p_body:dataUri});
     if(r.error) return;
     __chatTid=r.data; try{ localStorage.setItem('yuna_chat_tid',__chatTid); }catch(e){}
@@ -2056,8 +2084,14 @@ document.addEventListener('change', function(e){
       <span onclick="closeChat()" style="cursor:pointer;font-size:20px;line-height:1">&times;</span>
     </div>
     <div id="chatHi" style="padding:10px 14px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line)"></div>
-    <div id="chatMsgs" style="flex:1;overflow-y:auto;padding:10px 14px;background:var(--cream)"></div>
-    <div style="display:flex;gap:6px;padding:10px;border-top:1px solid var(--line)">
+    <div id="chatPhoneGate" class="hide" style="flex:1;padding:16px 14px;display:flex;flex-direction:column;justify-content:center;gap:10px;background:var(--cream)">
+      <div id="chatPhoneAskT" style="font-size:13px;color:var(--text);line-height:1.6"></div>
+      <input id="chatPhoneInput" type="tel" style="padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text);outline:none;font-size:13px" onkeydown="if(event.key==='Enter')submitChatPhone()"/>
+      <button onclick="submitChatPhone()" style="border:none;background:var(--rose);color:#fff;border-radius:10px;padding:9px;cursor:pointer;font-size:13px"><span id="chatPhoneBtnT"></span></button>
+      <div id="chatPhoneMsg" style="font-size:12px;color:var(--rose)"></div>
+    </div>
+    <div id="chatMsgs" class="hide" style="flex:1;overflow-y:auto;padding:10px 14px;background:var(--cream)"></div>
+    <div id="chatInputBar" class="hide" style="display:flex;gap:6px;padding:10px;border-top:1px solid var(--line)">
       <label for="chatImgInput" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--cream);cursor:pointer;flex-shrink:0"><i class="ti ti-photo" style="font-size:18px;color:var(--berry)"></i></label>
       <input id="chatImgInput" type="file" accept="image/*" style="display:none"/>
       <input id="chatInput" onkeydown="if(event.key==='Enter')chatSend()" placeholder="输入消息…" style="flex:1;padding:9px 11px;border:1px solid var(--line);border-radius:20px;background:#fff;color:var(--text);outline:none"/>
