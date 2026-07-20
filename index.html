@@ -880,6 +880,7 @@ function applyLang(){
   updateEarnLabels();
   renderShop(); renderCart();
   refreshAdminPlaceholders();
+  try{ pmRenderList(); }catch(e){}
   if(typeof renderMember==='function'){ try{ renderMember(); }catch(e){} }
 }
 
